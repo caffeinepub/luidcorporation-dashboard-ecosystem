@@ -1,41 +1,36 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix SidneiCosta00 credentials and ensure Master role permissions",
+  "title": "Remove Caffeine AI watermark and update footer branding",
   "requirements": [
     {
-      "id": "REQ-47",
-      "summary": "Verify that SidneiCosta00 with Master role has full access to all admin panel features including employee catalog, client credential editing, and all management operations",
+      "id": "REQ-1",
+      "summary": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
       "acceptanceCriteria": [
-        "When logged in as SidneiCosta00, Employee Catalog section is visible and accessible",
-        "When logged in as SidneiCosta00, client credential editing features are enabled",
-        "All admin panel management operations are available without restrictions"
+        "The footer no longer displays any reference to caffeine.ai",
+        "No 'powered by' or 'built with' attribution links remain visible"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/AdminPanel.tsx",
+          "path": "frontend/src/components/Footer.tsx",
           "operation": "modify",
-          "description": "Ensure Master role (stored as 'Master' in userProfile) has full access to all admin panel sections including employee management, client editing, announcements, and network monitoring. Verify role comparison logic checks for 'Master' string match with case sensitivity."
-        },
+          "description": "Remove the powered-by link to caffeine.ai and any associated branding elements from the footer component while maintaining the existing component structure"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "acceptanceCriteria": [
+        "Footer displays exactly 'LuidCorporation© 2026' with the copyright symbol",
+        "The text maintains consistent styling with the current Carbon Black and Neon Green theme",
+        "No other branding or text appears in the footer"
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/components/ClientList.tsx",
+          "path": "frontend/src/components/Footer.tsx",
           "operation": "modify",
-          "description": "Verify that edit and delete actions for client records are enabled when the admin role is 'Master'. Ensure role checks use exact string match 'Master' for permission validation."
-        },
-        {
-          "path": "frontend/src/components/EmployeeList.tsx",
-          "operation": "modify",
-          "description": "Ensure employee catalog displays correctly and edit/delete actions are available for Master role users. Verify role permission checks use 'Master' string for access control."
-        },
-        {
-          "path": "frontend/src/components/EmployeeEditModal.tsx",
-          "operation": "modify",
-          "description": "Confirm that Master role users can edit employee records and that the role field dropdown includes 'Master' as an option. Ensure the prevention of editing SidneiCosta00's role remains in place."
-        },
-        {
-          "path": "frontend/src/hooks/useAdminAuth.tsx",
-          "operation": "modify",
-          "description": "Verify that the admin authentication context correctly stores and retrieves the 'Master' role from backend UserProfile after successful login with SidneiCosta00 credentials. Ensure role persistence in localStorage/sessionStorage maintains exact case."
+          "description": "Replace all existing footer text with 'LuidCorporation© 2026' and ensure the styling maintains consistency with the Carbon Black and Neon Green color scheme defined in the theme"
         }
       ]
     }

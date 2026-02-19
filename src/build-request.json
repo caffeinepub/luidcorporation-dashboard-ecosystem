@@ -1,54 +1,52 @@
 {
   "kind": "build_request",
-  "title": "Fix SidneiCosta00 credentials and ensure Master role permissions",
-  "projectName": "LuidCorporation Dashboard",
-  "priority": "high",
+  "title": "Remove Caffeine AI watermark and update footer branding",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-46",
-      "text": "Update backend initialization to ensure employee record for SidneiCosta00 has correct password 'Nikebolado@4' and role 'Master'",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "Arruma ai SidneiCosta00 e a senha Nikebolado@4 e as permissões dele são master"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend contains employee record with employeeId 'SidneiCosta00'",
-        "Employee record has password set to 'Nikebolado@4'",
-        "Employee record has role set to 'Master'",
-        "Admin login with these credentials successfully authenticates"
-      ]
-    },
-    {
-      "id": "REQ-47",
-      "text": "Verify that SidneiCosta00 with Master role has full access to all admin panel features including employee catalog, client credential editing, and all management operations",
+      "id": "REQ-1",
+      "text": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-latest"
         ],
         "quotes": [
-          "as permissões dele são master"
+          "tire a marca da água build with caffeine ai"
         ]
       },
       "acceptanceCriteria": [
-        "When logged in as SidneiCosta00, Employee Catalog section is visible and accessible",
-        "When logged in as SidneiCosta00, client credential editing features are enabled",
-        "All admin panel management operations are available without restrictions"
+        "The footer no longer displays any reference to caffeine.ai",
+        "No 'powered by' or 'built with' attribution links remain visible"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "deixe Só LuidCorporation© 2026"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Footer displays exactly 'LuidCorporation© 2026' with the copyright symbol",
+        "The text maintains consistent styling with the current Carbon Black and Neon Green theme",
+        "No other branding or text appears in the footer"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the employee authentication flow logic",
-    "Preserve existing role-based permission system"
+    "Maintain the existing footer component structure and styling approach",
+    "Preserve the Carbon Black and Neon Green color scheme"
   ],
   "nonGoals": [
-    "Changing the authentication mechanism",
-    "Adding new employee roles beyond Master and Employee"
+    "Changing the footer layout or positioning",
+    "Modifying any other branding elements outside the footer",
+    "Adding additional footer content beyond the copyright text"
   ],
   "imageRequirements": {
     "required": [],

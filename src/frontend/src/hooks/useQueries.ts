@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Employee } from '../backend';
-import { toast } from 'sonner';
+import type { ClientRecord } from '../backend';
 
 export function useCreateClientRecord() {
   const { actor } = useActor();
@@ -153,7 +152,7 @@ export function useGetGlobalAnnouncement() {
       return await actor.getGlobalAnnouncement();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 30000,
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 }
 
@@ -167,7 +166,7 @@ export function useGetNetworkMonitoringStatus() {
       return await actor.getNetworkMonitoringStatus();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 5000,
+    refetchInterval: 5000, // Refetch every 5 seconds for real-time updates
   });
 }
 
@@ -182,87 +181,6 @@ export function useSetNetworkMonitoringStatus() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['networkMonitoringStatus'] });
-    },
-  });
-}
-
-// Employee Management Hooks
-export function useGetAllEmployees() {
-  const { actor, isFetching } = useActor();
-
-  return useQuery<Employee[]>({
-    queryKey: ['employees'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return await actor.getAllEmployees();
-    },
-    enabled: !!actor && !isFetching,
-  });
-}
-
-export function useCreateEmployee() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      employeeId: string;
-      name: string;
-      password: string;
-      role: string;
-    }) => {
-      if (!actor) throw new Error('Actor not initialized');
-      await actor.createEmployee(data.employeeId, data.name, data.password, data.role);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['employees'] });
-      toast.success('Funcionário cadastrado com sucesso!');
-    },
-    onError: (error: any) => {
-      toast.error(error.message || 'Erro ao cadastrar funcionário');
-    },
-  });
-}
-
-export function useUpdateEmployee() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (data: {
-      employeeId: string;
-      name: string;
-      password: string;
-      role: string;
-    }) => {
-      if (!actor) throw new Error('Actor not initialized');
-      await actor.updateEmployee(data.employeeId, data.name, data.password, data.role);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['employees'] });
-      toast.success('Funcionário atualizado com sucesso!');
-    },
-    onError: (error: any) => {
-      toast.error(error.message || 'Erro ao atualizar funcionário');
-    },
-  });
-}
-
-export function useDeleteEmployee() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (employeeId: string) => {
-      if (!actor) throw new Error('Actor not initialized');
-      await actor.deleteEmployee(employeeId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['employees'] });
-      toast.success('Funcionário excluído com sucesso!');
-    },
-    onError: (error: any) => {
-      toast.error(error.message || 'Erro ao excluir funcionário');
     },
   });
 }

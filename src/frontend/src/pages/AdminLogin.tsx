@@ -26,17 +26,16 @@ export default function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const success = await login(id, password, rememberMe);
+    // Simulate network delay for better UX
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-      if (success) {
-        toast.success('Login realizado com sucesso!');
-        navigate({ to: '/luid-master-panel' });
-      } else {
-        toast.error('Credenciais inválidas. Verifique seu ID e senha.');
-      }
-    } catch (error) {
-      toast.error('Erro ao realizar login. Tente novamente.');
+    const success = login(id, password, rememberMe);
+
+    if (success) {
+      toast.success('Login realizado com sucesso!');
+      navigate({ to: '/luid-master-panel' });
+    } else {
+      toast.error('Credenciais inválidas. Verifique seu ID e senha.');
     }
 
     setIsLoading(false);
@@ -55,7 +54,7 @@ export default function AdminLogin() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="id">ID do Funcionário</Label>
+              <Label htmlFor="id">ID de Administrador</Label>
               <Input
                 id="id"
                 type="text"

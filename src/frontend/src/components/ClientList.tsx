@@ -8,11 +8,7 @@ import { Trash2, Users, Loader2, Edit } from 'lucide-react';
 import ClientEditModal from './ClientEditModal';
 import type { ClientRecord } from '../backend';
 
-interface ClientListProps {
-  isMasterRole?: boolean;
-}
-
-export default function ClientList({ isMasterRole = true }: ClientListProps) {
+export default function ClientList() {
   const { data: clients, isLoading } = useAllClientRecords();
   const deleteClient = useDeleteClientRecord();
   const [editingClient, setEditingClient] = useState<ClientRecord | null>(null);
@@ -64,7 +60,7 @@ export default function ClientList({ isMasterRole = true }: ClientListProps) {
                     <TableHead className="text-neon-green">IP VPS</TableHead>
                     <TableHead className="text-neon-green">Usuário VPS</TableHead>
                     <TableHead className="text-neon-green">Plano</TableHead>
-                    {isMasterRole && <TableHead className="text-right text-neon-green">Ações</TableHead>}
+                    <TableHead className="text-right text-neon-green">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -80,33 +76,31 @@ export default function ClientList({ isMasterRole = true }: ClientListProps) {
                       <TableCell className="text-muted-foreground">{client.ipVps}</TableCell>
                       <TableCell className="text-muted-foreground">{client.userVps}</TableCell>
                       <TableCell className="text-muted-foreground">{client.plano}</TableCell>
-                      {isMasterRole && (
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEdit(client)}
-                              className="border-neon-green/30 text-neon-green hover:bg-neon-green/10"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDelete(client.idLuid)}
-                              disabled={deleteClient.isPending}
-                              className="bg-red-600 hover:bg-red-700"
-                            >
-                              {deleteClient.isPending ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <Trash2 className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      )}
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(client)}
+                            className="border-neon-green/30 text-neon-green hover:bg-neon-green/10"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(client.idLuid)}
+                            disabled={deleteClient.isPending}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            {deleteClient.isPending ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -120,7 +114,7 @@ export default function ClientList({ isMasterRole = true }: ClientListProps) {
         </CardContent>
       </Card>
 
-      {editingClient && isMasterRole && (
+      {editingClient && (
         <ClientEditModal
           client={editingClient}
           open={isEditModalOpen}
