@@ -4,8 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useAllClientRecords, useDeleteClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
-import { Trash2, Users, Loader2, Edit } from 'lucide-react';
+import { Trash2, Users, Loader2, Edit, Bell } from 'lucide-react';
 import ClientEditModal from './ClientEditModal';
+import SendNotificationModal from './SendNotificationModal';
 import type { ClientRecord } from '../backend';
 
 export default function ClientList() {
@@ -13,6 +14,8 @@ export default function ClientList() {
   const deleteClient = useDeleteClientRecord();
   const [editingClient, setEditingClient] = useState<ClientRecord | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [notificationClient, setNotificationClient] = useState<{ id: string; name: string } | null>(null);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
 
   const handleDelete = async (idLuid: string) => {
     try {
@@ -31,6 +34,16 @@ export default function ClientList() {
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditingClient(null);
+  };
+
+  const handleSendNotification = (client: ClientRecord) => {
+    setNotificationClient({ id: client.idLuid, name: client.nome });
+    setIsNotificationModalOpen(true);
+  };
+
+  const handleCloseNotificationModal = () => {
+    setIsNotificationModalOpen(false);
+    setNotificationClient(null);
   };
 
   return (
@@ -81,8 +94,18 @@ export default function ClientList() {
                           <Button
                             variant="outline"
                             size="sm"
+                            onClick={() => handleSendNotification(client)}
+                            className="border-neon-green/30 text-neon-green hover:bg-neon-green/10"
+                            title="Enviar notificação"
+                          >
+                            <Bell className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
                             onClick={() => handleEdit(client)}
                             className="border-neon-green/30 text-neon-green hover:bg-neon-green/10"
+                            title="Editar cliente"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -92,6 +115,7 @@ export default function ClientList() {
                             onClick={() => handleDelete(client.idLuid)}
                             disabled={deleteClient.isPending}
                             className="bg-red-600 hover:bg-red-700"
+                            title="Excluir cliente"
                           >
                             {deleteClient.isPending ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -119,6 +143,15 @@ export default function ClientList() {
           client={editingClient}
           open={isEditModalOpen}
           onOpenChange={handleCloseEditModal}
+        />
+      )}
+
+      {notificationClient && (
+        <SendNotificationModal
+          clientId={notificationClient.id}
+          clientName={notificationClient.name}
+          open={isNotificationModalOpen}
+          onOpenChange={handleCloseNotificationModal}
         />
       )}
     </>

@@ -2,10 +2,9 @@ import Text "mo:core/Text";
 import Map "mo:core/Map";
 import List "mo:core/List";
 import Runtime "mo:core/Runtime";
+import Migration "migration";
 
-
-// Add migration to backend actor
-
+(with migration = Migration.run)
 actor {
   type ClientRecord = {
     idLuid : Text;
@@ -17,7 +16,13 @@ actor {
     plano : Text;
   };
 
+  type Notification = {
+    message : Text;
+    timestamp : Int;
+  };
+
   let clientRecords = Map.empty<Text, ClientRecord>();
+  let notifications = Map.empty<Text, List.List<Notification>>();
   var globalAnnouncement : Text = "";
   var networkMonitoringStatus : Text = "normal";
 
@@ -45,6 +50,7 @@ actor {
     };
 
     clientRecords.add(idLuid, record);
+    notifications.add(idLuid, List.empty<Notification>());
   };
 
   public shared ({ caller }) func updateClientRecord(
@@ -95,6 +101,7 @@ actor {
       Runtime.trap("Client record does not exist");
     };
     clientRecords.remove(idLuid);
+    notifications.remove(idLuid);
   };
 
   public shared ({ caller }) func setGlobalAnnouncement(announcement : Text) : async () {
@@ -118,5 +125,34 @@ actor {
 
   public query ({ caller }) func getNetworkMonitoringStatus() : async Text {
     networkMonitoringStatus;
+  };
+
+  public shared ({ caller }) func addNotification(clientId : Text, message : Text) : async () {
+    let newNotification : Notification = {
+      message;
+      timestamp = 0;
+    };
+
+    switch (notifications.get(clientId)) {
+      case (null) {
+        let notificationList = List.empty<Notification>();
+        notificationList.add(newNotification);
+        notifications.add(clientId, notificationList);
+      };
+      case (?existingNotifications) {
+        existingNotifications.add(newNotification);
+      };
+    };
+  };
+
+  public query ({ caller }) func getNotifications(clientId : Text) : async [Notification] {
+    switch (notifications.get(clientId)) {
+      case (null) { [] };
+      case (?notificationList) { notificationList.toArray() };
+    };
+  };
+
+  public shared ({ caller }) func clearNotifications(clientId : Text) : async () {
+    notifications.add(clientId, List.empty<Notification>());
   };
 };

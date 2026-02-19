@@ -1,8 +1,8 @@
 {
   "frontend/src/App.tsx": "Main application component with TanStack Router setup, theme provider, authentication providers, and route definitions for admin and client portals with protected routes.",
   "frontend/src/hooks/useAdminAuth.tsx": "Admin authentication context provider managing hardcoded login credentials (SidneiCosta00/Nikebolado@4) with Remember Me functionality using localStorage/sessionStorage.",
-  "frontend/src/hooks/useClientAuth.tsx": "Client authentication context provider managing client session state and storing authenticated client data in sessionStorage.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including client CRUD with new nome/senhaCliente fields, network monitoring status management, and global announcements with automatic cache invalidation.",
+  "frontend/src/hooks/useClientAuth.tsx": "Client authentication context provider managing client session state with Remember Me functionality using localStorage for persistent sessions and sessionStorage for temporary sessions, with logout clearing both storage locations.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including client CRUD, network monitoring, global announcements, and individual client notifications with automatic cache invalidation and polling intervals.",
   "frontend/src/hooks/useNetworkSpeedSimulation.ts": "Custom hook simulating network speed that returns 0 Gbps when monitoring status is offline or oscillates between 2.5-4.8 Gbps when normal, updating every 2 seconds.",
   "frontend/src/components/ProtectedRoute.tsx": "Route wrapper component that checks admin authentication and redirects to login if not authenticated.",
   "frontend/src/components/ClientProtectedRoute.tsx": "Route wrapper component that checks client authentication and redirects to client login if not authenticated.",
@@ -14,11 +14,14 @@
   "frontend/src/components/GlobalAnnouncementBanner.tsx": "Breaking news style banner component displaying global announcements at the top of client dashboard with auto-hide when empty.",
   "frontend/src/pages/AdminLogin.tsx": "Admin login page with hardcoded credential validation, Remember Me checkbox, and navigation to master panel on success.",
   "frontend/src/pages/AdminPanel.tsx": "Admin dashboard page containing client registration form, global announcement management, network monitoring toggle, and client list table with logout functionality in a responsive grid layout.",
-  "frontend/src/pages/ClientLogin.tsx": "Client login page with ID_Luid and password authentication that validates credentials against backend records before granting dashboard access.",
-  "frontend/src/pages/ClientDashboard.tsx": "Client dashboard displaying VPS credentials card, network speed chart, and global announcement banner with read-only access.",
+  "frontend/src/pages/ClientLogin.tsx": "Client login page with ID_Luid and password authentication, including a \"Stay Connected\" checkbox that enables persistent authentication across browser sessions using localStorage.",
+  "frontend/src/pages/ClientDashboard.tsx": "Client dashboard displaying VPS credentials card, network speed chart, global announcement banner, notification bell, and profile menu with personalized welcome message.",
   "frontend/src/index.css": "Global styles with Carbon Black (#1a1a1a) background and Neon Green (#39FF14) accent colors using OKLCH color system for dark premium theme.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with custom Carbon Black and Neon Green color tokens, neon glow shadow effect, and dark mode settings.",
-  "frontend/src/components/ClientList.tsx": "Table component displaying all registered clients with Nome column, featuring edit and delete buttons for each client row with loading states and toast notifications.",
+  "frontend/src/components/ClientList.tsx": "Table component displaying all registered clients with Nome column, featuring notification bell, edit, and delete buttons for each client row with loading states and toast notifications.",
   "frontend/src/components/ClientEditModal.tsx": "Modal dialog component for editing client information with pre-filled form fields for all client data including Nome, Senha_Cliente, VPS credentials, and Plano with save/cancel actions.",
-  "frontend/src/components/NetworkMonitoringToggle.tsx": "Radio group control component for toggling network monitoring status between Normal and Offline modes with real-time backend synchronization and visual feedback."
+  "frontend/src/components/NetworkMonitoringToggle.tsx": "Radio group control component for toggling network monitoring status between Normal and Offline modes with real-time backend synchronization and visual feedback.",
+  "frontend/src/components/ClientProfileMenu.tsx": "Dropdown menu component displaying client avatar with initials, client name, ID, and logout button in the top-right corner of the dashboard header.",
+  "frontend/src/components/NotificationBell.tsx": "Notification bell component with badge counter displaying both global announcements and individual client notifications in a popover, with ability to clear individual notifications.",
+  "frontend/src/components/SendNotificationModal.tsx": "Dialog modal component for admins to compose and send individual notifications to specific clients with textarea input and backend integration."
 }

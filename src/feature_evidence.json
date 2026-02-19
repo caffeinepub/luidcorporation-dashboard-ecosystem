@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-remove-the-built-with-caffeine-ai-link-and-branding-from-the-footer-component",
-      "featureTitle": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
+      "featureId": "feature-add-a-stay-connected-checkbox-to-the-client-login-page-that-persists-the-client-s-authentication-session-using-localstorage-instead-of-sessionstorage-when-checked",
+      "featureTitle": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
       "files": [
-        "frontend/src/components/Footer.tsx"
+        "frontend/src/hooks/useClientAuth.tsx",
+        "frontend/src/pages/ClientLogin.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -20,10 +21,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-footer-to-display-only-luidcorporation-2026-as-the-copyright-text",
-      "featureTitle": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "featureId": "feature-create-a-profile-menu-in-the-top-right-corner-of-the-client-dashboard-that-displays-the-client-s-name-and-a-disconnect-button-when-clicked",
+      "featureTitle": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
       "files": [
-        "frontend/src/components/Footer.tsx"
+        "frontend/src/components/ClientProfileMenu.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -34,6 +36,64 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-notification-bell-icon-in-the-client-dashboard-that-displays-global-announcements-when-clicked",
+      "featureTitle": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "files": [
+        "frontend/src/components/NotificationBell.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-ui-in-the-admin-panel-s-client-management-section-to-send-individual-notifications-to-specific-clients",
+      "featureTitle": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "files": [
+        "frontend/src/components/ClientList.tsx",
+        "frontend/src/components/SendNotificationModal.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-individual-client-notifications-in-the-notification-bell-dropdown-on-the-client-dashboard-showing-both-global-announcements-and-client-specific-notifications",
+      "featureTitle": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "files": [
+        "frontend/src/components/NotificationBell.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
       ],
       "confidence": "high"
     }

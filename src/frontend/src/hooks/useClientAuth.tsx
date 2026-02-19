@@ -4,7 +4,7 @@ import type { ClientRecord } from '../backend';
 interface ClientAuthContextType {
   isAuthenticated: boolean;
   clientData: ClientRecord | null;
-  login: (clientData: ClientRecord) => void;
+  login: (clientData: ClientRecord, rememberMe?: boolean) => void;
   logout: () => void;
 }
 
@@ -17,27 +17,40 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
   const [clientData, setClientData] = useState<ClientRecord | null>(null);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem(CLIENT_AUTH_KEY);
+    // Check localStorage first (remember me), then sessionStorage
+    const storedLocal = localStorage.getItem(CLIENT_AUTH_KEY);
+    const storedSession = sessionStorage.getItem(CLIENT_AUTH_KEY);
+    const stored = storedLocal || storedSession;
+    
     if (stored) {
       try {
         const data = JSON.parse(stored);
         setClientData(data);
         setIsAuthenticated(true);
       } catch (e) {
+        localStorage.removeItem(CLIENT_AUTH_KEY);
         sessionStorage.removeItem(CLIENT_AUTH_KEY);
       }
     }
   }, []);
 
-  const login = (data: ClientRecord) => {
+  const login = (data: ClientRecord, rememberMe: boolean = false) => {
     setClientData(data);
     setIsAuthenticated(true);
-    sessionStorage.setItem(CLIENT_AUTH_KEY, JSON.stringify(data));
+    
+    if (rememberMe) {
+      localStorage.setItem(CLIENT_AUTH_KEY, JSON.stringify(data));
+      sessionStorage.removeItem(CLIENT_AUTH_KEY);
+    } else {
+      sessionStorage.setItem(CLIENT_AUTH_KEY, JSON.stringify(data));
+      localStorage.removeItem(CLIENT_AUTH_KEY);
+    }
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setClientData(null);
+    localStorage.removeItem(CLIENT_AUTH_KEY);
     sessionStorage.removeItem(CLIENT_AUTH_KEY);
   };
 

@@ -1,45 +1,110 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T01:35:32.203Z",
+  "generatedAt": "2026-02-19T03:07:59.540Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 6,
+    "implemented": 5,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
+        "summary": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/pages/ClientLogin.tsx",
+          "frontend/src/hooks/useClientAuth.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/pages/ClientLogin.tsx",
+          "frontend/src/hooks/useClientAuth.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+        "summary": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/ClientProfileMenu.tsx",
+          "frontend/src/pages/ClientDashboard.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/ClientProfileMenu.tsx",
+          "frontend/src/pages/ClientDashboard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/pages/ClientDashboard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/pages/ClientDashboard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add backend functionality to store and retrieve individual notifications for specific clients",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/SendNotificationModal.tsx",
+          "frontend/src/components/ClientList.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/SendNotificationModal.tsx",
+          "frontend/src/components/ClientList.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/Footer.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/ClientList.tsx",
+    "frontend/src/components/ClientProfileMenu.tsx",
+    "frontend/src/components/NotificationBell.tsx",
+    "frontend/src/components/SendNotificationModal.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useClientAuth.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/ClientDashboard.tsx",
+    "frontend/src/pages/ClientLogin.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

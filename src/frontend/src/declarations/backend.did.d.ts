@@ -19,8 +19,11 @@ export interface ClientRecord {
   'idLuid' : string,
   'plano' : string,
 }
+export interface Notification { 'message' : string, 'timestamp' : bigint }
 export interface _SERVICE {
+  'addNotification' : ActorMethod<[string, string], undefined>,
   'clearGlobalAnnouncement' : ActorMethod<[], undefined>,
+  'clearNotifications' : ActorMethod<[string], undefined>,
   'createClientRecord' : ActorMethod<
     [string, string, string, string, string, string, string],
     undefined
@@ -30,6 +33,7 @@ export interface _SERVICE {
   'getClientRecord' : ActorMethod<[string], ClientRecord>,
   'getGlobalAnnouncement' : ActorMethod<[], string>,
   'getNetworkMonitoringStatus' : ActorMethod<[], string>,
+  'getNotifications' : ActorMethod<[string], Array<Notification>>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,
   'updateClientRecord' : ActorMethod<
     [string, string, string, string, string, string, string],

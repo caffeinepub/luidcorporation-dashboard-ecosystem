@@ -17,9 +17,15 @@ export const ClientRecord = IDL.Record({
   'idLuid' : IDL.Text,
   'plano' : IDL.Text,
 });
+export const Notification = IDL.Record({
+  'message' : IDL.Text,
+  'timestamp' : IDL.Int,
+});
 
 export const idlService = IDL.Service({
+  'addNotification' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'clearGlobalAnnouncement' : IDL.Func([], [], []),
+  'clearNotifications' : IDL.Func([IDL.Text], [], []),
   'createClientRecord' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [],
@@ -30,6 +36,7 @@ export const idlService = IDL.Service({
   'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
   'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
   'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
+  'getNotifications' : IDL.Func([IDL.Text], [IDL.Vec(Notification)], ['query']),
   'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
   'updateClientRecord' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
@@ -51,9 +58,15 @@ export const idlFactory = ({ IDL }) => {
     'idLuid' : IDL.Text,
     'plano' : IDL.Text,
   });
+  const Notification = IDL.Record({
+    'message' : IDL.Text,
+    'timestamp' : IDL.Int,
+  });
   
   return IDL.Service({
+    'addNotification' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'clearGlobalAnnouncement' : IDL.Func([], [], []),
+    'clearNotifications' : IDL.Func([IDL.Text], [], []),
     'createClientRecord' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [],
@@ -64,6 +77,11 @@ export const idlFactory = ({ IDL }) => {
     'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
     'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
     'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
+    'getNotifications' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(Notification)],
+        ['query'],
+      ),
     'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
     'updateClientRecord' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],

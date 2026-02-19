@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useClientAuth } from '../hooks/useClientAuth';
 import { useActor } from '../hooks/useActor';
@@ -12,6 +13,7 @@ import { Cloud, Loader2 } from 'lucide-react';
 export default function ClientLogin() {
   const [idLuid, setIdLuid] = useState('');
   const [senha, setSenha] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login, isAuthenticated } = useClientAuth();
   const { actor } = useActor();
@@ -47,7 +49,7 @@ export default function ClientLogin() {
         return;
       }
 
-      login(clientData);
+      login(clientData, rememberMe);
       toast.success('Login realizado com sucesso!');
       navigate({ to: '/client-dashboard' });
     } catch (error) {
@@ -93,6 +95,21 @@ export default function ClientLogin() {
                 required
                 className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
               />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="rememberMe"
+                checked={rememberMe}
+                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                className="border-neon-green/30 data-[state=checked]:bg-neon-green data-[state=checked]:text-carbon-black"
+              />
+              <Label
+                htmlFor="rememberMe"
+                className="text-sm font-normal text-muted-foreground cursor-pointer"
+              >
+                Manter conectado
+              </Label>
             </div>
 
             <Button

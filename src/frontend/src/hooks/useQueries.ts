@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord } from '../backend';
+import type { ClientRecord, Notification } from '../backend';
 
 export function useCreateClientRecord() {
   const { actor } = useActor();
@@ -181,6 +181,50 @@ export function useSetNetworkMonitoringStatus() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['networkMonitoringStatus'] });
+    },
+  });
+}
+
+export function useSendNotification() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ clientId, message }: { clientId: string; message: string }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.addNotification(clientId, message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+}
+
+export function useGetNotifications(clientId: string | null) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Notification[]>({
+    queryKey: ['notifications', clientId],
+    queryFn: async () => {
+      if (!actor || !clientId) return [];
+      return await actor.getNotifications(clientId);
+    },
+    enabled: !!actor && !isFetching && !!clientId,
+    refetchInterval: 15000, // Refetch every 15 seconds
+  });
+}
+
+export function useClearNotifications() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (clientId: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.clearNotifications(clientId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
   });
 }

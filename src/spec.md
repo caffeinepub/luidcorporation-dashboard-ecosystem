@@ -1,11 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Remove Caffeine AI watermark from footer and update to display only LuidCorporation branding.
+**Goal:** Add persistent login option, profile menu with logout, notification bell for global announcements, and individual client notification system.
 
 **Planned changes:**
-- Remove the 'Built with caffeine.ai' link and all caffeine.ai branding from the footer component
-- Update footer to display only 'LuidCorporation© 2026' as the copyright text
-- Maintain Carbon Black and Neon Green color scheme in footer styling
+- Add "Stay Connected" checkbox to client login page that uses localStorage for persistent authentication
+- Create profile menu in top-right corner displaying client name and disconnect button
+- Add notification bell icon showing global announcements in a dropdown
+- Implement backend storage and retrieval for individual client notifications
+- Add admin UI to send individual notifications to specific clients
+- Display both global announcements and individual notifications in the bell dropdown
 
-**User-visible outcome:** The footer displays clean LuidCorporation branding without any third-party attribution or watermarks.
+**User-visible outcome:** Clients can stay logged in across sessions, access their profile menu to logout, view global announcements via notification bell, and receive individual notifications from admins. Admins can send targeted notifications to specific clients.

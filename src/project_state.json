@@ -1,30 +1,68 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
+  "summary": "Client login and notification system with admin panel for managing client notifications",
+  "architectural_notes": [
+    "Client authentication system with persistent login capability",
+    "User profile management with session control",
+    "Notification system supporting both global and individual client messages",
+    "Admin panel with client management and notification broadcast features"
+  ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-remove-the-built-with-caffeine-ai-link-and-branding-from-the-footer-component",
-      "title": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
+      "id": "feature-add-a-stay-connected-checkbox-to-the-client-login-page-that-persists-the-client-s-authentication-session-using-localstorage-instead-of-sessionstorage-when-checked",
+      "title": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-update-the-footer-to-display-only-luidcorporation-2026-as-the-copyright-text",
-      "title": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "id": "feature-create-a-profile-menu-in-the-top-right-corner-of-the-client-dashboard-that-displays-the-client-s-name-and-a-disconnect-button-when-clicked",
+      "title": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-notification-bell-icon-in-the-client-dashboard-that-displays-global-announcements-when-clicked",
+      "title": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-ui-in-the-admin-panel-s-client-management-section-to-send-individual-notifications-to-specific-clients",
+      "title": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-individual-client-notifications-in-the-notification-bell-dropdown-on-the-client-dashboard-showing-both-global-announcements-and-client-specific-notifications",
+      "title": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
     }
   ],
-  "new_feature_requests": [],
-  "projectName": "Remove Caffeine AI watermark and update footer branding",
+  "new_feature_requests": [
+    {
+      "id": "AR-4",
+      "summary": "Add backend functionality to store and retrieve individual notifications for specific clients",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Add stay connected option, profile menu, notification bell, and individual client notifications",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

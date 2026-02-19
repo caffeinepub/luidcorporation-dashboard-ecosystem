@@ -1,52 +1,129 @@
 {
   "kind": "build_request",
-  "title": "Remove Caffeine AI watermark and update footer branding",
+  "title": "Add stay connected option, profile menu, notification bell, and individual client notifications",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
+      "text": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "tire a marca da água build with caffeine ai"
+          "Coloque a opção de manter conectado no login do cliente"
         ]
       },
       "acceptanceCriteria": [
-        "The footer no longer displays any reference to caffeine.ai",
-        "No 'powered by' or 'built with' attribution links remain visible"
+        "Client login page displays a 'Stay Connected' checkbox",
+        "When checked, client authentication persists across browser sessions using localStorage",
+        "When unchecked, authentication uses sessionStorage (current behavior)"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "text": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "deixe Só LuidCorporation© 2026"
+          "deixe bonitinho ali o perfil no canto ai a pessoa clica aparece o nome dela e o botão de desconectar"
         ]
       },
       "acceptanceCriteria": [
-        "Footer displays exactly 'LuidCorporation© 2026' with the copyright symbol",
-        "The text maintains consistent styling with the current Carbon Black and Neon Green theme",
-        "No other branding or text appears in the footer"
+        "Profile menu is visible in the top-right corner of the client dashboard",
+        "Clicking the profile menu reveals a dropdown showing the client's name",
+        "Dropdown includes a disconnect/logout button",
+        "Clicking disconnect logs out the client and redirects to login"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "adicione um sino onde apareçam os avisos globais"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Notification bell icon is visible in the client dashboard header",
+        "Clicking the bell opens a dropdown/popover showing global announcements",
+        "Bell shows a visual indicator (badge) when there are unread announcements",
+        "Announcement content is fetched from the existing global announcement system"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add backend functionality to store and retrieve individual notifications for specific clients",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "adicione no gerenciamento de clientes pra enviar avisos individuais pra cada cliente"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend supports creating individual notifications targeted to specific client idLuid",
+        "Backend provides a query to retrieve all notifications for a given client",
+        "Each notification includes timestamp, message text, and read/unread status",
+        "Backend supports marking notifications as read"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "no painel de administração adicione no gerenciamento de clientes pra enviar avisos individuais pra cada cliente"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel client list includes a button or action to send notifications to individual clients",
+        "Clicking the notification action opens a modal or form to compose a message",
+        "Admin can enter notification text and send it to the selected client",
+        "Success/error feedback is displayed after sending"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Notification bell dropdown shows both global announcements and individual notifications",
+        "Individual notifications are clearly distinguished from global announcements",
+        "Client can mark individual notifications as read",
+        "Notification count badge reflects unread individual notifications"
       ]
     }
   ],
   "constraints": [
-    "Maintain the existing footer component structure and styling approach",
-    "Preserve the Carbon Black and Neon Green color scheme"
+    "Preserve existing authentication flow and session management logic",
+    "Do not modify the backend client record schema beyond adding notification storage",
+    "Maintain the existing global announcement system functionality"
   ],
   "nonGoals": [
-    "Changing the footer layout or positioning",
-    "Modifying any other branding elements outside the footer",
-    "Adding additional footer content beyond the copyright text"
+    "Real-time push notifications or WebSocket-based updates",
+    "Notification scheduling or delayed delivery",
+    "Rich text or HTML formatting in notifications",
+    "Notification history pagination"
   ],
   "imageRequirements": {
     "required": [],

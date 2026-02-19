@@ -1,36 +1,119 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove Caffeine AI watermark and update footer branding",
+  "title": "Add stay connected option, profile menu, notification bell, and individual client notifications",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Remove the 'Built with caffeine.ai' link and branding from the footer component",
+      "summary": "Add a 'Stay Connected' checkbox to the client login page that persists authentication using localStorage when checked",
       "acceptanceCriteria": [
-        "The footer no longer displays any reference to caffeine.ai",
-        "No 'powered by' or 'built with' attribution links remain visible"
+        "Client login page displays a 'Stay Connected' checkbox",
+        "When checked, client authentication persists across browser sessions using localStorage",
+        "When unchecked, authentication uses sessionStorage (current behavior)"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/pages/ClientLogin.tsx",
           "operation": "modify",
-          "description": "Remove the powered-by link to caffeine.ai and any associated branding elements from the footer component while maintaining the existing component structure"
+          "description": "Add a 'Stay Connected' checkbox to the client login form using shadcn-ui Checkbox component. Pass the checkbox state to the authentication handler."
+        },
+        {
+          "path": "frontend/src/hooks/useClientAuth.tsx",
+          "operation": "modify",
+          "description": "Modify the login function to accept a 'rememberMe' parameter. When true, persist client authentication data in localStorage instead of sessionStorage. Update the authentication check to read from both storage locations, prioritizing localStorage. Ensure logout clears both storage locations."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Update the footer to display only 'LuidCorporation© 2026' as the copyright text",
+      "summary": "Create a profile menu in the top-right corner of the client dashboard displaying the client's name and a disconnect button",
       "acceptanceCriteria": [
-        "Footer displays exactly 'LuidCorporation© 2026' with the copyright symbol",
-        "The text maintains consistent styling with the current Carbon Black and Neon Green theme",
-        "No other branding or text appears in the footer"
+        "Profile menu is visible in the top-right corner of the client dashboard",
+        "Clicking the profile menu reveals a dropdown showing the client's name",
+        "Dropdown includes a disconnect/logout button",
+        "Clicking disconnect logs out the client and redirects to login"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/components/ClientProfileMenu.tsx",
+          "operation": "create",
+          "description": "Create a profile menu component using shadcn-ui DropdownMenu components. Display a user icon or avatar that triggers the dropdown on click. The dropdown content should show the client's name (from useClientAuth context) and a logout button. Clicking logout should call the logout function from useClientAuth and navigate to the client login page."
+        },
+        {
+          "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Replace all existing footer text with 'LuidCorporation© 2026' and ensure the styling maintains consistency with the Carbon Black and Neon Green color scheme defined in the theme"
+          "description": "Add the ClientProfileMenu component to the top-right corner of the dashboard header area, positioning it alongside any existing header elements using flexbox layout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "acceptanceCriteria": [
+        "Notification bell icon is visible in the client dashboard header",
+        "Clicking the bell opens a dropdown/popover showing global announcements",
+        "Bell shows a visual indicator (badge) when there are unread announcements",
+        "Announcement content is fetched from the existing global announcement system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NotificationBell.tsx",
+          "operation": "create",
+          "description": "Create a notification bell component using shadcn-ui Popover and Badge components. Display a bell icon from lucide-react. Show a badge indicator when there are unread announcements. On click, open a popover displaying global announcements fetched via the existing useQueries hook. Initially show only global announcements (individual notifications will be added in REQ-6)."
+        },
+        {
+          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "operation": "modify",
+          "description": "Add the NotificationBell component to the dashboard header area, positioned to the left of the ClientProfileMenu component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "acceptanceCriteria": [
+        "Admin panel client list includes a button or action to send notifications to individual clients",
+        "Clicking the notification action opens a modal or form to compose a message",
+        "Admin can enter notification text and send it to the selected client",
+        "Success/error feedback is displayed after sending"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SendNotificationModal.tsx",
+          "operation": "create",
+          "description": "Create a dialog modal component using shadcn-ui Dialog and Form components. Accept clientId and clientName as props. Display a textarea for notification message input and a send button. Use React Query mutation to call backend.addNotification with the clientId and message. Show toast notifications for success/error feedback. Close the modal on successful submission."
+        },
+        {
+          "path": "frontend/src/components/ClientList.tsx",
+          "operation": "modify",
+          "description": "Add a notification/bell icon button in the action column for each client row. Clicking the button opens the SendNotificationModal for that specific client, passing the client's idLuid and nome as props."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a React Query mutation hook for sending individual notifications using backend.addNotification. The mutation should accept clientId and message parameters, invalidate relevant notification queries on success, and return success/error states for UI feedback."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Display individual client notifications in the notification bell dropdown, showing both global announcements and client-specific notifications",
+      "acceptanceCriteria": [
+        "Notification bell dropdown shows both global announcements and individual notifications",
+        "Individual notifications are clearly distinguished from global announcements",
+        "Client can mark individual notifications as read",
+        "Notification count badge reflects unread individual notifications"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NotificationBell.tsx",
+          "operation": "modify",
+          "description": "Extend the notification bell to fetch and display individual notifications for the logged-in client using backend.getNotifications. Show both global announcements and individual notifications in separate sections within the popover. Add a clear/dismiss action for individual notifications using backend.clearNotifications. Update the badge count to reflect unread individual notifications. Use the client's idLuid from useClientAuth context to fetch notifications."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for fetching individual client notifications using backend.getNotifications and clearing notifications using backend.clearNotifications. Accept clientId as a parameter and enable the query only when clientId is available. Invalidate notification queries after clearing."
         }
       ]
     }

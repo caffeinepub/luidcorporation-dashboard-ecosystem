@@ -89,6 +89,10 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface Notification {
+    message: string;
+    timestamp: bigint;
+}
 export interface ClientRecord {
     senhaCliente: string;
     senhaVps: string;
@@ -99,19 +103,36 @@ export interface ClientRecord {
     plano: string;
 }
 export interface backendInterface {
+    addNotification(clientId: string, message: string): Promise<void>;
     clearGlobalAnnouncement(): Promise<void>;
+    clearNotifications(clientId: string): Promise<void>;
     createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
     getClientRecord(idLuid: string): Promise<ClientRecord>;
     getGlobalAnnouncement(): Promise<string>;
     getNetworkMonitoringStatus(): Promise<string>;
+    getNotifications(clientId: string): Promise<Array<Notification>>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
     updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async addNotification(arg0: string, arg1: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addNotification(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addNotification(arg0, arg1);
+            return result;
+        }
+    }
     async clearGlobalAnnouncement(): Promise<void> {
         if (this.processError) {
             try {
@@ -123,6 +144,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.clearGlobalAnnouncement();
+            return result;
+        }
+    }
+    async clearNotifications(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.clearNotifications(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.clearNotifications(arg0);
             return result;
         }
     }
@@ -207,6 +242,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getNetworkMonitoringStatus();
+            return result;
+        }
+    }
+    async getNotifications(arg0: string): Promise<Array<Notification>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNotifications(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNotifications(arg0);
             return result;
         }
     }
