@@ -8,14 +8,26 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const VMStatus = IDL.Variant({
+  'maintenance' : IDL.Null,
+  'offline' : IDL.Null,
+  'online' : IDL.Null,
+});
 export const ClientRecord = IDL.Record({
   'senhaCliente' : IDL.Text,
   'senhaVps' : IDL.Text,
   'nome' : IDL.Text,
+  'vmStatus' : VMStatus,
   'userVps' : IDL.Text,
   'ipVps' : IDL.Text,
   'idLuid' : IDL.Text,
   'plano' : IDL.Text,
+});
+export const ChatMessage = IDL.Record({
+  'sender' : IDL.Text,
+  'message' : IDL.Text,
+  'timestamp' : IDL.Int,
+  'receiver' : IDL.Text,
 });
 export const Notification = IDL.Record({
   'message' : IDL.Text,
@@ -25,9 +37,19 @@ export const Notification = IDL.Record({
 export const idlService = IDL.Service({
   'addNotification' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'clearGlobalAnnouncement' : IDL.Func([], [], []),
+  'clearMessages' : IDL.Func([IDL.Text], [], []),
   'clearNotifications' : IDL.Func([IDL.Text], [], []),
   'createClientRecord' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+      [
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        VMStatus,
+      ],
       [],
       [],
     ),
@@ -35,28 +57,52 @@ export const idlService = IDL.Service({
   'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
   'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
   'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
+  'getMessages' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
   'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
   'getNotifications' : IDL.Func([IDL.Text], [IDL.Vec(Notification)], ['query']),
+  'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
   'updateClientRecord' : IDL.Func(
-      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+      [
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        IDL.Text,
+        VMStatus,
+      ],
       [],
       [],
     ),
   'updateNetworkMonitoringStatus' : IDL.Func([IDL.Text], [], []),
+  'updateVMStatus' : IDL.Func([IDL.Text, VMStatus], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const VMStatus = IDL.Variant({
+    'maintenance' : IDL.Null,
+    'offline' : IDL.Null,
+    'online' : IDL.Null,
+  });
   const ClientRecord = IDL.Record({
     'senhaCliente' : IDL.Text,
     'senhaVps' : IDL.Text,
     'nome' : IDL.Text,
+    'vmStatus' : VMStatus,
     'userVps' : IDL.Text,
     'ipVps' : IDL.Text,
     'idLuid' : IDL.Text,
     'plano' : IDL.Text,
+  });
+  const ChatMessage = IDL.Record({
+    'sender' : IDL.Text,
+    'message' : IDL.Text,
+    'timestamp' : IDL.Int,
+    'receiver' : IDL.Text,
   });
   const Notification = IDL.Record({
     'message' : IDL.Text,
@@ -66,9 +112,19 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'addNotification' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'clearGlobalAnnouncement' : IDL.Func([], [], []),
+    'clearMessages' : IDL.Func([IDL.Text], [], []),
     'clearNotifications' : IDL.Func([IDL.Text], [], []),
     'createClientRecord' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          VMStatus,
+        ],
         [],
         [],
       ),
@@ -76,19 +132,31 @@ export const idlFactory = ({ IDL }) => {
     'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
     'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
     'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
+    'getMessages' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
     'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
     'getNotifications' : IDL.Func(
         [IDL.Text],
         [IDL.Vec(Notification)],
         ['query'],
       ),
+    'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
     'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
     'updateClientRecord' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          IDL.Text,
+          VMStatus,
+        ],
         [],
         [],
       ),
     'updateNetworkMonitoringStatus' : IDL.Func([IDL.Text], [], []),
+    'updateVMStatus' : IDL.Func([IDL.Text, VMStatus], [], []),
   });
 };
 

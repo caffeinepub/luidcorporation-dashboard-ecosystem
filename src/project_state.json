@@ -1,68 +1,93 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Client login and notification system with admin panel for managing client notifications",
+  "summary": "Admin panel with VM status management and customer support chat",
   "architectural_notes": [
-    "Client authentication system with persistent login capability",
-    "User profile management with session control",
-    "Notification system supporting both global and individual client messages",
-    "Admin panel with client management and notification broadcast features"
+    "Admin panel with client VM status management",
+    "Real-time chat system between customers and administrators",
+    "User profile display in admin interface"
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-a-stay-connected-checkbox-to-the-client-login-page-that-persists-the-client-s-authentication-session-using-localstorage-instead-of-sessionstorage-when-checked",
-      "title": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-profile-menu-in-the-top-right-corner-of-the-client-dashboard-that-displays-the-client-s-name-and-a-disconnect-button-when-clicked",
-      "title": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
+      "id": "feature-add-vm-status-edit-controls-in-the-admin-panel-for-each-client-in-the-client-list",
+      "title": "Add VM status edit controls in the admin panel for each client in the client list",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-notification-bell-icon-in-the-client-dashboard-that-displays-global-announcements-when-clicked",
-      "title": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "id": "feature-display-vm-status-indicator-on-the-client-dashboard-showing-their-current-vm-state",
+      "title": "Display VM status indicator on the client dashboard showing their current VM state",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-ui-in-the-admin-panel-s-client-management-section-to-send-individual-notifications-to-specific-clients",
-      "title": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "id": "feature-implement-a-floating-chat-button-and-chat-window-widget-on-the-client-dashboard",
+      "title": "Implement a floating chat button and chat window widget on the client dashboard",
       "reqIds": [
         "REQ-5"
       ],
       "version": 1
     },
     {
-      "id": "feature-display-individual-client-notifications-in-the-notification-bell-dropdown-on-the-client-dashboard-showing-both-global-announcements-and-client-specific-notifications",
-      "title": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "id": "feature-add-a-chat-management-interface-in-the-admin-panel-showing-all-active-client-conversations",
+      "title": "Add a chat management interface in the admin panel showing all active client conversations",
       "reqIds": [
         "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-logged-in-administrator-s-name-profile-in-the-admin-panel-header",
+      "title": "Display the logged-in administrator's name/profile in the admin panel header",
+      "reqIds": [
+        "REQ-7"
       ],
       "version": 1
     }
   ],
   "new_feature_requests": [
     {
+      "id": "AR-1",
+      "summary": "Add VM status indicator (online/offline/maintenance) for each client, editable in admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add floating chat widget for customers to contact support/admin",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Display logged-in user profile name in admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
       "id": "AR-4",
-      "summary": "Add backend functionality to store and retrieve individual notifications for specific clients",
+      "summary": "Add a VM status field to each client record that can be set to 'online', 'offline', or 'maintenance'",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Create backend data structures and functions to store and retrieve chat messages between clients and administrators",
       "reqIds": [
         "REQ-4"
       ],
       "status": "pending"
     }
   ],
-  "projectName": "Add stay connected option, profile menu, notification bell, and individual client notifications",
+  "projectName": "Luid Corporation Dashboard",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -1,87 +1,92 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T03:07:59.540Z",
+  "generatedAt": "2026-02-19T03:37:43.550Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
+    "total": 7,
     "implemented": 5,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/ClientLogin.tsx",
-          "frontend/src/hooks/useClientAuth.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/ClientLogin.tsx",
-          "frontend/src/hooks/useClientAuth.tsx"
-        ]
+        "summary": "Add a VM status field to each client record that can be set to 'online', 'offline', or 'maintenance'",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
+        "summary": "Add VM status edit controls in the admin panel for each client in the client list",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ClientProfileMenu.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientList.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/ClientProfileMenu.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientList.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+        "summary": "Display VM status indicator on the client dashboard showing their current VM state",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
           "frontend/src/pages/ClientDashboard.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
           "frontend/src/pages/ClientDashboard.tsx"
         ]
       },
       {
         "id": "REQ-4",
-        "summary": "Add backend functionality to store and retrieve individual notifications for specific clients",
+        "summary": "Create backend data structures and functions to store and retrieve chat messages between clients and administrators",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-5",
-        "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+        "summary": "Implement a floating chat button and chat window widget on the client dashboard",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/SendNotificationModal.tsx",
-          "frontend/src/components/ClientList.tsx",
+          "frontend/src/components/ChatWidget.tsx",
+          "frontend/src/pages/ClientDashboard.tsx",
           "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/SendNotificationModal.tsx",
-          "frontend/src/components/ClientList.tsx",
+          "frontend/src/components/ChatWidget.tsx",
+          "frontend/src/pages/ClientDashboard.tsx",
           "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
         "id": "REQ-6",
-        "summary": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+        "summary": "Add a chat management interface in the admin panel showing all active client conversations",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/AdminChatPanel.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
-          "frontend/src/hooks/useQueries.ts"
+          "frontend/src/components/AdminChatPanel.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Display the logged-in administrator's name/profile in the admin panel header",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminProfileDisplay.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AdminProfileDisplay.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
         ]
       }
     ]
@@ -95,16 +100,18 @@
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
+    "frontend/src/components/AdminChatPanel.tsx",
+    "frontend/src/components/AdminProfileDisplay.tsx",
+    "frontend/src/components/ChatWidget.tsx",
+    "frontend/src/components/ClientEditModal.tsx",
     "frontend/src/components/ClientList.tsx",
-    "frontend/src/components/ClientProfileMenu.tsx",
-    "frontend/src/components/NotificationBell.tsx",
-    "frontend/src/components/SendNotificationModal.tsx",
+    "frontend/src/components/VMStatusIndicator.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useClientAuth.tsx",
+    "frontend/src/hooks/useAdminAuth.tsx",
     "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminPanel.tsx",
     "frontend/src/pages/ClientDashboard.tsx",
-    "frontend/src/pages/ClientLogin.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

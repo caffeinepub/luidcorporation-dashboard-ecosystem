@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface AdminAuthContextType {
   isAuthenticated: boolean;
+  adminUsername: string;
   login: (id: string, password: string, rememberMe: boolean) => boolean;
   logout: () => void;
 }
@@ -14,22 +15,22 @@ const AUTH_KEY = 'luid_admin_auth';
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminUsername, setAdminUsername] = useState('');
 
   useEffect(() => {
     const stored = localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
     if (stored === 'authenticated') {
       setIsAuthenticated(true);
+      setAdminUsername(ADMIN_ID);
     }
   }, []);
 
   const login = (id: string, password: string, rememberMe: boolean): boolean => {
     if (id === ADMIN_ID && password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
-      if (rememberMe) {
-        localStorage.setItem(AUTH_KEY, 'authenticated');
-      } else {
-        sessionStorage.setItem(AUTH_KEY, 'authenticated');
-      }
+      setAdminUsername(id);
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem(AUTH_KEY, 'authenticated');
       return true;
     }
     return false;
@@ -37,12 +38,13 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setIsAuthenticated(false);
+    setAdminUsername('');
     localStorage.removeItem(AUTH_KEY);
     sessionStorage.removeItem(AUTH_KEY);
   };
 
   return (
-    <AdminAuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AdminAuthContext.Provider value={{ isAuthenticated, adminUsername, login, logout }}>
       {children}
     </AdminAuthContext.Provider>
   );
@@ -50,8 +52,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
 export function useAdminAuth() {
   const context = useContext(AdminAuthContext);
-  if (!context) {
-    throw new Error('useAdminAuth must be used within AdminAuthProvider');
+  if (context === undefined) {
+    throw new Error('useAdminAuth must be used within an AdminAuthProvider');
   }
   return context;
 }

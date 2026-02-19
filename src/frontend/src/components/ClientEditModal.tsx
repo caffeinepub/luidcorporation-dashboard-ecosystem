@@ -30,6 +30,7 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
     userVps: client.userVps,
     senhaVps: client.senhaVps,
     plano: client.plano,
+    vmStatus: client.vmStatus,
   });
 
   const updateClient = useUpdateClientRecord();
@@ -43,6 +44,7 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
       userVps: client.userVps,
       senhaVps: client.senhaVps,
       plano: client.plano,
+      vmStatus: client.vmStatus,
     });
   }, [client]);
 

@@ -1,11 +1,13 @@
-import Text "mo:core/Text";
-import Map "mo:core/Map";
 import List "mo:core/List";
+import Map "mo:core/Map";
+import Text "mo:core/Text";
 import Runtime "mo:core/Runtime";
 import Migration "migration";
 
 (with migration = Migration.run)
 actor {
+  type VMStatus = { #online; #offline; #maintenance };
+
   type ClientRecord = {
     idLuid : Text;
     nome : Text;
@@ -14,6 +16,7 @@ actor {
     userVps : Text;
     senhaVps : Text;
     plano : Text;
+    vmStatus : VMStatus;
   };
 
   type Notification = {
@@ -21,8 +24,17 @@ actor {
     timestamp : Int;
   };
 
+  type ChatMessage = {
+    sender : Text;
+    receiver : Text;
+    message : Text;
+    timestamp : Int;
+  };
+
   let clientRecords = Map.empty<Text, ClientRecord>();
   let notifications = Map.empty<Text, List.List<Notification>>();
+  let chatMessages = Map.empty<Text, List.List<ChatMessage>>();
+
   var globalAnnouncement : Text = "";
   var networkMonitoringStatus : Text = "normal";
 
@@ -34,6 +46,7 @@ actor {
     userVps : Text,
     senhaVps : Text,
     plano : Text,
+    vmStatus : VMStatus,
   ) : async () {
     if (clientRecords.containsKey(idLuid)) {
       Runtime.trap("Client with this ID_Luid already exists.");
@@ -47,10 +60,12 @@ actor {
       userVps;
       senhaVps;
       plano;
+      vmStatus;
     };
 
     clientRecords.add(idLuid, record);
     notifications.add(idLuid, List.empty<Notification>());
+    chatMessages.add(idLuid, List.empty<ChatMessage>());
   };
 
   public shared ({ caller }) func updateClientRecord(
@@ -61,6 +76,7 @@ actor {
     userVps : Text,
     senhaVps : Text,
     plano : Text,
+    vmStatus : VMStatus,
   ) : async () {
     switch (clientRecords.get(idLuid)) {
       case (null) {
@@ -75,7 +91,20 @@ actor {
           userVps;
           senhaVps;
           plano;
+          vmStatus;
         };
+        clientRecords.add(idLuid, updatedRecord);
+      };
+    };
+  };
+
+  public shared ({ caller }) func updateVMStatus(idLuid : Text, vmStatus : VMStatus) : async () {
+    switch (clientRecords.get(idLuid)) {
+      case (null) {
+        Runtime.trap("Client record not found");
+      };
+      case (?existing) {
+        let updatedRecord = { existing with vmStatus };
         clientRecords.add(idLuid, updatedRecord);
       };
     };
@@ -102,6 +131,7 @@ actor {
     };
     clientRecords.remove(idLuid);
     notifications.remove(idLuid);
+    chatMessages.remove(idLuid);
   };
 
   public shared ({ caller }) func setGlobalAnnouncement(announcement : Text) : async () {
@@ -154,5 +184,49 @@ actor {
 
   public shared ({ caller }) func clearNotifications(clientId : Text) : async () {
     notifications.add(clientId, List.empty<Notification>());
+  };
+
+  public shared ({ caller }) func sendMessage(sender : Text, receiver : Text, message : Text) : async () {
+    let newMessage : ChatMessage = {
+      sender;
+      receiver;
+      message;
+      timestamp = 0;
+    };
+
+    // Store message for sender
+    switch (chatMessages.get(sender)) {
+      case (null) {
+        let messageList = List.empty<ChatMessage>();
+        messageList.add(newMessage);
+        chatMessages.add(sender, messageList);
+      };
+      case (?existingMessages) {
+        existingMessages.add(newMessage);
+      };
+    };
+
+    // Store message for receiver
+    switch (chatMessages.get(receiver)) {
+      case (null) {
+        let messageList = List.empty<ChatMessage>();
+        messageList.add(newMessage);
+        chatMessages.add(receiver, messageList);
+      };
+      case (?existingMessages) {
+        existingMessages.add(newMessage);
+      };
+    };
+  };
+
+  public query ({ caller }) func getMessages(clientId : Text) : async [ChatMessage] {
+    switch (chatMessages.get(clientId)) {
+      case (null) { [] };
+      case (?messageList) { messageList.toArray() };
+    };
+  };
+
+  public shared ({ caller }) func clearMessages(clientId : Text) : async () {
+    chatMessages.add(clientId, List.empty<ChatMessage>());
   };
 };

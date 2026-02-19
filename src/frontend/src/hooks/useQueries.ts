@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Notification } from '../backend';
+import type { ClientRecord, Notification, ChatMessage } from '../backend';
+import { VMStatus } from '../backend';
 
 export function useCreateClientRecord() {
   const { actor } = useActor();
@@ -24,7 +25,8 @@ export function useCreateClientRecord() {
         data.ipVps,
         data.userVps,
         data.senhaVps,
-        data.plano
+        data.plano,
+        VMStatus.online
       );
     },
     onSuccess: () => {
@@ -47,6 +49,7 @@ export function useUpdateClientRecord() {
       userVps: string;
       senhaVps: string;
       plano: string;
+      vmStatus: VMStatus;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
       await actor.updateClientRecord(
@@ -56,8 +59,25 @@ export function useUpdateClientRecord() {
         data.ipVps,
         data.userVps,
         data.senhaVps,
-        data.plano
+        data.plano,
+        data.vmStatus
       );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allClientRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['client'] });
+    },
+  });
+}
+
+export function useUpdateVMStatus() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ idLuid, vmStatus }: { idLuid: string; vmStatus: VMStatus }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.updateVMStatus(idLuid, vmStatus);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['allClientRecords'] });
@@ -80,6 +100,7 @@ export function useGetClientRecord(idLuid: string | null) {
       }
     },
     enabled: !!actor && !isFetching && !!idLuid,
+    refetchInterval: 10000, // Refetch every 10 seconds for VM status updates
   });
 }
 
@@ -226,5 +247,55 @@ export function useClearNotifications() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
+  });
+}
+
+export function useChatMessages(clientId: string | null) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ChatMessage[]>({
+    queryKey: ['chatMessages', clientId],
+    queryFn: async () => {
+      if (!actor || !clientId) return [];
+      return await actor.getMessages(clientId);
+    },
+    enabled: !!actor && !isFetching && !!clientId,
+    refetchInterval: 5000, // Refetch every 5 seconds for real-time chat
+  });
+}
+
+export function useSendMessage() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ sender, receiver, message }: { sender: string; receiver: string; message: string }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.sendMessage(sender, receiver, message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
+    },
+  });
+}
+
+export function useAllChatMessages() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<{ clientId: string; messages: ChatMessage[] }[]>({
+    queryKey: ['allChatMessages'],
+    queryFn: async () => {
+      if (!actor) return [];
+      const clients = await actor.getAllClientRecords();
+      const chatData = await Promise.all(
+        clients.map(async (client) => ({
+          clientId: client.idLuid,
+          messages: await actor.getMessages(client.idLuid),
+        }))
+      );
+      return chatData;
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 5000, // Refetch every 5 seconds
   });
 }

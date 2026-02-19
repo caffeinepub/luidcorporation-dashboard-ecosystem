@@ -1,13 +1,17 @@
 import { useClientAuth } from '../hooks/useClientAuth';
+import { useGetClientRecord } from '../hooks/useQueries';
 import VpsCredentialsCard from '../components/VpsCredentialsCard';
 import NetworkSpeedChart from '../components/NetworkSpeedChart';
 import GlobalAnnouncementBanner from '../components/GlobalAnnouncementBanner';
 import ClientProfileMenu from '../components/ClientProfileMenu';
 import NotificationBell from '../components/NotificationBell';
-import { Cloud } from 'lucide-react';
+import ChatWidget from '../components/ChatWidget';
+import VMStatusIndicator from '../components/VMStatusIndicator';
+import { Cloud, Loader2 } from 'lucide-react';
 
 export default function ClientDashboard() {
   const { clientData } = useClientAuth();
+  const { data: clientRecord, isLoading } = useGetClientRecord(clientData?.idLuid || null);
 
   if (!clientData) {
     return null;
@@ -41,20 +45,29 @@ export default function ClientDashboard() {
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div>
-            <VpsCredentialsCard
-              ipVps={clientData.ipVps}
-              userVps={clientData.userVps}
-              senhaVps={clientData.senhaVps}
-              plano={clientData.plano}
-            />
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-neon-green" />
           </div>
-          <div>
-            <NetworkSpeedChart />
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <VpsCredentialsCard
+                ipVps={clientData.ipVps}
+                userVps={clientData.userVps}
+                senhaVps={clientData.senhaVps}
+                plano={clientData.plano}
+              />
+              {clientRecord && <VMStatusIndicator vmStatus={clientRecord.vmStatus} />}
+            </div>
+            <div>
+              <NetworkSpeedChart />
+            </div>
           </div>
-        </div>
+        )}
       </main>
+
+      <ChatWidget />
     </div>
   );
 }

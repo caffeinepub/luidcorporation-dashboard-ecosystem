@@ -1,119 +1,116 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add stay connected option, profile menu, notification bell, and individual client notifications",
+  "title": "Add VM status management, support chat, and admin profile display",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add a 'Stay Connected' checkbox to the client login page that persists authentication using localStorage when checked",
-      "acceptanceCriteria": [
-        "Client login page displays a 'Stay Connected' checkbox",
-        "When checked, client authentication persists across browser sessions using localStorage",
-        "When unchecked, authentication uses sessionStorage (current behavior)"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ClientLogin.tsx",
-          "operation": "modify",
-          "description": "Add a 'Stay Connected' checkbox to the client login form using shadcn-ui Checkbox component. Pass the checkbox state to the authentication handler."
-        },
-        {
-          "path": "frontend/src/hooks/useClientAuth.tsx",
-          "operation": "modify",
-          "description": "Modify the login function to accept a 'rememberMe' parameter. When true, persist client authentication data in localStorage instead of sessionStorage. Update the authentication check to read from both storage locations, prioritizing localStorage. Ensure logout clears both storage locations."
-        }
-      ]
-    },
-    {
       "id": "REQ-2",
-      "summary": "Create a profile menu in the top-right corner of the client dashboard displaying the client's name and a disconnect button",
+      "summary": "Add VM status edit controls in the admin panel for each client in the client list",
       "acceptanceCriteria": [
-        "Profile menu is visible in the top-right corner of the client dashboard",
-        "Clicking the profile menu reveals a dropdown showing the client's name",
-        "Dropdown includes a disconnect/logout button",
-        "Clicking disconnect logs out the client and redirects to login"
+        "Each client row in the admin panel ClientList shows the current VM status",
+        "Admin can change VM status through a dropdown or button group for each client",
+        "Status changes are saved to the backend immediately",
+        "Visual indicators (colors/icons) differentiate between online (green), offline (red), and maintenance (yellow/orange) statuses"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientProfileMenu.tsx",
-          "operation": "create",
-          "description": "Create a profile menu component using shadcn-ui DropdownMenu components. Display a user icon or avatar that triggers the dropdown on click. The dropdown content should show the client's name (from useClientAuth context) and a logout button. Clicking logout should call the logout function from useClientAuth and navigate to the client login page."
+          "path": "frontend/src/components/ClientList.tsx",
+          "operation": "modify",
+          "description": "Add a VM status column to the client table that displays the current vmStatus for each client. Include a dropdown or button group allowing admins to change the status between 'online', 'offline', and 'maintenance'. Use color coding: green for online, red for offline, yellow/orange for maintenance. Wire the status change to call the backend's updateVMStatus function immediately upon selection. Display visual indicators (icons or badges) alongside the status text."
         },
         {
-          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add the ClientProfileMenu component to the top-right corner of the dashboard header area, positioning it alongside any existing header elements using flexbox layout."
+          "description": "Add a new mutation hook useUpdateVMStatus that calls the backend's updateVMStatus(idLuid, vmStatus) function. Configure the mutation to invalidate the client records query cache after successful status update to refresh the client list automatically."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "summary": "Display VM status indicator on the client dashboard showing their current VM state",
       "acceptanceCriteria": [
-        "Notification bell icon is visible in the client dashboard header",
-        "Clicking the bell opens a dropdown/popover showing global announcements",
-        "Bell shows a visual indicator (badge) when there are unread announcements",
-        "Announcement content is fetched from the existing global announcement system"
+        "Client dashboard displays the current VM status with appropriate visual styling",
+        "Status indicator uses consistent color coding matching admin panel (green=online, red=offline, yellow/orange=maintenance)",
+        "Status updates in real-time when changed by admin"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/NotificationBell.tsx",
-          "operation": "create",
-          "description": "Create a notification bell component using shadcn-ui Popover and Badge components. Display a bell icon from lucide-react. Show a badge indicator when there are unread announcements. On click, open a popover displaying global announcements fetched via the existing useQueries hook. Initially show only global announcements (individual notifications will be added in REQ-6)."
-        },
-        {
           "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Add the NotificationBell component to the dashboard header area, positioned to the left of the ClientProfileMenu component."
+          "description": "Add a VM status indicator component to the dashboard that fetches the authenticated client's record and displays their vmStatus field. Use consistent color coding: green for online, red for offline, yellow/orange for maintenance. Position the indicator prominently, potentially near the VpsCredentialsCard or as a separate status card. Leverage React Query's auto-refetch to ensure status updates appear when admin changes the value."
         }
       ]
     },
     {
       "id": "REQ-5",
-      "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "summary": "Implement a floating chat button and chat window widget on the client dashboard",
       "acceptanceCriteria": [
-        "Admin panel client list includes a button or action to send notifications to individual clients",
-        "Clicking the notification action opens a modal or form to compose a message",
-        "Admin can enter notification text and send it to the selected client",
-        "Success/error feedback is displayed after sending"
+        "A floating chat icon appears fixed on the client dashboard (typically bottom-right corner)",
+        "Clicking the chat icon opens a chat window showing conversation history with support/admin",
+        "Chat window displays messages in chronological order with clear sender identification",
+        "Client can type and send messages through the chat interface",
+        "Chat window can be minimized/closed while retaining conversation state",
+        "Unread message indicator shows on the chat icon when new admin messages arrive"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/SendNotificationModal.tsx",
+          "path": "frontend/src/components/ChatWidget.tsx",
           "operation": "create",
-          "description": "Create a dialog modal component using shadcn-ui Dialog and Form components. Accept clientId and clientName as props. Display a textarea for notification message input and a send button. Use React Query mutation to call backend.addNotification with the clientId and message. Show toast notifications for success/error feedback. Close the modal on successful submission."
+          "description": "Create a floating chat widget component that includes a fixed-position chat button (bottom-right corner) and an expandable chat window. The chat button should display an unread message count badge when new messages from admin are detected. The chat window displays messages in chronological order with sender identification (client vs admin), includes a text input for composing messages, and has minimize/close controls. Use getMessages and sendMessage backend functions to load and send chat messages. Track open/closed state locally. Apply Carbon Black and Neon Green theming consistent with the app."
         },
         {
-          "path": "frontend/src/components/ClientList.tsx",
+          "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Add a notification/bell icon button in the action column for each client row. Clicking the button opens the SendNotificationModal for that specific client, passing the client's idLuid and nome as props."
+          "description": "Import and render the ChatWidget component so it appears on the client dashboard. Position it as a fixed overlay element that remains accessible while clients view their dashboard content."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add a React Query mutation hook for sending individual notifications using backend.addNotification. The mutation should accept clientId and message parameters, invalidate relevant notification queries on success, and return success/error states for UI feedback."
+          "description": "Add query hooks useChatMessages(clientId) to fetch messages using getMessages backend function, and mutation hook useSendMessage to send messages via sendMessage backend function. Configure the send mutation to invalidate the chat messages query after successful send. Include polling or refetch interval to check for new admin messages periodically."
         }
       ]
     },
     {
       "id": "REQ-6",
-      "summary": "Display individual client notifications in the notification bell dropdown, showing both global announcements and client-specific notifications",
+      "summary": "Add a chat management interface in the admin panel showing all active client conversations",
       "acceptanceCriteria": [
-        "Notification bell dropdown shows both global announcements and individual notifications",
-        "Individual notifications are clearly distinguished from global announcements",
-        "Client can mark individual notifications as read",
-        "Notification count badge reflects unread individual notifications"
+        "Admin panel displays a list of clients with active chat conversations",
+        "Admin can select a client to view and respond to their chat messages",
+        "Admin chat interface shows full conversation history with the selected client",
+        "Admin can send messages that appear in the client's chat window",
+        "Visual indicator shows which clients have unread messages waiting for admin response"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/NotificationBell.tsx",
-          "operation": "modify",
-          "description": "Extend the notification bell to fetch and display individual notifications for the logged-in client using backend.getNotifications. Show both global announcements and individual notifications in separate sections within the popover. Add a clear/dismiss action for individual notifications using backend.clearNotifications. Update the badge count to reflect unread individual notifications. Use the client's idLuid from useClientAuth context to fetch notifications."
+          "path": "frontend/src/components/AdminChatPanel.tsx",
+          "operation": "create",
+          "description": "Create an admin chat management component that displays a list of all clients with conversation threads. Show unread message indicators for clients who have sent messages. When admin selects a client, display the full chat history for that client using getMessages backend function. Include a message input allowing admin to send responses via sendMessage backend function with sender='admin' and receiver=clientId. Use a two-column layout: client list on the left, conversation view on the right."
         },
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/pages/AdminPanel.tsx",
           "operation": "modify",
-          "description": "Add React Query hooks for fetching individual client notifications using backend.getNotifications and clearing notifications using backend.clearNotifications. Accept clientId as a parameter and enable the query only when clientId is available. Invalidate notification queries after clearing."
+          "description": "Import and render the AdminChatPanel component in the admin panel, positioning it below or alongside the existing client management sections. Ensure the chat panel is visible and accessible to administrators viewing the admin dashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Display the logged-in administrator's name/profile in the admin panel header",
+      "acceptanceCriteria": [
+        "Admin panel header displays the logged-in administrator's name or username",
+        "Profile display is visible on all admin panel pages",
+        "Profile section includes admin identification consistent with the authentication system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminProfileDisplay.tsx",
+          "operation": "create",
+          "description": "Create a component that displays the logged-in admin's name or username retrieved from the useAdminAuth context. Style it consistently with the Carbon Black and Neon Green theme. Include an avatar or icon alongside the admin name for visual identification."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Import and render the AdminProfileDisplay component in the header section of the admin panel. Position it prominently (e.g., top-right corner) so it's visible on all admin panel pages. Ensure it displays alongside existing header elements like the logout button."
         }
       ]
     }
