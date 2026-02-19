@@ -1,129 +1,194 @@
 {
   "kind": "build_request",
-  "title": "Add stay connected option, profile menu, notification bell, and individual client notifications",
+  "title": "Add VM status management, live chat support, and multi-admin management",
+  "projectName": "Luid Corporation Dashboard",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Coloque a opção de manter conectado no login do cliente"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Client login page displays a 'Stay Connected' checkbox",
-        "When checked, client authentication persists across browser sessions using localStorage",
-        "When unchecked, authentication uses sessionStorage (current behavior)"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "deixe bonitinho ali o perfil no canto ai a pessoa clica aparece o nome dela e o botão de desconectar"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Profile menu is visible in the top-right corner of the client dashboard",
-        "Clicking the profile menu reveals a dropdown showing the client's name",
-        "Dropdown includes a disconnect/logout button",
-        "Clicking disconnect logs out the client and redirects to login"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "adicione um sino onde apareçam os avisos globais"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Notification bell icon is visible in the client dashboard header",
-        "Clicking the bell opens a dropdown/popover showing global announcements",
-        "Bell shows a visual indicator (badge) when there are unread announcements",
-        "Announcement content is fetched from the existing global announcement system"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Add backend functionality to store and retrieve individual notifications for specific clients",
+      "text": "Add a VM status field to each client record that can be set to 'online', 'offline', or 'maintenance'",
       "target": "backend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "adicione no gerenciamento de clientes pra enviar avisos individuais pra cada cliente"
+          "status da vm do cliente se está offline e online ou em manutenção"
         ]
       },
       "acceptanceCriteria": [
-        "Backend supports creating individual notifications targeted to specific client idLuid",
-        "Backend provides a query to retrieve all notifications for a given client",
-        "Each notification includes timestamp, message text, and read/unread status",
-        "Backend supports marking notifications as read"
+        "Client record type includes a vmStatus field with three possible values: online, offline, maintenance",
+        "Default status for new clients is 'online'",
+        "Backend provides functions to get and update VM status for specific clients"
       ]
     },
     {
-      "id": "REQ-5",
-      "text": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "id": "REQ-2",
+      "text": "Display VM status indicator for each client in the admin panel client list with visual differentiation for each state (online/offline/maintenance)",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
         ],
         "quotes": [
-          "no painel de administração adicione no gerenciamento de clientes pra enviar avisos individuais pra cada cliente"
+          "status da vm do cliente",
+          "no painel de administração"
         ]
       },
       "acceptanceCriteria": [
-        "Admin panel client list includes a button or action to send notifications to individual clients",
-        "Clicking the notification action opens a modal or form to compose a message",
-        "Admin can enter notification text and send it to the selected client",
-        "Success/error feedback is displayed after sending"
+        "Client list table shows VM status badge for each client",
+        "Online status displays with green indicator",
+        "Offline status displays with red indicator",
+        "Maintenance status displays with yellow/orange indicator"
       ]
     },
     {
-      "id": "REQ-6",
-      "text": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "id": "REQ-3",
+      "text": "Add ability to change VM status for individual clients in the admin panel through the client edit modal",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-latest"
+        ],
+        "quotes": [
+          "alteravel em cada cliente específico no painel de administração"
         ]
       },
       "acceptanceCriteria": [
-        "Notification bell dropdown shows both global announcements and individual notifications",
-        "Individual notifications are clearly distinguished from global announcements",
-        "Client can mark individual notifications as read",
-        "Notification count badge reflects unread individual notifications"
+        "Client edit modal includes a dropdown or radio button group to select VM status",
+        "Admin can change status between online, offline, and maintenance",
+        "Status change persists and updates the client list display immediately"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Create backend data structures and functions to store and manage chat messages between clients and administrators",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "faça um chat onde o cliente clica no simbolo de chat flutuante"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores chat messages with sender identification (client ID or admin ID)",
+        "Messages include timestamp, sender type (client/admin), and message content",
+        "Backend provides functions to send messages, retrieve conversation history per client",
+        "Chat conversations are organized by client ID"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a floating chat button on the client dashboard that opens a chat window for communication with administrators",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "cliente clica no simbolo de chat flutuante e abre uma janelinha com o chat"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Floating chat icon button positioned fixed in bottom-right corner of client dashboard",
+        "Clicking the button opens a chat window/dialog",
+        "Chat window displays conversation history with the support team",
+        "Client can type and send messages in the chat window",
+        "Chat window can be closed and reopened without losing context"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create an admin chat interface in the admin panel to view and respond to client messages",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "falar com algum suporte no caso algum administrador"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes a chat section showing all active client conversations",
+        "Admin can select a client conversation to view message history",
+        "Admin can send messages to clients through the chat interface",
+        "New messages from clients are highlighted or indicated with unread status"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add backend functionality to store and manage multiple administrator accounts with credentials",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "no painel administrativo seja possivel adicionar mais membros"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend stores administrator records with ID, username, and password",
+        "Backend provides functions to add, remove, and update administrator accounts",
+        "Backend authenticates admin login attempts against stored admin accounts",
+        "Initial default admin account remains accessible"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Create an admin member management interface in the admin panel to add, edit, and remove administrator accounts",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "adicionar mais membros e gerencialos pra logar no painel administrativo"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes a section for managing administrator accounts",
+        "Interface allows creating new admin accounts with ID and password",
+        "Admin list displays all registered administrators",
+        "Administrators can be edited or removed from the list",
+        "Only authenticated admins can access the member management interface"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Update admin login page to authenticate against the backend's stored administrator accounts instead of hardcoded credentials",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "gerencialos pra logar no painel administrativo"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin login validates credentials against backend-stored admin accounts",
+        "Login works for all registered administrators, not just hardcoded credentials",
+        "Failed login attempts show appropriate error messages",
+        "Successful login maintains session persistence as currently implemented"
       ]
     }
   ],
   "constraints": [
-    "Preserve existing authentication flow and session management logic",
-    "Do not modify the backend client record schema beyond adding notification storage",
-    "Maintain the existing global announcement system functionality"
+    "Maintain the existing single-actor Motoko architecture in backend/main.mo",
+    "Do not modify immutable frontend paths: useInternetIdentity hooks, useActor.ts, main.tsx, or components/ui directory",
+    "Preserve existing client authentication and notification functionality",
+    "Keep the Carbon Black and Neon Green theme consistent across new UI components"
   ],
   "nonGoals": [
-    "Real-time push notifications or WebSocket-based updates",
-    "Notification scheduling or delayed delivery",
-    "Rich text or HTML formatting in notifications",
-    "Notification history pagination"
+    "Real-time WebSocket-based chat (use polling or manual refresh pattern)",
+    "External chat service integration",
+    "File sharing or image upload in chat",
+    "Email notifications for chat messages",
+    "Chat encryption or advanced security features beyond basic authentication"
   ],
   "imageRequirements": {
     "required": [],

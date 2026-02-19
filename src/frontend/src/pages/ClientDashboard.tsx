@@ -4,6 +4,7 @@ import NetworkSpeedChart from '../components/NetworkSpeedChart';
 import GlobalAnnouncementBanner from '../components/GlobalAnnouncementBanner';
 import ClientProfileMenu from '../components/ClientProfileMenu';
 import NotificationBell from '../components/NotificationBell';
+import ClientChatWidget from '../components/ClientChatWidget';
 import { Cloud } from 'lucide-react';
 
 export default function ClientDashboard() {
@@ -55,6 +56,8 @@ export default function ClientDashboard() {
           </div>
         </div>
       </main>
+
+      <ClientChatWidget />
     </div>
   );
 }

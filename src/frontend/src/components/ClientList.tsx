@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useAllClientRecords, useDeleteClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Trash2, Users, Loader2, Edit, Bell } from 'lucide-react';
 import ClientEditModal from './ClientEditModal';
 import SendNotificationModal from './SendNotificationModal';
-import type { ClientRecord } from '../backend';
+import type { ClientRecord, VMStatus } from '../backend';
 
 export default function ClientList() {
   const { data: clients, isLoading } = useAllClientRecords();
@@ -46,6 +47,35 @@ export default function ClientList() {
     setNotificationClient(null);
   };
 
+  const getStatusBadge = (status: VMStatus) => {
+    switch (status) {
+      case 'online':
+        return (
+          <Badge className="bg-green-600 text-white hover:bg-green-700">
+            Online
+          </Badge>
+        );
+      case 'offline':
+        return (
+          <Badge className="bg-red-600 text-white hover:bg-red-700">
+            Offline
+          </Badge>
+        );
+      case 'maintenance':
+        return (
+          <Badge className="bg-yellow-600 text-white hover:bg-yellow-700">
+            Manutenção
+          </Badge>
+        );
+      default:
+        return (
+          <Badge className="bg-gray-600 text-white hover:bg-gray-700">
+            Desconhecido
+          </Badge>
+        );
+    }
+  };
+
   return (
     <>
       <Card className="border-neon-green/20 bg-card-dark">
@@ -73,6 +103,7 @@ export default function ClientList() {
                     <TableHead className="text-neon-green">IP VPS</TableHead>
                     <TableHead className="text-neon-green">Usuário VPS</TableHead>
                     <TableHead className="text-neon-green">Plano</TableHead>
+                    <TableHead className="text-neon-green">Status VM</TableHead>
                     <TableHead className="text-right text-neon-green">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -89,6 +120,7 @@ export default function ClientList() {
                       <TableCell className="text-muted-foreground">{client.ipVps}</TableCell>
                       <TableCell className="text-muted-foreground">{client.userVps}</TableCell>
                       <TableCell className="text-muted-foreground">{client.plano}</TableCell>
+                      <TableCell>{getStatusBadge(client.vmStatus)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button

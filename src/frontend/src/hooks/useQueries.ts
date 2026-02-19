@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Notification } from '../backend';
+import type { ClientRecord, Notification, ChatMessage, VMStatus } from '../backend';
 
 export function useCreateClientRecord() {
   const { actor } = useActor();
@@ -15,6 +15,7 @@ export function useCreateClientRecord() {
       userVps: string;
       senhaVps: string;
       plano: string;
+      vmStatus: VMStatus;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
       await actor.createClientRecord(
@@ -24,7 +25,8 @@ export function useCreateClientRecord() {
         data.ipVps,
         data.userVps,
         data.senhaVps,
-        data.plano
+        data.plano,
+        data.vmStatus
       );
     },
     onSuccess: () => {
@@ -47,6 +49,7 @@ export function useUpdateClientRecord() {
       userVps: string;
       senhaVps: string;
       plano: string;
+      vmStatus: VMStatus;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
       await actor.updateClientRecord(
@@ -56,7 +59,8 @@ export function useUpdateClientRecord() {
         data.ipVps,
         data.userVps,
         data.senhaVps,
-        data.plano
+        data.plano,
+        data.vmStatus
       );
     },
     onSuccess: () => {
@@ -152,7 +156,7 @@ export function useGetGlobalAnnouncement() {
       return await actor.getGlobalAnnouncement();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
 }
 
@@ -166,7 +170,7 @@ export function useGetNetworkMonitoringStatus() {
       return await actor.getNetworkMonitoringStatus();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 5000, // Refetch every 5 seconds for real-time updates
+    refetchInterval: 5000,
   });
 }
 
@@ -210,7 +214,7 @@ export function useGetNotifications(clientId: string | null) {
       return await actor.getNotifications(clientId);
     },
     enabled: !!actor && !isFetching && !!clientId,
-    refetchInterval: 15000, // Refetch every 15 seconds
+    refetchInterval: 10000,
   });
 }
 
@@ -225,6 +229,61 @@ export function useClearNotifications() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+}
+
+export function useSendChatMessage() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ sender, message }: { sender: string; message: string }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.sendMessage(sender, message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
+    },
+  });
+}
+
+export function useGetChatMessages(userId: string | null) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ChatMessage[]>({
+    queryKey: ['chatMessages', userId],
+    queryFn: async () => {
+      if (!actor || !userId) return [];
+      return await actor.getChatMessages(userId);
+    },
+    enabled: !!actor && !isFetching && !!userId,
+    refetchInterval: 5000,
+  });
+}
+
+export function useAddAdminAccount() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.addAdminAccount(username, password);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminAccounts'] });
+    },
+  });
+}
+
+export function useAdminLogin() {
+  const { actor } = useActor();
+
+  return useMutation({
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      return await actor.adminLogin(username, password);
     },
   });
 }

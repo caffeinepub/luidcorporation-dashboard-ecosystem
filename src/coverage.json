@@ -1,87 +1,114 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-19T03:07:59.540Z",
+  "generatedAt": "2026-02-19T03:27:08.122Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 5,
+    "total": 9,
+    "implemented": 6,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/ClientLogin.tsx",
-          "frontend/src/hooks/useClientAuth.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/ClientLogin.tsx",
-          "frontend/src/hooks/useClientAuth.tsx"
-        ]
+        "summary": "Add a VM status field to each client record that can be set to 'online', 'offline', or 'maintenance'",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
+        "summary": "Display VM status indicator for each client in the admin panel client list with visual differentiation for each state (online/offline/maintenance)",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/ClientProfileMenu.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientList.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/ClientProfileMenu.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientList.tsx"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+        "summary": "Add ability to change VM status for individual clients in the admin panel through the client edit modal",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientEditModal.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
-          "frontend/src/pages/ClientDashboard.tsx"
+          "frontend/src/components/ClientEditModal.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
         "id": "REQ-4",
-        "summary": "Add backend functionality to store and retrieve individual notifications for specific clients",
+        "summary": "Create backend data structures and functions to store and manage chat messages between clients and administrators",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-5",
-        "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+        "summary": "Add a floating chat button on the client dashboard that opens a chat window for communication with administrators",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/SendNotificationModal.tsx",
-          "frontend/src/components/ClientList.tsx",
+          "frontend/src/components/ClientChatWidget.tsx",
+          "frontend/src/pages/ClientDashboard.tsx",
           "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/SendNotificationModal.tsx",
-          "frontend/src/components/ClientList.tsx",
+          "frontend/src/components/ClientChatWidget.tsx",
+          "frontend/src/pages/ClientDashboard.tsx",
           "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
         "id": "REQ-6",
-        "summary": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+        "summary": "Create an admin chat interface in the admin panel to view and respond to client messages",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/components/AdminChatInterface.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AdminChatInterface.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Add backend functionality to store and manage multiple administrator accounts with credentials",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Create an admin member management interface in the admin panel to add, edit, and remove administrator accounts",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AdminMemberManagement.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
           "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/components/NotificationBell.tsx",
+          "frontend/src/components/AdminMemberManagement.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
           "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Update admin login page to authenticate against the backend's stored administrator accounts instead of hardcoded credentials",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/AdminLogin.tsx",
+          "frontend/src/hooks/useAdminAuth.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/AdminLogin.tsx",
+          "frontend/src/hooks/useAdminAuth.tsx"
         ]
       }
     ]
@@ -95,16 +122,19 @@
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
+    "frontend/src/components/AdminChatInterface.tsx",
+    "frontend/src/components/AdminMemberManagement.tsx",
+    "frontend/src/components/ClientChatWidget.tsx",
+    "frontend/src/components/ClientEditModal.tsx",
     "frontend/src/components/ClientList.tsx",
-    "frontend/src/components/ClientProfileMenu.tsx",
-    "frontend/src/components/NotificationBell.tsx",
-    "frontend/src/components/SendNotificationModal.tsx",
+    "frontend/src/components/ClientRegistrationForm.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useClientAuth.tsx",
+    "frontend/src/hooks/useAdminAuth.tsx",
     "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/AdminLogin.tsx",
+    "frontend/src/pages/AdminPanel.tsx",
     "frontend/src/pages/ClientDashboard.tsx",
-    "frontend/src/pages/ClientLogin.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

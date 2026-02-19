@@ -2,30 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-stay-connected-checkbox-to-the-client-login-page-that-persists-the-client-s-authentication-session-using-localstorage-instead-of-sessionstorage-when-checked",
-      "featureTitle": "Add a 'Stay Connected' checkbox to the client login page that persists the client's authentication session using localStorage instead of sessionStorage when checked",
+      "featureId": "feature-display-vm-status-indicator-for-each-client-in-the-admin-panel-client-list-with-visual-differentiation-for-each-state-online-offline-maintenance",
+      "featureTitle": "Display VM status indicator for each client in the admin panel client list with visual differentiation for each state (online/offline/maintenance)",
       "files": [
-        "frontend/src/hooks/useClientAuth.tsx",
-        "frontend/src/pages/ClientLogin.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-create-a-profile-menu-in-the-top-right-corner-of-the-client-dashboard-that-displays-the-client-s-name-and-a-disconnect-button-when-clicked",
-      "featureTitle": "Create a profile menu in the top-right corner of the client dashboard that displays the client's name and a disconnect button when clicked",
-      "files": [
-        "frontend/src/components/ClientProfileMenu.tsx",
-        "frontend/src/pages/ClientDashboard.tsx"
+        "frontend/src/components/ClientList.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -40,11 +20,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-notification-bell-icon-in-the-client-dashboard-that-displays-global-announcements-when-clicked",
-      "featureTitle": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
+      "featureId": "feature-add-ability-to-change-vm-status-for-individual-clients-in-the-admin-panel-through-the-client-edit-modal",
+      "featureTitle": "Add ability to change VM status for individual clients in the admin panel through the client edit modal",
       "files": [
-        "frontend/src/components/NotificationBell.tsx",
-        "frontend/src/pages/ClientDashboard.tsx"
+        "frontend/src/components/ClientEditModal.tsx",
+        "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -59,12 +39,12 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-ui-in-the-admin-panel-s-client-management-section-to-send-individual-notifications-to-specific-clients",
-      "featureTitle": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
+      "featureId": "feature-add-a-floating-chat-button-on-the-client-dashboard-that-opens-a-chat-window-for-communication-with-administrators",
+      "featureTitle": "Add a floating chat button on the client dashboard that opens a chat window for communication with administrators",
       "files": [
-        "frontend/src/components/ClientList.tsx",
-        "frontend/src/components/SendNotificationModal.tsx",
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/components/ClientChatWidget.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/ClientDashboard.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -79,11 +59,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-display-individual-client-notifications-in-the-notification-bell-dropdown-on-the-client-dashboard-showing-both-global-announcements-and-client-specific-notifications",
-      "featureTitle": "Display individual client notifications in the notification bell dropdown on the client dashboard, showing both global announcements and client-specific notifications",
+      "featureId": "feature-create-an-admin-chat-interface-in-the-admin-panel-to-view-and-respond-to-client-messages",
+      "featureTitle": "Create an admin chat interface in the admin panel to view and respond to client messages",
       "files": [
-        "frontend/src/components/NotificationBell.tsx",
-        "frontend/src/hooks/useQueries.ts"
+        "frontend/src/components/AdminChatInterface.tsx",
+        "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -94,6 +74,45 @@
       ],
       "testIds": [
         "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-an-admin-member-management-interface-in-the-admin-panel-to-add-edit-and-remove-administrator-accounts",
+      "featureTitle": "Create an admin member management interface in the admin panel to add, edit, and remove administrator accounts",
+      "files": [
+        "frontend/src/components/AdminMemberManagement.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminPanel.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-admin-login-page-to-authenticate-against-the-backend-s-stored-administrator-accounts-instead-of-hardcoded-credentials",
+      "featureTitle": "Update admin login page to authenticate against the backend's stored administrator accounts instead of hardcoded credentials",
+      "files": [
+        "frontend/src/hooks/useAdminAuth.tsx",
+        "frontend/src/pages/AdminLogin.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
       ],
       "confidence": "high"
     }

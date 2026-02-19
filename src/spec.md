@@ -1,14 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Add persistent login option, profile menu with logout, notification bell for global announcements, and individual client notification system.
+**Goal:** Add VM status management for clients, implement live chat support between clients and administrators, and enable multi-admin account management in the admin panel.
 
 **Planned changes:**
-- Add "Stay Connected" checkbox to client login page that uses localStorage for persistent authentication
-- Create profile menu in top-right corner displaying client name and disconnect button
-- Add notification bell icon showing global announcements in a dropdown
-- Implement backend storage and retrieval for individual client notifications
-- Add admin UI to send individual notifications to specific clients
-- Display both global announcements and individual notifications in the bell dropdown
+- Add VM status field (online/offline/maintenance) to client records with visual indicators in the admin panel
+- Allow administrators to change VM status for individual clients through the edit modal
+- Implement chat system with floating chat button on client dashboard and admin chat interface in the admin panel
+- Add backend storage and management for multiple administrator accounts
+- Create admin member management interface to add, edit, and remove administrator accounts
+- Update admin login to authenticate against backend-stored admin accounts instead of hardcoded credentials
 
-**User-visible outcome:** Clients can stay logged in across sessions, access their profile menu to logout, view global announcements via notification bell, and receive individual notifications from admins. Admins can send targeted notifications to specific clients.
+**User-visible outcome:** Clients can see their VM status and communicate with support via a floating chat button. Administrators can manage VM statuses, respond to client messages through a dedicated chat interface, and add/manage multiple admin accounts for the panel.
