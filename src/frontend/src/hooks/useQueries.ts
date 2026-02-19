@@ -1,0 +1,186 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useActor } from './useActor';
+import type { ClientRecord } from '../backend';
+
+export function useCreateClientRecord() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      idLuid: string;
+      nome: string;
+      senhaCliente: string;
+      ipVps: string;
+      userVps: string;
+      senhaVps: string;
+      plano: string;
+    }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.createClientRecord(
+        data.idLuid,
+        data.nome,
+        data.senhaCliente,
+        data.ipVps,
+        data.userVps,
+        data.senhaVps,
+        data.plano
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
+      queryClient.invalidateQueries({ queryKey: ['allClientRecords'] });
+    },
+  });
+}
+
+export function useUpdateClientRecord() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      idLuid: string;
+      nome: string;
+      senhaCliente: string;
+      ipVps: string;
+      userVps: string;
+      senhaVps: string;
+      plano: string;
+    }) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.updateClientRecord(
+        data.idLuid,
+        data.nome,
+        data.senhaCliente,
+        data.ipVps,
+        data.userVps,
+        data.senhaVps,
+        data.plano
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allClientRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['client'] });
+    },
+  });
+}
+
+export function useGetClientRecord(idLuid: string | null) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ClientRecord | null>({
+    queryKey: ['client', idLuid],
+    queryFn: async () => {
+      if (!actor || !idLuid) return null;
+      try {
+        return await actor.getClientRecord(idLuid);
+      } catch (error) {
+        return null;
+      }
+    },
+    enabled: !!actor && !isFetching && !!idLuid,
+  });
+}
+
+export function useAllClientRecords() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ClientRecord[]>({
+    queryKey: ['allClientRecords'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return await actor.getAllClientRecords();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useDeleteClientRecord() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (idLuid: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.deleteClientRecord(idLuid);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['allClientRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
+    },
+  });
+}
+
+export function useSetGlobalAnnouncement() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (announcement: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.setGlobalAnnouncement(announcement);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['globalAnnouncement'] });
+    },
+  });
+}
+
+export function useClearGlobalAnnouncement() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.clearGlobalAnnouncement();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['globalAnnouncement'] });
+    },
+  });
+}
+
+export function useGetGlobalAnnouncement() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ['globalAnnouncement'],
+    queryFn: async () => {
+      if (!actor) return '';
+      return await actor.getGlobalAnnouncement();
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 30000, // Refetch every 30 seconds
+  });
+}
+
+export function useGetNetworkMonitoringStatus() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ['networkMonitoringStatus'],
+    queryFn: async () => {
+      if (!actor) return 'normal';
+      return await actor.getNetworkMonitoringStatus();
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 5000, // Refetch every 5 seconds for real-time updates
+  });
+}
+
+export function useSetNetworkMonitoringStatus() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (status: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.updateNetworkMonitoringStatus(status);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['networkMonitoringStatus'] });
+    },
+  });
+}

@@ -1,0 +1,409 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "Dashboard ecosystem for LuidCorporation with admin panel and client portals",
+  "architectural_notes": [
+    "Two-tier access system: Admin panel at /luid-master-panel and client portals",
+    "Admin credentials: SidneiCosta00 / Nikebolado@4",
+    "Network simulation: 5Gbps base with 2.5-4.8Gbps oscillation, 2ms latency for BR-SOUTH",
+    "Global announcement system propagating from admin to all client dashboards",
+    "Persistence via Local Storage or native Caffeine database",
+    "Responsive design for desktop and mobile",
+    "Dark theme with neon green (#39FF14) accents",
+    "Admin panel includes client management: view registered clients and delete functionality",
+    "Client data structure expanded: ID_Luid, client name, password, IP_VPS, User_VPS, Senha_VPS, Plano",
+    "Client authentication now requires ID_Luid + password"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-protected-admin-route-at-luid-master-panel-with-hardcoded-authentication-id-sidneicosta00-password-nikebolado-4",
+      "title": "Create protected admin route at /luid-master-panel with hardcoded authentication (ID: SidneiCosta00, Password: Nikebolado@4)",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-remember-me-functionality-for-admin-login-using-local-storage-to-persist-authentication-state",
+      "title": "Implement Remember Me functionality for admin login using local storage to persist authentication state",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-client-registration-form-in-admin-panel-with-fields-id-luid-ip-vps-user-vps-senha-vps-and-plano-that-saves-to-backend",
+      "title": "Create client registration form in admin panel with fields ID_Luid, IP_VPS, User_VPS, Senha_VPS, and Plano that saves to backend",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-global-announcement-input-field-in-admin-panel-that-saves-to-backend-and-propagates-to-all-client-dashboards",
+      "title": "Add global announcement input field in admin panel that saves to backend and propagates to all client dashboards",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-network-speed-simulation-logic-that-oscillates-dynamically-between-2-5gbps-and-4-8gbps-base-5gbps-to-simulate-realistic-traffic-patterns",
+      "title": "Implement network speed simulation logic that oscillates dynamically between 2.5Gbps and 4.8Gbps (base 5Gbps) to simulate realistic traffic patterns",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-network-speed-simulation-in-a-dynamic-line-chart-with-label-regi-o-br-south-lat-ncia-2ms",
+      "title": "Display network speed simulation in a dynamic line chart with label 'Região: BR-SOUTH | Latência: 2ms'",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-client-portal-route-with-simplified-login-requiring-only-id-luid-field",
+      "title": "Create client portal route with simplified login requiring only ID_Luid field",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-client-vps-credentials-ip-user-password-in-modern-cards-with-reveal-eye-button-for-password-field",
+      "title": "Display client VPS credentials (IP, User, Password) in modern cards with reveal/eye button for password field",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-global-announcement-from-admin-panel-in-breaking-news-style-notification-bar-at-top-of-client-dashboard",
+      "title": "Display global announcement from admin panel in breaking news style notification bar at top of client dashboard",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-client-portal-is-read-only-with-no-ability-to-modify-any-data",
+      "title": "Ensure client portal is read-only with no ability to modify any data",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-dark-premium-theme-with-carbon-black-background-and-neon-green-39ff14-accents-throughout-the-application",
+      "title": "Apply Dark Premium theme with Carbon Black background and Neon Green (#39FF14) accents throughout the application",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-footer-branding-with-text-powered-by-luidcloud-computing-green-infrastructure",
+      "title": "Add footer branding with text 'Powered by LuidCloud Computing - Green Infrastructure'",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-responsive-layout-works-perfectly-on-both-desktop-and-mobile-devices",
+      "title": "Ensure responsive layout works perfectly on both desktop and mobile devices",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-a-table-list-of-all-registered-clients-in-the-admin-panel-showing-id-luid-ip-vps-user-vps-and-plano-fields",
+      "title": "Display a table/list of all registered clients in the admin panel showing ID_Luid, IP_VPS, User_VPS, and Plano fields",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-delete-button-for-each-client-in-the-admin-panel-client-list-that-removes-the-client-from-the-backend-database",
+      "title": "Add delete button for each client in the admin panel client list that removes the client from the backend database",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-delete-clear-button-for-global-announcements-in-the-admin-panel-that-removes-the-current-announcement-text",
+      "title": "Add delete/clear button for global announcements in the admin panel that removes the current announcement text",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-frontend-mutation-hook-and-query-to-fetch-all-registered-clients-for-display-in-admin-panel",
+      "title": "Add frontend mutation hook and query to fetch all registered clients for display in admin panel",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-clientregistrationform-component-in-admin-panel-to-include-nome-client-name-input-field-and-save-it-when-creating-new-clients",
+      "title": "Update ClientRegistrationForm component in admin panel to include Nome (client name) input field and save it when creating new clients",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-clientregistrationform-component-in-admin-panel-to-include-senha-cliente-client-password-input-field-and-save-it-when-creating-new-clients",
+      "title": "Update ClientRegistrationForm component in admin panel to include Senha_Cliente (client password) input field and save it when creating new clients",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-client-edit-form-modal-in-admin-panel-that-allows-editing-all-client-fields-nome-ip-vps-user-vps-senha-vps-plano-senha-cliente-for-existing-clients",
+      "title": "Create client edit form/modal in admin panel that allows editing all client fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) for existing clients",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-clientlist-component-to-display-nome-client-name-column-in-the-admin-panel-table",
+      "title": "Update ClientList component to display Nome (client name) column in the admin panel table",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-client-login-flow-to-require-both-id-luid-and-senha-cliente-password-for-authentication-instead-of-id-only",
+      "title": "Update client login flow to require both ID_Luid and Senha_Cliente (password) for authentication instead of ID only",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-network-monitoring-status-toggle-control-in-admin-panel-with-options-normal-and-offline-that-updates-backend-status",
+      "title": "Add network monitoring status toggle control in admin panel with options 'Normal' and 'Offline' that updates backend status",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-network-speed-simulation-logic-to-display-zero-gbps-when-monitoring-status-is-offline-and-normal-oscillating-speeds-when-status-is-normal",
+      "title": "Modify network speed simulation logic to display zero Gbps when monitoring status is 'Offline' and normal oscillating speeds when status is 'Normal'",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-frontend-mutation-hooks-for-updating-client-records-and-managing-network-monitoring-status",
+      "title": "Add frontend mutation hooks for updating client records and managing network monitoring status",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Protected admin route /luid-master-panel with authentication (ID: SidneiCosta00, Password: Nikebolado@4)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Remember Me functionality using cookies/local storage",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Client registration form with fields: ID_Luid, IP_VPS, User_VPS, Senha_VPS, Plano using native database",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Global announcement field in admin panel that propagates to all client dashboards",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "BR-SOUTH network simulation: 5Gbps base oscillating between 2.5-4.8Gbps with dynamic line chart",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Client portal with ID Luid login only",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Client dashboard with cards displaying IP, User, Password (with reveal/eye button)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Breaking news style notification bar displaying Global Announcement from admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Dark Premium theme (Carbon Black) with Neon Green accents (#39FF14)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Footer branding: 'Powered by LuidCloud Computing - Green Infrastructure'",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Create backend data model and API endpoints to store and retrieve client records with fields: ID_Luid (string), IP_VPS (string), User_VPS (string), Senha_VPS (string), Plano (string)",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Create backend storage and API endpoints for global announcement text that can be set by admin and retrieved by all clients",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Display list of registered clients in admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Add delete button for each client in admin panel to remove from database",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add delete/clear button for global announcements in admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Add backend function to delete a client record by ID_Luid",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Add backend function to clear/delete the global announcement text",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Add backend function to retrieve all registered client records",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Add edit functionality in admin panel to modify client VPS credentials (IP, User, Password, Plan)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Add client name field to client registration and display",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Add password field for client login authentication (in addition to ID_Luid) for enhanced security",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add network monitoring status toggle in admin panel (Normal/Offline) that sets network speed to zero when Offline",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Add client name field (Nome) to the backend ClientRecord data structure and update all CRUD operations to handle this field",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add client password field (Senha_Cliente) to the backend ClientRecord data structure for client authentication and update all CRUD operations to handle this field",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Create backend update function that allows modifying all client fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) for an existing client by ID_Luid",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Add network monitoring status field to backend with possible values 'normal' and 'offline', including functions to set and get this status",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Generate migration.mo to preserve existing client data when adding Nome and Senha_Cliente fields to ClientRecord structure",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "LuidCorporation Dashboard Ecosystem",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

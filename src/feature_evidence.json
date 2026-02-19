@@ -1,0 +1,151 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-clientregistrationform-component-in-admin-panel-to-include-nome-client-name-input-field-and-save-it-when-creating-new-clients",
+      "featureTitle": "Update ClientRegistrationForm component in admin panel to include Nome (client name) input field and save it when creating new clients",
+      "files": [
+        "frontend/src/components/ClientRegistrationForm.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-27"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-clientregistrationform-component-in-admin-panel-to-include-senha-cliente-client-password-input-field-and-save-it-when-creating-new-clients",
+      "featureTitle": "Update ClientRegistrationForm component in admin panel to include Senha_Cliente (client password) input field and save it when creating new clients",
+      "files": [
+        "frontend/src/components/ClientRegistrationForm.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-28"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-client-edit-form-modal-in-admin-panel-that-allows-editing-all-client-fields-nome-ip-vps-user-vps-senha-vps-plano-senha-cliente-for-existing-clients",
+      "featureTitle": "Create client edit form/modal in admin panel that allows editing all client fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) for existing clients",
+      "files": [
+        "frontend/src/components/ClientEditModal.tsx",
+        "frontend/src/components/ClientList.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-29"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-clientlist-component-to-display-nome-client-name-column-in-the-admin-panel-table",
+      "featureTitle": "Update ClientList component to display Nome (client name) column in the admin panel table",
+      "files": [
+        "frontend/src/components/ClientList.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-30"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-client-login-flow-to-require-both-id-luid-and-senha-cliente-password-for-authentication-instead-of-id-only",
+      "featureTitle": "Update client login flow to require both ID_Luid and Senha_Cliente (password) for authentication instead of ID only",
+      "files": [
+        "frontend/src/pages/ClientLogin.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-31"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-network-monitoring-status-toggle-control-in-admin-panel-with-options-normal-and-offline-that-updates-backend-status",
+      "featureTitle": "Add network monitoring status toggle control in admin panel with options 'Normal' and 'Offline' that updates backend status",
+      "files": [
+        "frontend/src/components/NetworkMonitoringToggle.tsx",
+        "frontend/src/pages/AdminPanel.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-32"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-modify-network-speed-simulation-logic-to-display-zero-gbps-when-monitoring-status-is-offline-and-normal-oscillating-speeds-when-status-is-normal",
+      "featureTitle": "Modify network speed simulation logic to display zero Gbps when monitoring status is 'Offline' and normal oscillating speeds when status is 'Normal'",
+      "files": [
+        "frontend/src/hooks/useNetworkSpeedSimulation.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-33"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-frontend-mutation-hooks-for-updating-client-records-and-managing-network-monitoring-status",
+      "featureTitle": "Add frontend mutation hooks for updating client records and managing network monitoring status",
+      "files": [
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-34"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
