@@ -3,9 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { useCreateClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CalendarIcon } from 'lucide-react';
+import { OperatingSystem } from '../backend';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export default function ClientRegistrationForm() {
   const [formData, setFormData] = useState({
@@ -16,20 +22,27 @@ export default function ClientRegistrationForm() {
     userVps: '',
     senhaVps: '',
     plano: '',
+    operatingSystem: 'windows' as 'windows' | 'ubuntu',
   });
+  const [planExpiry, setPlanExpiry] = useState<Date | undefined>(undefined);
 
   const createClient = useCreateClientRecord();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.idLuid || !formData.nome || !formData.senhaCliente || !formData.ipVps || !formData.userVps || !formData.senhaVps || !formData.plano) {
+    if (!formData.idLuid || !formData.nome || !formData.senhaCliente || !formData.ipVps || !formData.userVps || !formData.senhaVps || !formData.plano || !planExpiry) {
       toast.error('Todos os campos são obrigatórios');
       return;
     }
 
     try {
-      await createClient.mutateAsync(formData);
+      const planExpiryTimestamp = BigInt(planExpiry.getTime() * 1000000);
+      await createClient.mutateAsync({
+        ...formData,
+        operatingSystem: formData.operatingSystem as OperatingSystem,
+        planExpiry: planExpiryTimestamp,
+      });
       toast.success('Cliente cadastrado com sucesso!');
       setFormData({
         idLuid: '',
@@ -39,7 +52,9 @@ export default function ClientRegistrationForm() {
         userVps: '',
         senhaVps: '',
         plano: '',
+        operatingSystem: 'windows',
       });
+      setPlanExpiry(undefined);
     } catch (error) {
       toast.error('Erro ao cadastrar cliente. Verifique se o ID já existe.');
     }
@@ -130,6 +145,50 @@ export default function ClientRegistrationForm() {
               placeholder="Ex: Premium, Basic, Enterprise"
               className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="operatingSystem">Sistema Operacional</Label>
+            <Select
+              value={formData.operatingSystem}
+              onValueChange={(value: 'windows' | 'ubuntu') =>
+                setFormData({ ...formData, operatingSystem: value })
+              }
+            >
+              <SelectTrigger className="border-neon-green/30 bg-carbon-black focus:border-neon-green">
+                <SelectValue placeholder="Selecione o sistema" />
+              </SelectTrigger>
+              <SelectContent className="border-neon-green/20 bg-card-dark">
+                <SelectItem value="windows">Windows</SelectItem>
+                <SelectItem value="ubuntu">Ubuntu</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="planExpiry">Validade do Plano</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'w-full justify-start text-left font-normal border-neon-green/30 bg-carbon-black hover:bg-carbon-black/80',
+                    !planExpiry && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {planExpiry ? format(planExpiry, 'PPP') : <span>Selecione a data</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 border-neon-green/20 bg-card-dark" align="start">
+                <Calendar
+                  mode="single"
+                  selected={planExpiry}
+                  onSelect={setPlanExpiry}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <Button

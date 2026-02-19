@@ -10,10 +10,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { useUpdateClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CalendarIcon } from 'lucide-react';
 import type { ClientRecord } from '../backend';
+import { OperatingSystem } from '../backend';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface ClientEditModalProps {
   client: ClientRecord;
@@ -31,7 +37,11 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
     senhaVps: client.senhaVps,
     plano: client.plano,
     vmStatus: client.vmStatus,
+    operatingSystem: client.operatingSystem,
   });
+  const [planExpiry, setPlanExpiry] = useState<Date | undefined>(
+    new Date(Number(client.planExpiry) / 1000000)
+  );
 
   const updateClient = useUpdateClientRecord();
 
@@ -45,19 +55,25 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
       senhaVps: client.senhaVps,
       plano: client.plano,
       vmStatus: client.vmStatus,
+      operatingSystem: client.operatingSystem,
     });
+    setPlanExpiry(new Date(Number(client.planExpiry) / 1000000));
   }, [client]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.nome || !formData.senhaCliente || !formData.ipVps || !formData.userVps || !formData.senhaVps || !formData.plano) {
+    if (!formData.nome || !formData.senhaCliente || !formData.ipVps || !formData.userVps || !formData.senhaVps || !formData.plano || !planExpiry) {
       toast.error('Todos os campos são obrigatórios');
       return;
     }
 
     try {
-      await updateClient.mutateAsync(formData);
+      const planExpiryTimestamp = BigInt(planExpiry.getTime() * 1000000);
+      await updateClient.mutateAsync({
+        ...formData,
+        planExpiry: planExpiryTimestamp,
+      });
       toast.success('Cliente atualizado com sucesso!');
       onOpenChange(false);
     } catch (error) {
@@ -67,7 +83,7 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-neon-green/20 bg-card-dark sm:max-w-[500px]">
+      <DialogContent className="border-neon-green/20 bg-card-dark sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-neon-green">Editar Cliente</DialogTitle>
           <DialogDescription>
@@ -151,6 +167,50 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
               placeholder="Ex: Premium, Basic, Enterprise"
               className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-operatingSystem">Sistema Operacional</Label>
+            <Select
+              value={formData.operatingSystem}
+              onValueChange={(value: OperatingSystem) =>
+                setFormData({ ...formData, operatingSystem: value })
+              }
+            >
+              <SelectTrigger className="border-neon-green/30 bg-carbon-black focus:border-neon-green">
+                <SelectValue placeholder="Selecione o sistema" />
+              </SelectTrigger>
+              <SelectContent className="border-neon-green/20 bg-card-dark">
+                <SelectItem value="windows">Windows</SelectItem>
+                <SelectItem value="ubuntu">Ubuntu</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-planExpiry">Validade do Plano</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'w-full justify-start text-left font-normal border-neon-green/30 bg-carbon-black hover:bg-carbon-black/80',
+                    !planExpiry && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {planExpiry ? format(planExpiry, 'PPP') : <span>Selecione a data</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0 border-neon-green/20 bg-card-dark" align="start">
+                <Calendar
+                  mode="single"
+                  selected={planExpiry}
+                  onSelect={setPlanExpiry}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <DialogFooter>

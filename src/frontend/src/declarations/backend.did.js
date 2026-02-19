@@ -13,12 +13,19 @@ export const VMStatus = IDL.Variant({
   'offline' : IDL.Null,
   'online' : IDL.Null,
 });
+export const OperatingSystem = IDL.Variant({
+  'ubuntu' : IDL.Null,
+  'windows' : IDL.Null,
+});
+export const Time = IDL.Int;
 export const ClientRecord = IDL.Record({
   'senhaCliente' : IDL.Text,
   'senhaVps' : IDL.Text,
   'nome' : IDL.Text,
   'vmStatus' : VMStatus,
   'userVps' : IDL.Text,
+  'operatingSystem' : OperatingSystem,
+  'planExpiry' : Time,
   'ipVps' : IDL.Text,
   'idLuid' : IDL.Text,
   'plano' : IDL.Text,
@@ -53,6 +60,8 @@ export const idlService = IDL.Service({
         IDL.Text,
         IDL.Text,
         VMStatus,
+        OperatingSystem,
+        Time,
       ],
       [],
       [],
@@ -78,6 +87,8 @@ export const idlService = IDL.Service({
         IDL.Text,
         IDL.Text,
         VMStatus,
+        OperatingSystem,
+        Time,
       ],
       [],
       [],
@@ -94,12 +105,19 @@ export const idlFactory = ({ IDL }) => {
     'offline' : IDL.Null,
     'online' : IDL.Null,
   });
+  const OperatingSystem = IDL.Variant({
+    'ubuntu' : IDL.Null,
+    'windows' : IDL.Null,
+  });
+  const Time = IDL.Int;
   const ClientRecord = IDL.Record({
     'senhaCliente' : IDL.Text,
     'senhaVps' : IDL.Text,
     'nome' : IDL.Text,
     'vmStatus' : VMStatus,
     'userVps' : IDL.Text,
+    'operatingSystem' : OperatingSystem,
+    'planExpiry' : Time,
     'ipVps' : IDL.Text,
     'idLuid' : IDL.Text,
     'plano' : IDL.Text,
@@ -134,6 +152,8 @@ export const idlFactory = ({ IDL }) => {
           IDL.Text,
           IDL.Text,
           VMStatus,
+          OperatingSystem,
+          Time,
         ],
         [],
         [],
@@ -163,6 +183,8 @@ export const idlFactory = ({ IDL }) => {
           IDL.Text,
           IDL.Text,
           VMStatus,
+          OperatingSystem,
+          Time,
         ],
         [],
         [],

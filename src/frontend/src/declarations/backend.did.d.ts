@@ -24,11 +24,16 @@ export interface ClientRecord {
   'nome' : string,
   'vmStatus' : VMStatus,
   'userVps' : string,
+  'operatingSystem' : OperatingSystem,
+  'planExpiry' : Time,
   'ipVps' : string,
   'idLuid' : string,
   'plano' : string,
 }
 export interface Notification { 'message' : string, 'timestamp' : bigint }
+export type OperatingSystem = { 'ubuntu' : null } |
+  { 'windows' : null };
+export type Time = bigint;
 export type VMStatus = { 'maintenance' : null } |
   { 'offline' : null } |
   { 'online' : null };
@@ -38,7 +43,18 @@ export interface _SERVICE {
   'clearMessages' : ActorMethod<[string], undefined>,
   'clearNotifications' : ActorMethod<[string], undefined>,
   'createClientRecord' : ActorMethod<
-    [string, string, string, string, string, string, string, VMStatus],
+    [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      VMStatus,
+      OperatingSystem,
+      Time,
+    ],
     undefined
   >,
   'deleteClientRecord' : ActorMethod<[string], undefined>,
@@ -53,7 +69,18 @@ export interface _SERVICE {
   'setChatSystemStatus' : ActorMethod<[ChatSystemStatus], undefined>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,
   'updateClientRecord' : ActorMethod<
-    [string, string, string, string, string, string, string, VMStatus],
+    [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      VMStatus,
+      OperatingSystem,
+      Time,
+    ],
     undefined
   >,
   'updateNetworkMonitoringStatus' : ActorMethod<[string], undefined>,

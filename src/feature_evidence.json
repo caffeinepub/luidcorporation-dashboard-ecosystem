@@ -2,53 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-display-a-typing-indicator-in-the-chat-interface-when-the-other-party-is-actively-typing-a-message",
-      "featureTitle": "Display a typing indicator in the chat interface when the other party is actively typing a message",
+      "featureId": "feature-update-the-client-registration-form-in-the-admin-panel-to-include-a-dropdown-for-selecting-operating-system-windows-or-ubuntu-and-a-date-picker-for-setting-the-plan-expiration-date",
+      "featureTitle": "Update the client registration form in the admin panel to include a dropdown for selecting operating system (Windows or Ubuntu) and a date picker for setting the plan expiration date",
       "files": [
-        "frontend/src/components/AdminChatPanel.tsx",
-        "frontend/src/components/ChatWidget.tsx",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-online-offline-status-indicator-for-the-chat-system-visible-in-the-admin-panel",
-      "featureTitle": "Add online/offline status indicator for the chat system visible in the admin panel",
-      "files": [
-        "frontend/src/components/ChatSystemStatusIndicator.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AdminPanel.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-provide-admin-controls-to-manually-change-the-chat-status-between-online-and-offline",
-      "featureTitle": "Provide admin controls to manually change the chat status between online and offline",
-      "files": [
-        "frontend/src/components/ChatSystemStatusToggle.tsx",
-        "frontend/src/components/ChatWidget.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/AdminPanel.tsx"
+        "frontend/src/components/ClientRegistrationForm.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -59,6 +16,80 @@
       ],
       "testIds": [
         "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-client-edit-modal-in-the-admin-panel-to-allow-editing-the-operating-system-and-plan-expiration-date-fields",
+      "featureTitle": "Update the client edit modal in the admin panel to allow editing the operating system and plan expiration date fields",
+      "files": [
+        "frontend/src/components/ClientEditModal.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-ssh-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-ubuntu-including-a-mini-explanation-with-the-command-format-and-connection-steps",
+      "featureTitle": "Display SSH connection instructions on the client dashboard when the operating system is Ubuntu, including a mini explanation with the command format and connection steps",
+      "files": [
+        "frontend/src/components/SshInstructionsCard.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-rdp-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-windows-including-a-mini-explanation-with-the-connection-steps-and-how-to-use-remote-desktop",
+      "featureTitle": "Display RDP connection instructions on the client dashboard when the operating system is Windows, including a mini explanation with the connection steps and how to use Remote Desktop",
+      "files": [
+        "frontend/src/components/RdpInstructionsCard.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-the-client-s-plan-name-and-expiration-date-in-the-user-profile-section-on-the-client-dashboard-showing-the-expiration-date-in-a-readable-format",
+      "featureTitle": "Display the client's plan name and expiration date in the user profile section on the client dashboard, showing the expiration date in a readable format",
+      "files": [
+        "frontend/src/components/ClientProfileMenu.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
       ],
       "confidence": "high"
     }

@@ -89,12 +89,7 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface ChatMessage {
-    sender: string;
-    message: string;
-    timestamp: bigint;
-    receiver: string;
-}
+export type Time = bigint;
 export interface Notification {
     message: string;
     timestamp: bigint;
@@ -105,13 +100,25 @@ export interface ClientRecord {
     nome: string;
     vmStatus: VMStatus;
     userVps: string;
+    operatingSystem: OperatingSystem;
+    planExpiry: Time;
     ipVps: string;
     idLuid: string;
     plano: string;
 }
+export interface ChatMessage {
+    sender: string;
+    message: string;
+    timestamp: bigint;
+    receiver: string;
+}
 export enum ChatSystemStatus {
     offline = "offline",
     online = "online"
+}
+export enum OperatingSystem {
+    ubuntu = "ubuntu",
+    windows = "windows"
 }
 export enum VMStatus {
     maintenance = "maintenance",
@@ -123,7 +130,7 @@ export interface backendInterface {
     clearGlobalAnnouncement(): Promise<void>;
     clearMessages(clientId: string): Promise<void>;
     clearNotifications(clientId: string): Promise<void>;
-    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus, operatingSystem: OperatingSystem, planExpiry: Time): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
     getChatSystemStatus(): Promise<ChatSystemStatus>;
@@ -135,11 +142,11 @@ export interface backendInterface {
     sendMessage(sender: string, receiver: string, message: string): Promise<void>;
     setChatSystemStatus(status: ChatSystemStatus): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
-    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus, operatingSystem: OperatingSystem, planExpiry: Time): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;
     updateVMStatus(idLuid: string, vmStatus: VMStatus): Promise<void>;
 }
-import type { ChatSystemStatus as _ChatSystemStatus, ClientRecord as _ClientRecord, VMStatus as _VMStatus } from "./declarations/backend.did.d.ts";
+import type { ChatSystemStatus as _ChatSystemStatus, ClientRecord as _ClientRecord, OperatingSystem as _OperatingSystem, Time as _Time, VMStatus as _VMStatus } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async addNotification(arg0: string, arg1: string): Promise<void> {
@@ -198,17 +205,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async createClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus): Promise<void> {
+    async createClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus, arg8: OperatingSystem, arg9: Time): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+                const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7), to_candid_OperatingSystem_n3(this._uploadFile, this._downloadFile, arg8), arg9);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+            const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7), to_candid_OperatingSystem_n3(this._uploadFile, this._downloadFile, arg8), arg9);
             return result;
         }
     }
@@ -230,42 +237,42 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllClientRecords();
-                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+                return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getAllClientRecords();
-            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+            return from_candid_vec_n5(this._uploadFile, this._downloadFile, result);
         }
     }
     async getChatSystemStatus(): Promise<ChatSystemStatus> {
         if (this.processError) {
             try {
                 const result = await this.actor.getChatSystemStatus();
-                return from_candid_ChatSystemStatus_n8(this._uploadFile, this._downloadFile, result);
+                return from_candid_ChatSystemStatus_n12(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getChatSystemStatus();
-            return from_candid_ChatSystemStatus_n8(this._uploadFile, this._downloadFile, result);
+            return from_candid_ChatSystemStatus_n12(this._uploadFile, this._downloadFile, result);
         }
     }
     async getClientRecord(arg0: string): Promise<ClientRecord> {
         if (this.processError) {
             try {
                 const result = await this.actor.getClientRecord(arg0);
-                return from_candid_ClientRecord_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_ClientRecord_n6(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getClientRecord(arg0);
-            return from_candid_ClientRecord_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_ClientRecord_n6(this._uploadFile, this._downloadFile, result);
         }
     }
     async getGlobalAnnouncement(): Promise<string> {
@@ -341,14 +348,14 @@ export class Backend implements backendInterface {
     async setChatSystemStatus(arg0: ChatSystemStatus): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n10(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n14(this._uploadFile, this._downloadFile, arg0));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n10(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n14(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -366,17 +373,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus): Promise<void> {
+    async updateClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus, arg8: OperatingSystem, arg9: Time): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+                const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7), to_candid_OperatingSystem_n3(this._uploadFile, this._downloadFile, arg8), arg9);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+            const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7), to_candid_OperatingSystem_n3(this._uploadFile, this._downloadFile, arg8), arg9);
             return result;
         }
     }
@@ -409,21 +416,26 @@ export class Backend implements backendInterface {
         }
     }
 }
-function from_candid_ChatSystemStatus_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ChatSystemStatus): ChatSystemStatus {
+function from_candid_ChatSystemStatus_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ChatSystemStatus): ChatSystemStatus {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
+}
+function from_candid_ClientRecord_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ClientRecord): ClientRecord {
+    return from_candid_record_n7(_uploadFile, _downloadFile, value);
+}
+function from_candid_OperatingSystem_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _OperatingSystem): OperatingSystem {
+    return from_candid_variant_n11(_uploadFile, _downloadFile, value);
+}
+function from_candid_VMStatus_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _VMStatus): VMStatus {
     return from_candid_variant_n9(_uploadFile, _downloadFile, value);
 }
-function from_candid_ClientRecord_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ClientRecord): ClientRecord {
-    return from_candid_record_n5(_uploadFile, _downloadFile, value);
-}
-function from_candid_VMStatus_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _VMStatus): VMStatus {
-    return from_candid_variant_n7(_uploadFile, _downloadFile, value);
-}
-function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_record_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     senhaCliente: string;
     senhaVps: string;
     nome: string;
     vmStatus: _VMStatus;
     userVps: string;
+    operatingSystem: _OperatingSystem;
+    planExpiry: _Time;
     ipVps: string;
     idLuid: string;
     plano: string;
@@ -433,6 +445,8 @@ function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint
     nome: string;
     vmStatus: VMStatus;
     userVps: string;
+    operatingSystem: OperatingSystem;
+    planExpiry: Time;
     ipVps: string;
     idLuid: string;
     plano: string;
@@ -441,14 +455,30 @@ function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint
         senhaCliente: value.senhaCliente,
         senhaVps: value.senhaVps,
         nome: value.nome,
-        vmStatus: from_candid_VMStatus_n6(_uploadFile, _downloadFile, value.vmStatus),
+        vmStatus: from_candid_VMStatus_n8(_uploadFile, _downloadFile, value.vmStatus),
         userVps: value.userVps,
+        operatingSystem: from_candid_OperatingSystem_n10(_uploadFile, _downloadFile, value.operatingSystem),
+        planExpiry: value.planExpiry,
         ipVps: value.ipVps,
         idLuid: value.idLuid,
         plano: value.plano
     };
 }
-function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    ubuntu: null;
+} | {
+    windows: null;
+}): OperatingSystem {
+    return "ubuntu" in value ? OperatingSystem.ubuntu : "windows" in value ? OperatingSystem.windows : value;
+}
+function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    offline: null;
+} | {
+    online: null;
+}): ChatSystemStatus {
+    return "offline" in value ? ChatSystemStatus.offline : "online" in value ? ChatSystemStatus.online : value;
+}
+function from_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     maintenance: null;
 } | {
     offline: null;
@@ -457,23 +487,19 @@ function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): VMStatus {
     return "maintenance" in value ? VMStatus.maintenance : "offline" in value ? VMStatus.offline : "online" in value ? VMStatus.online : value;
 }
-function from_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    offline: null;
-} | {
-    online: null;
-}): ChatSystemStatus {
-    return "offline" in value ? ChatSystemStatus.offline : "online" in value ? ChatSystemStatus.online : value;
+function from_candid_vec_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_ClientRecord>): Array<ClientRecord> {
+    return value.map((x)=>from_candid_ClientRecord_n6(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_ClientRecord>): Array<ClientRecord> {
-    return value.map((x)=>from_candid_ClientRecord_n4(_uploadFile, _downloadFile, x));
+function to_candid_ChatSystemStatus_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): _ChatSystemStatus {
+    return to_candid_variant_n15(_uploadFile, _downloadFile, value);
 }
-function to_candid_ChatSystemStatus_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): _ChatSystemStatus {
-    return to_candid_variant_n11(_uploadFile, _downloadFile, value);
+function to_candid_OperatingSystem_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: OperatingSystem): _OperatingSystem {
+    return to_candid_variant_n4(_uploadFile, _downloadFile, value);
 }
 function to_candid_VMStatus_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: VMStatus): _VMStatus {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): {
+function to_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): {
     offline: null;
 } | {
     online: null;
@@ -497,6 +523,17 @@ function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8
         offline: null
     } : value == VMStatus.online ? {
         online: null
+    } : value;
+}
+function to_candid_variant_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: OperatingSystem): {
+    ubuntu: null;
+} | {
+    windows: null;
+} {
+    return value == OperatingSystem.ubuntu ? {
+        ubuntu: null
+    } : value == OperatingSystem.windows ? {
+        windows: null
     } : value;
 }
 export interface CreateActorOptions {

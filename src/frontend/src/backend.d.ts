@@ -7,12 +7,7 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface ChatMessage {
-    sender: string;
-    message: string;
-    timestamp: bigint;
-    receiver: string;
-}
+export type Time = bigint;
 export interface Notification {
     message: string;
     timestamp: bigint;
@@ -23,13 +18,25 @@ export interface ClientRecord {
     nome: string;
     vmStatus: VMStatus;
     userVps: string;
+    operatingSystem: OperatingSystem;
+    planExpiry: Time;
     ipVps: string;
     idLuid: string;
     plano: string;
 }
+export interface ChatMessage {
+    sender: string;
+    message: string;
+    timestamp: bigint;
+    receiver: string;
+}
 export enum ChatSystemStatus {
     offline = "offline",
     online = "online"
+}
+export enum OperatingSystem {
+    ubuntu = "ubuntu",
+    windows = "windows"
 }
 export enum VMStatus {
     maintenance = "maintenance",
@@ -41,7 +48,7 @@ export interface backendInterface {
     clearGlobalAnnouncement(): Promise<void>;
     clearMessages(clientId: string): Promise<void>;
     clearNotifications(clientId: string): Promise<void>;
-    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus, operatingSystem: OperatingSystem, planExpiry: Time): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
     getChatSystemStatus(): Promise<ChatSystemStatus>;
@@ -53,7 +60,7 @@ export interface backendInterface {
     sendMessage(sender: string, receiver: string, message: string): Promise<void>;
     setChatSystemStatus(status: ChatSystemStatus): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
-    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus, operatingSystem: OperatingSystem, planExpiry: Time): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;
     updateVMStatus(idLuid: string, vmStatus: VMStatus): Promise<void>;
 }

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Notification, ChatMessage, ChatSystemStatus } from '../backend';
+import type { ClientRecord, Notification, ChatMessage, ChatSystemStatus, OperatingSystem, Time } from '../backend';
 import { VMStatus } from '../backend';
 
 export function useCreateClientRecord() {
@@ -16,6 +16,8 @@ export function useCreateClientRecord() {
       userVps: string;
       senhaVps: string;
       plano: string;
+      operatingSystem: OperatingSystem;
+      planExpiry: Time;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
       await actor.createClientRecord(
@@ -26,7 +28,9 @@ export function useCreateClientRecord() {
         data.userVps,
         data.senhaVps,
         data.plano,
-        VMStatus.online
+        VMStatus.online,
+        data.operatingSystem,
+        data.planExpiry
       );
     },
     onSuccess: () => {
@@ -50,6 +54,8 @@ export function useUpdateClientRecord() {
       senhaVps: string;
       plano: string;
       vmStatus: VMStatus;
+      operatingSystem: OperatingSystem;
+      planExpiry: Time;
     }) => {
       if (!actor) throw new Error('Actor not initialized');
       await actor.updateClientRecord(
@@ -60,7 +66,9 @@ export function useUpdateClientRecord() {
         data.userVps,
         data.senhaVps,
         data.plano,
-        data.vmStatus
+        data.vmStatus,
+        data.operatingSystem,
+        data.planExpiry
       );
     },
     onSuccess: () => {

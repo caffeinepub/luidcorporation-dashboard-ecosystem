@@ -1,89 +1,95 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add typing indicator and chat online/offline status management",
+  "title": "Add OS tracking, connection instructions, and plan management with expiration dates",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Display a typing indicator in the chat interface when the other party is actively typing a message",
-      "acceptanceCriteria": [
-        "Typing indicator appears in chat when the other user is typing",
-        "Indicator disappears when typing stops or message is sent",
-        "Works bidirectionally for both admin and client chat views"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AdminChatPanel.tsx",
-          "operation": "modify",
-          "description": "Add typing indicator display logic to show when a client is typing. Track typing state through message input changes and display a visual typing indicator (e.g., animated dots) in the message list when the other party is typing. Clear the indicator when typing stops or a message is sent."
-        },
-        {
-          "path": "frontend/src/components/ChatWidget.tsx",
-          "operation": "modify",
-          "description": "Add typing indicator display logic to show when admin is typing. Track typing state through message input changes and display a visual typing indicator in the message list when admin is typing. Clear the indicator when typing stops or a message is sent. Mirror the implementation pattern used in AdminChatPanel for consistency."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add React Query mutations and queries for tracking typing status. Create mutations to signal when a user starts/stops typing and queries to poll for the other party's typing status. Use optimistic updates to provide immediate feedback without waiting for backend confirmation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Add online/offline status indicator for the chat system visible in the admin panel",
-      "acceptanceCriteria": [
-        "Chat status (online/offline) is displayed in the admin panel",
-        "Status indicator clearly shows whether chat is available or unavailable",
-        "Status persists across sessions"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ChatSystemStatusIndicator.tsx",
-          "operation": "create",
-          "description": "Create a new component that displays the current chat system status (online/offline) using the getChatSystemStatus backend method. Show a clear visual indicator with color-coded badges (neon green for online, red for offline) and descriptive text. Follow the pattern established by VMStatusIndicator component for consistent styling with the Carbon Black/Neon Green theme."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
-          "operation": "modify",
-          "description": "Integrate the ChatSystemStatusIndicator component into the admin panel, displaying it prominently in the Chat tab or header area so admins can always see the current chat availability status."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add a React Query hook to fetch the current chat system status using the getChatSystemStatus backend method. Implement polling or cache invalidation to keep the status up-to-date across the admin panel."
-        }
-      ]
-    },
-    {
       "id": "REQ-3",
-      "summary": "Provide admin controls to manually change the chat status between online and offline",
+      "summary": "Update client registration form to include operating system dropdown and plan expiration date picker",
       "acceptanceCriteria": [
-        "Admin can toggle chat status between online and offline",
-        "Status change is immediately reflected in the admin panel",
-        "When chat is offline, clients see an appropriate message or disabled state",
-        "Status change persists in backend storage"
+        "ClientRegistrationForm component includes OS dropdown with Windows/Ubuntu options",
+        "ClientRegistrationForm component includes date picker for plan expiration",
+        "Form submits OS and expiration date to backend when creating new clients"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ChatSystemStatusToggle.tsx",
+          "path": "frontend/src/components/ClientRegistrationForm.tsx",
+          "operation": "modify",
+          "description": "Add operating system dropdown field with Windows/Ubuntu options using shadcn/ui Select component. Add plan expiration date picker using shadcn/ui Calendar/Popover components. Update form state to include operatingSystem and planExpiry fields. Modify form submission to pass operatingSystem (as OperatingSystem enum) and planExpiry (as Time/bigint timestamp) to the createClientRecord backend function. Ensure proper type mapping between form values and backend interface types."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Update client edit modal to allow editing operating system and plan expiration date",
+      "acceptanceCriteria": [
+        "ClientEditModal component includes OS dropdown field",
+        "ClientEditModal component includes date picker for plan expiration",
+        "Modal saves updated OS and expiration date to backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ClientEditModal.tsx",
+          "operation": "modify",
+          "description": "Add operating system dropdown field with Windows/Ubuntu options using shadcn/ui Select component. Add plan expiration date picker using shadcn/ui Calendar/Popover components. Initialize form with existing operatingSystem and planExpiry values from the client record. Update form submission to include operatingSystem and planExpiry in the updateClientRecord backend call. Ensure proper handling of OperatingSystem enum values and Time/bigint conversion."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Display SSH connection instructions on client dashboard when operating system is Ubuntu",
+      "acceptanceCriteria": [
+        "Client dashboard shows SSH instructions card when OS is Ubuntu",
+        "Instructions include SSH command format using the VPS IP and username",
+        "Instructions include clear step-by-step connection guidance"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/SshInstructionsCard.tsx",
           "operation": "create",
-          "description": "Create a new component with toggle controls (radio buttons or switch) allowing admins to change the chat system status between online and offline. Use the setChatSystemStatus backend method to persist changes. Include immediate visual feedback and success/error toast notifications. Follow the design pattern of NetworkMonitoringToggle for consistency."
+          "description": "Create a new card component that displays SSH connection instructions for Ubuntu users. Include a title 'SSH Connection Instructions', a mini explanation of SSH, and step-by-step instructions. Display the SSH command format using the client's VPS IP and username (e.g., 'ssh {userVps}@{ipVps}'). Include steps: 1) Open terminal, 2) Run the SSH command, 3) Enter VPS password when prompted. Use shadcn/ui Card components for consistent styling with the dark theme. Accept ipVps and userVps as props."
         },
         {
-          "path": "frontend/src/pages/AdminPanel.tsx",
+          "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Integrate the ChatSystemStatusToggle component into the admin panel Chat tab, placing it near the ChatSystemStatusIndicator for logical grouping of status display and controls."
+          "description": "Import and conditionally render the SshInstructionsCard component when the client's operatingSystem field equals 'ubuntu'. Pass the ipVps and userVps values from the clientRecord to the component. Position the card appropriately within the dashboard layout, ensuring it appears alongside other relevant client information like VPS credentials."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Display RDP connection instructions on client dashboard when operating system is Windows",
+      "acceptanceCriteria": [
+        "Client dashboard shows RDP instructions card when OS is Windows",
+        "Instructions include how to open Remote Desktop Connection",
+        "Instructions include step-by-step guidance using the VPS IP and credentials"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/RdpInstructionsCard.tsx",
+          "operation": "create",
+          "description": "Create a new card component that displays RDP connection instructions for Windows users. Include a title 'RDP Connection Instructions', a mini explanation of Remote Desktop Protocol, and step-by-step instructions. Include steps: 1) Press Windows + R and type 'mstsc', 2) Enter the VPS IP address, 3) Click Connect, 4) Enter VPS username and password when prompted. Use shadcn/ui Card components for consistent styling with the dark theme. Accept ipVps, userVps, and senhaVps as props for display in instructions."
         },
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Add a React Query mutation for updating chat system status using the setChatSystemStatus backend method. Implement optimistic updates and automatic query invalidation to refresh the status display immediately after changes."
-        },
+          "description": "Import and conditionally render the RdpInstructionsCard component when the client's operatingSystem field equals 'windows'. Pass the ipVps, userVps, and senhaVps values from the clientRecord to the component. Position the card appropriately within the dashboard layout alongside other client information."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Display client's plan name and expiration date in user profile section on client dashboard",
+      "acceptanceCriteria": [
+        "Client dashboard profile section displays the plan name",
+        "Client dashboard profile section displays the plan expiration date",
+        "Expiration date is formatted in a user-friendly way (e.g., 'Valid until Jan 15, 2025')"
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/components/ChatWidget.tsx",
+          "path": "frontend/src/components/ClientProfileMenu.tsx",
           "operation": "modify",
-          "description": "Add logic to detect when chat system status is offline and display an appropriate disabled state or message to clients (e.g., 'Chat is currently unavailable'). Disable the message input and send button when status is offline. Poll the chat system status to detect when it comes back online."
+          "description": "Add display of plan name and plan expiration date within the profile dropdown menu. Fetch the current clientRecord from useClientAuth context to access the plano and planExpiry fields. Format the planExpiry timestamp (bigint) to a readable date string using JavaScript Date methods (e.g., 'Valid until Jan 15, 2025'). Display plan information below the client name and ID, maintaining consistent styling with existing profile elements."
         }
       ]
     }

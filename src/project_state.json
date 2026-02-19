@@ -1,35 +1,52 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Chat application with typing indicators and online/offline status management in admin panel",
+  "summary": "A VPS/hosting management system with machine OS tracking (Windows/Ubuntu), connection instructions (SSH/RDP), and client plan management with expiration dates",
   "architectural_notes": [
-    "Chat system with real-time features (typing indicators)",
-    "Administrative panel for chat status management"
+    "Machine registry includes OS type (Windows/Ubuntu)",
+    "Context-sensitive connection instructions based on OS",
+    "Client plan management with expiration tracking"
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-display-a-typing-indicator-in-the-chat-interface-when-the-other-party-is-actively-typing-a-message",
-      "title": "Display a typing indicator in the chat interface when the other party is actively typing a message",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-online-offline-status-indicator-for-the-chat-system-visible-in-the-admin-panel",
-      "title": "Add online/offline status indicator for the chat system visible in the admin panel",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-provide-admin-controls-to-manually-change-the-chat-status-between-online-and-offline",
-      "title": "Provide admin controls to manually change the chat status between online and offline",
+      "id": "feature-update-the-client-registration-form-in-the-admin-panel-to-include-a-dropdown-for-selecting-operating-system-windows-or-ubuntu-and-a-date-picker-for-setting-the-plan-expiration-date",
+      "title": "Update the client registration form in the admin panel to include a dropdown for selecting operating system (Windows or Ubuntu) and a date picker for setting the plan expiration date",
       "reqIds": [
         "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-client-edit-modal-in-the-admin-panel-to-allow-editing-the-operating-system-and-plan-expiration-date-fields",
+      "title": "Update the client edit modal in the admin panel to allow editing the operating system and plan expiration date fields",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-ssh-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-ubuntu-including-a-mini-explanation-with-the-command-format-and-connection-steps",
+      "title": "Display SSH connection instructions on the client dashboard when the operating system is Ubuntu, including a mini explanation with the command format and connection steps",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-rdp-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-windows-including-a-mini-explanation-with-the-connection-steps-and-how-to-use-remote-desktop",
+      "title": "Display RDP connection instructions on the client dashboard when the operating system is Windows, including a mini explanation with the connection steps and how to use Remote Desktop",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-client-s-plan-name-and-expiration-date-in-the-user-profile-section-on-the-client-dashboard-showing-the-expiration-date-in-a-readable-format",
+      "title": "Display the client's plan name and expiration date in the user profile section on the client dashboard, showing the expiration date in a readable format",
+      "reqIds": [
+        "REQ-7"
       ],
       "version": 1
     }
@@ -37,24 +54,52 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add typing indicator to chat",
+      "summary": "Add OS field (Windows/Ubuntu) to machine registration",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add online/offline status display for chat in admin panel",
+      "summary": "Display SSH connection instructions for Ubuntu machines",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Add ability to change chat status from admin panel",
+      "summary": "Display RDP connection instructions for Windows machines",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Show plan and expiration date in user profile",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add plan and expiration date fields to client registration in admin panel",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add operating system field (Windows or Ubuntu) to the client record data model in the backend, storing it as a variant type with options for Windows and Ubuntu",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add plan expiration date field to the client record data model in the backend, storing it as a timestamp or date value",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Add typing indicator and chat online/offline status management",
+  "projectName": "Add OS tracking, connection instructions, and plan management with expiration dates",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

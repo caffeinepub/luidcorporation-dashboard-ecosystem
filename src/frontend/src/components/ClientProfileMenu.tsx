@@ -1,4 +1,5 @@
 import { useClientAuth } from '../hooks/useClientAuth';
+import { useGetClientRecord } from '../hooks/useQueries';
 import { useNavigate } from '@tanstack/react-router';
 import {
   DropdownMenu,
@@ -10,10 +11,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, Calendar } from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 export default function ClientProfileMenu() {
   const { clientData, logout } = useClientAuth();
+  const { data: clientRecord } = useGetClientRecord(clientData?.idLuid || null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -30,6 +34,11 @@ export default function ClientProfileMenu() {
     .toUpperCase()
     .slice(0, 2);
 
+  const formatExpiryDate = (timestamp: bigint) => {
+    const date = new Date(Number(timestamp) / 1000000);
+    return format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,7 +53,7 @@ export default function ClientProfileMenu() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 border-neon-green/20 bg-card-dark" align="end">
+      <DropdownMenuContent className="w-64 border-neon-green/20 bg-card-dark" align="end">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none text-neon-green">{clientData.nome}</p>
@@ -52,6 +61,24 @@ export default function ClientProfileMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-neon-green/20" />
+        {clientRecord && (
+          <>
+            <div className="px-2 py-2">
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-muted-foreground">Plano</p>
+                <p className="text-sm font-semibold text-neon-green">{clientRecord.plano}</p>
+              </div>
+              <div className="mt-2 space-y-1">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Calendar className="h-3 w-3" />
+                  <span>Válido até</span>
+                </div>
+                <p className="text-sm text-foreground">{formatExpiryDate(clientRecord.planExpiry)}</p>
+              </div>
+            </div>
+            <DropdownMenuSeparator className="bg-neon-green/20" />
+          </>
+        )}
         <DropdownMenuItem
           onClick={handleLogout}
           className="cursor-pointer text-red-400 focus:bg-red-500/10 focus:text-red-400"

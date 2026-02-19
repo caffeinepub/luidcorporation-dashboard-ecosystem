@@ -1,12 +1,14 @@
 import List "mo:core/List";
 import Map "mo:core/Map";
 import Text "mo:core/Text";
+import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
 import Migration "migration";
 
 (with migration = Migration.run)
 actor {
   type VMStatus = { #online; #offline; #maintenance };
+  type OperatingSystem = { #windows; #ubuntu };
 
   type ClientRecord = {
     idLuid : Text;
@@ -17,6 +19,8 @@ actor {
     senhaVps : Text;
     plano : Text;
     vmStatus : VMStatus;
+    operatingSystem : OperatingSystem;
+    planExpiry : Time.Time;
   };
 
   type Notification = {
@@ -50,6 +54,8 @@ actor {
     senhaVps : Text,
     plano : Text,
     vmStatus : VMStatus,
+    operatingSystem : OperatingSystem,
+    planExpiry : Time.Time,
   ) : async () {
     if (clientRecords.containsKey(idLuid)) {
       Runtime.trap("Client with this ID_Luid already exists.");
@@ -64,6 +70,8 @@ actor {
       senhaVps;
       plano;
       vmStatus;
+      operatingSystem;
+      planExpiry;
     };
 
     clientRecords.add(idLuid, record);
@@ -80,6 +88,8 @@ actor {
     senhaVps : Text,
     plano : Text,
     vmStatus : VMStatus,
+    operatingSystem : OperatingSystem,
+    planExpiry : Time.Time,
   ) : async () {
     switch (clientRecords.get(idLuid)) {
       case (null) {
@@ -95,6 +105,8 @@ actor {
           senhaVps;
           plano;
           vmStatus;
+          operatingSystem;
+          planExpiry;
         };
         clientRecords.add(idLuid, updatedRecord);
       };

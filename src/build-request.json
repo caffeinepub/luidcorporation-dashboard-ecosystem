@@ -1,73 +1,145 @@
 {
   "kind": "build_request",
-  "title": "Add typing indicator and chat online/offline status management",
+  "title": "Add OS tracking, connection instructions, and plan management with expiration dates",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Display a typing indicator in the chat interface when the other party is actively typing a message",
-      "target": "both",
+      "text": "Add operating system field (Windows or Ubuntu) to the client record data model in the backend, storing it as a variant type with options for Windows and Ubuntu",
+      "target": "backend",
       "source": {
         "messageIds": [
           "msg-7"
         ],
         "quotes": [
-          "mostrar no chat o quando ta digitando"
+          "cadastrar o sistema da máquina se é windows ou ubuntu"
         ]
       },
       "acceptanceCriteria": [
-        "Typing indicator appears in chat when the other user is typing",
-        "Indicator disappears when typing stops or message is sent",
-        "Works bidirectionally for both admin and client chat views"
+        "Backend ClientRecord type includes an OS field with Windows/Ubuntu options",
+        "OS field is persisted and retrieved correctly in CRUD operations"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add online/offline status indicator for the chat system visible in the admin panel",
-      "target": "both",
+      "text": "Add plan expiration date field to the client record data model in the backend, storing it as a timestamp or date value",
+      "target": "backend",
       "source": {
         "messageIds": [
           "msg-7"
         ],
         "quotes": [
-          "coloque o status do chat se está online ou offline no painel administrativo"
+          "validade dele, que deve também ser definida no cadastro do cliente no painel de administração"
         ]
       },
       "acceptanceCriteria": [
-        "Chat status (online/offline) is displayed in the admin panel",
-        "Status indicator clearly shows whether chat is available or unavailable",
-        "Status persists across sessions"
+        "Backend ClientRecord type includes a planExpirationDate field",
+        "Expiration date is persisted and retrieved correctly in CRUD operations"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Provide admin controls to manually change the chat status between online and offline",
-      "target": "both",
+      "text": "Update the client registration form in the admin panel to include a dropdown for selecting operating system (Windows or Ubuntu) and a date picker for setting the plan expiration date",
+      "target": "frontend",
       "source": {
         "messageIds": [
           "msg-7"
         ],
         "quotes": [
-          "pra alterar o status do chat"
+          "cadastrar o sistema da máquina se é windows ou ubuntu",
+          "validade dele, que deve também ser definida no cadastro do cliente no painel de administração"
         ]
       },
       "acceptanceCriteria": [
-        "Admin can toggle chat status between online and offline",
-        "Status change is immediately reflected in the admin panel",
-        "When chat is offline, clients see an appropriate message or disabled state",
-        "Status change persists in backend storage"
+        "ClientRegistrationForm component includes OS dropdown with Windows/Ubuntu options",
+        "ClientRegistrationForm component includes date picker for plan expiration",
+        "Form submits OS and expiration date to backend when creating new clients"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Update the client edit modal in the admin panel to allow editing the operating system and plan expiration date fields",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "cadastrar o sistema da máquina se é windows ou ubuntu",
+          "validade dele, que deve também ser definida no cadastro do cliente"
+        ]
+      },
+      "acceptanceCriteria": [
+        "ClientEditModal component includes OS dropdown field",
+        "ClientEditModal component includes date picker for plan expiration",
+        "Modal saves updated OS and expiration date to backend"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Display SSH connection instructions on the client dashboard when the operating system is Ubuntu, including a mini explanation with the command format and connection steps",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "caso seja Ubuntu tenha uma mini explicação sobre como conectar ao ssh"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Client dashboard shows SSH instructions card when OS is Ubuntu",
+        "Instructions include SSH command format using the VPS IP and username",
+        "Instructions include clear step-by-step connection guidance"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Display RDP connection instructions on the client dashboard when the operating system is Windows, including a mini explanation with the connection steps and how to use Remote Desktop",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "se for windows como conectar ao rdp"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Client dashboard shows RDP instructions card when OS is Windows",
+        "Instructions include how to open Remote Desktop Connection",
+        "Instructions include step-by-step guidance using the VPS IP and credentials"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Display the client's plan name and expiration date in the user profile section on the client dashboard, showing the expiration date in a readable format",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "no perfil do usuário apareça o plano e a validade dele"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Client dashboard profile section displays the plan name",
+        "Client dashboard profile section displays the plan expiration date",
+        "Expiration date is formatted in a user-friendly way (e.g., 'Valid until Jan 15, 2025')"
       ]
     }
   ],
   "constraints": [
-    "Use existing chat message infrastructure from backend/main.mo",
-    "Maintain consistency with current VMStatus pattern for status management",
-    "Keep the Carbon Black/Neon Green theme consistent across new UI elements"
+    "Do not modify immutable frontend paths: useInternetIdentity.ts, useInternetIdentity.tsx, useActor.ts, main.tsx, components/ui",
+    "Maintain single-actor architecture in backend with all logic in main.mo",
+    "Preserve existing authentication system and admin/client separation"
   ],
   "nonGoals": [
-    "Real-time WebSocket implementation (not supported on platform)",
-    "Read receipts or message delivery confirmations",
-    "Chat history pagination"
+    "Automated expiration date notifications or warnings",
+    "Automatic client account suspension based on expiration",
+    "Support for operating systems other than Windows and Ubuntu",
+    "VNC or other remote connection protocols beyond SSH and RDP"
   ],
   "imageRequirements": {
     "required": [],

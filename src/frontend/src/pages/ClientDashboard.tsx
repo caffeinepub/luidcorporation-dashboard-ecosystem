@@ -7,6 +7,8 @@ import ClientProfileMenu from '../components/ClientProfileMenu';
 import NotificationBell from '../components/NotificationBell';
 import ChatWidget from '../components/ChatWidget';
 import VMStatusIndicator from '../components/VMStatusIndicator';
+import SshInstructionsCard from '../components/SshInstructionsCard';
+import RdpInstructionsCard from '../components/RdpInstructionsCard';
 import { Cloud, Loader2 } from 'lucide-react';
 
 export default function ClientDashboard() {
@@ -50,19 +52,33 @@ export default function ClientDashboard() {
             <Loader2 className="h-8 w-8 animate-spin text-neon-green" />
           </div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="space-y-6">
-              <VpsCredentialsCard
+          <div className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-6">
+                <VpsCredentialsCard
+                  ipVps={clientData.ipVps}
+                  userVps={clientData.userVps}
+                  senhaVps={clientData.senhaVps}
+                  plano={clientData.plano}
+                />
+                {clientRecord && <VMStatusIndicator vmStatus={clientRecord.vmStatus} />}
+              </div>
+              <div>
+                <NetworkSpeedChart />
+              </div>
+            </div>
+
+            {clientRecord && clientRecord.operatingSystem === 'ubuntu' && (
+              <SshInstructionsCard ipVps={clientData.ipVps} userVps={clientData.userVps} />
+            )}
+
+            {clientRecord && clientRecord.operatingSystem === 'windows' && (
+              <RdpInstructionsCard
                 ipVps={clientData.ipVps}
                 userVps={clientData.userVps}
                 senhaVps={clientData.senhaVps}
-                plano={clientData.plano}
               />
-              {clientRecord && <VMStatusIndicator vmStatus={clientRecord.vmStatus} />}
-            </div>
-            <div>
-              <NetworkSpeedChart />
-            </div>
+            )}
           </div>
         )}
       </main>

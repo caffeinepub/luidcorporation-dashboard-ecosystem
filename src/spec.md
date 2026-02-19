@@ -1,12 +1,15 @@
 # Specification
 
 ## Summary
-**Goal:** Add real-time typing indicators and online/offline status management to the chat system.
+**Goal:** Add operating system tracking, connection instructions for SSH/RDP, and plan management with expiration dates.
 
 **Planned changes:**
-- Display typing indicator in chat interface when the other party is actively typing
-- Add online/offline status indicator for chat in the admin panel
-- Provide admin controls to toggle chat status between online and offline
-- Show appropriate message to clients when chat is offline
+- Add OS field (Windows/Ubuntu) to client records in backend
+- Add plan expiration date field to client records in backend
+- Update admin panel client registration form with OS dropdown and expiration date picker
+- Update admin panel client edit modal to allow editing OS and expiration date
+- Display SSH connection instructions on client dashboard when OS is Ubuntu
+- Display RDP connection instructions on client dashboard when OS is Windows
+- Show plan name and expiration date in client dashboard profile section
 
-**User-visible outcome:** Users will see when someone is typing in the chat, and admins can control whether the chat is available (online/offline) with status clearly visible in the admin panel. Clients will see when chat is unavailable.
+**User-visible outcome:** Admins can register clients with their operating system and plan expiration date. Clients see their plan validity and receive OS-specific connection instructions (SSH for Ubuntu, RDP for Windows) on their dashboard.
