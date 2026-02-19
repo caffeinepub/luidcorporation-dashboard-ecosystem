@@ -1,9 +1,11 @@
-import List "mo:core/List";
 import Map "mo:core/Map";
+import List "mo:core/List";
 import Text "mo:core/Text";
 
 module {
-  type OldClientRecord = {
+  type VMStatus = { #online; #offline; #maintenance };
+
+  type ClientRecord = {
     idLuid : Text;
     nome : Text;
     senhaCliente : Text;
@@ -11,52 +13,44 @@ module {
     userVps : Text;
     senhaVps : Text;
     plano : Text;
+    vmStatus : VMStatus;
   };
 
+  type Notification = {
+    message : Text;
+    timestamp : Int;
+  };
+
+  type ChatMessage = {
+    sender : Text;
+    receiver : Text;
+    message : Text;
+    timestamp : Int;
+  };
+
+  type ChatSystemStatus = { #online; #offline };
+
   type OldActor = {
-    clientRecords : Map.Map<Text, OldClientRecord>;
-    notifications : Map.Map<Text, List.List<{ message : Text; timestamp : Int }>>;
+    clientRecords : Map.Map<Text, ClientRecord>;
+    notifications : Map.Map<Text, List.List<Notification>>;
+    chatMessages : Map.Map<Text, List.List<ChatMessage>>;
     globalAnnouncement : Text;
     networkMonitoringStatus : Text;
   };
 
   type NewActor = {
-    clientRecords : Map.Map<Text, {
-      idLuid : Text;
-      nome : Text;
-      senhaCliente : Text;
-      ipVps : Text;
-      userVps : Text;
-      senhaVps : Text;
-      plano : Text;
-      vmStatus : { #online; #offline; #maintenance };
-    }>;
-    notifications : Map.Map<Text, List.List<{ message : Text; timestamp : Int }>>;
+    clientRecords : Map.Map<Text, ClientRecord>;
+    notifications : Map.Map<Text, List.List<Notification>>;
+    chatMessages : Map.Map<Text, List.List<ChatMessage>>;
     globalAnnouncement : Text;
     networkMonitoringStatus : Text;
-    chatMessages : Map.Map<Text, List.List<{ sender : Text; receiver : Text; message : Text; timestamp : Int }>>;
+    chatSystemStatus : ChatSystemStatus;
   };
 
   public func run(old : OldActor) : NewActor {
-    let newClientRecords = old.clientRecords.map<Text, OldClientRecord, {
-      idLuid : Text;
-      nome : Text;
-      senhaCliente : Text;
-      ipVps : Text;
-      userVps : Text;
-      senhaVps : Text;
-      plano : Text;
-      vmStatus : { #online; #offline; #maintenance };
-    }>(
-      func(_id, oldRecord) {
-        { oldRecord with vmStatus = #online };
-      }
-    );
-
     {
       old with
-      clientRecords = newClientRecords;
-      chatMessages = Map.empty<Text, List.List<{ sender : Text; receiver : Text; message : Text; timestamp : Int }>>();
+      chatSystemStatus = #offline
     };
   };
 };

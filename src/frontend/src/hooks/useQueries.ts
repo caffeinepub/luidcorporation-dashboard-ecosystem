@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Notification, ChatMessage } from '../backend';
+import type { ClientRecord, Notification, ChatMessage, ChatSystemStatus } from '../backend';
 import { VMStatus } from '../backend';
 
 export function useCreateClientRecord() {
@@ -100,7 +100,7 @@ export function useGetClientRecord(idLuid: string | null) {
       }
     },
     enabled: !!actor && !isFetching && !!idLuid,
-    refetchInterval: 10000, // Refetch every 10 seconds for VM status updates
+    refetchInterval: 10000,
   });
 }
 
@@ -163,7 +163,7 @@ export function useClearGlobalAnnouncement() {
   });
 }
 
-export function useGetGlobalAnnouncement() {
+export function useGlobalAnnouncement() {
   const { actor, isFetching } = useActor();
 
   return useQuery<string>({
@@ -173,25 +173,11 @@ export function useGetGlobalAnnouncement() {
       return await actor.getGlobalAnnouncement();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
 }
 
-export function useGetNetworkMonitoringStatus() {
-  const { actor, isFetching } = useActor();
-
-  return useQuery<string>({
-    queryKey: ['networkMonitoringStatus'],
-    queryFn: async () => {
-      if (!actor) return 'normal';
-      return await actor.getNetworkMonitoringStatus();
-    },
-    enabled: !!actor && !isFetching,
-    refetchInterval: 5000, // Refetch every 5 seconds for real-time updates
-  });
-}
-
-export function useSetNetworkMonitoringStatus() {
+export function useUpdateNetworkMonitoringStatus() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
@@ -203,6 +189,20 @@ export function useSetNetworkMonitoringStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['networkMonitoringStatus'] });
     },
+  });
+}
+
+export function useNetworkMonitoringStatus() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ['networkMonitoringStatus'],
+    queryFn: async () => {
+      if (!actor) return 'normal';
+      return await actor.getNetworkMonitoringStatus();
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 5000,
   });
 }
 
@@ -221,7 +221,7 @@ export function useSendNotification() {
   });
 }
 
-export function useGetNotifications(clientId: string | null) {
+export function useNotifications(clientId: string | null) {
   const { actor, isFetching } = useActor();
 
   return useQuery<Notification[]>({
@@ -231,7 +231,7 @@ export function useGetNotifications(clientId: string | null) {
       return await actor.getNotifications(clientId);
     },
     enabled: !!actor && !isFetching && !!clientId,
-    refetchInterval: 15000, // Refetch every 15 seconds
+    refetchInterval: 10000,
   });
 }
 
@@ -250,20 +250,6 @@ export function useClearNotifications() {
   });
 }
 
-export function useChatMessages(clientId: string | null) {
-  const { actor, isFetching } = useActor();
-
-  return useQuery<ChatMessage[]>({
-    queryKey: ['chatMessages', clientId],
-    queryFn: async () => {
-      if (!actor || !clientId) return [];
-      return await actor.getMessages(clientId);
-    },
-    enabled: !!actor && !isFetching && !!clientId,
-    refetchInterval: 5000, // Refetch every 5 seconds for real-time chat
-  });
-}
-
 export function useSendMessage() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -275,27 +261,71 @@ export function useSendMessage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
+      queryClient.invalidateQueries({ queryKey: ['allChatMessages'] });
     },
+  });
+}
+
+export function useChatMessages(clientId: string | null) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ChatMessage[]>({
+    queryKey: ['chatMessages', clientId],
+    queryFn: async () => {
+      if (!actor || !clientId) return [];
+      return await actor.getMessages(clientId);
+    },
+    enabled: !!actor && !isFetching && !!clientId,
+    refetchInterval: 3000,
   });
 }
 
 export function useAllChatMessages() {
   const { actor, isFetching } = useActor();
+  const { data: clients = [] } = useAllClientRecords();
 
-  return useQuery<{ clientId: string; messages: ChatMessage[] }[]>({
+  return useQuery<Array<{ clientId: string; messages: ChatMessage[] }>>({
     queryKey: ['allChatMessages'],
     queryFn: async () => {
       if (!actor) return [];
-      const clients = await actor.getAllClientRecords();
-      const chatData = await Promise.all(
+      const allChats = await Promise.all(
         clients.map(async (client) => ({
           clientId: client.idLuid,
           messages: await actor.getMessages(client.idLuid),
         }))
       );
-      return chatData;
+      return allChats;
+    },
+    enabled: !!actor && !isFetching && clients.length > 0,
+    refetchInterval: 3000,
+  });
+}
+
+export function useChatSystemStatus() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<ChatSystemStatus>({
+    queryKey: ['chatSystemStatus'],
+    queryFn: async () => {
+      if (!actor) return 'offline' as ChatSystemStatus;
+      return await actor.getChatSystemStatus();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchInterval: 5000,
+  });
+}
+
+export function useSetChatSystemStatus() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (status: ChatSystemStatus) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.setChatSystemStatus(status);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatSystemStatus'] });
+    },
   });
 }

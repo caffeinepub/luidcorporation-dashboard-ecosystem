@@ -1,13 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useGetNetworkMonitoringStatus, useSetNetworkMonitoringStatus } from '../hooks/useQueries';
+import { useNetworkMonitoringStatus, useUpdateNetworkMonitoringStatus } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Activity, Loader2 } from 'lucide-react';
 
 export default function NetworkMonitoringToggle() {
-  const { data: status, isLoading } = useGetNetworkMonitoringStatus();
-  const setStatus = useSetNetworkMonitoringStatus();
+  const { data: status, isLoading } = useNetworkMonitoringStatus();
+  const setStatus = useUpdateNetworkMonitoringStatus();
 
   const handleStatusChange = async (newStatus: string) => {
     try {

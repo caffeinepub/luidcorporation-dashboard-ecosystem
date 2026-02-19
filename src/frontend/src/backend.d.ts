@@ -27,6 +27,10 @@ export interface ClientRecord {
     idLuid: string;
     plano: string;
 }
+export enum ChatSystemStatus {
+    offline = "offline",
+    online = "online"
+}
 export enum VMStatus {
     maintenance = "maintenance",
     offline = "offline",
@@ -40,12 +44,14 @@ export interface backendInterface {
     createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
+    getChatSystemStatus(): Promise<ChatSystemStatus>;
     getClientRecord(idLuid: string): Promise<ClientRecord>;
     getGlobalAnnouncement(): Promise<string>;
     getMessages(clientId: string): Promise<Array<ChatMessage>>;
     getNetworkMonitoringStatus(): Promise<string>;
     getNotifications(clientId: string): Promise<Array<Notification>>;
     sendMessage(sender: string, receiver: string, message: string): Promise<void>;
+    setChatSystemStatus(status: ChatSystemStatus): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
     updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;

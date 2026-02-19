@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useGetNetworkMonitoringStatus } from './useQueries';
+import { useNetworkMonitoringStatus } from './useQueries';
 
 interface NetworkDataPoint {
   time: string;
@@ -9,7 +9,7 @@ interface NetworkDataPoint {
 export function useNetworkSpeedSimulation() {
   const [data, setData] = useState<NetworkDataPoint[]>([]);
   const [currentSpeed, setCurrentSpeed] = useState(3.5);
-  const { data: monitoringStatus } = useGetNetworkMonitoringStatus();
+  const { data: monitoringStatus } = useNetworkMonitoringStatus();
 
   useEffect(() => {
     const interval = setInterval(() => {

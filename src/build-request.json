@@ -1,156 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Add VM status management, support chat, and admin profile display",
-  "projectName": "Luid Corporation Dashboard",
+  "title": "Add typing indicator and chat online/offline status management",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a VM status field to each client record that can be set to 'online', 'offline', or 'maintenance'",
-      "target": "backend",
+      "text": "Display a typing indicator in the chat interface when the other party is actively typing a message",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-7"
         ],
         "quotes": [
-          "o status da vm do cliente se está offline e online ou em manutenção isso alteravel em cada cliente específico"
+          "mostrar no chat o quando ta digitando"
         ]
       },
       "acceptanceCriteria": [
-        "Client record schema includes a vmStatus field with three possible values: online, offline, maintenance",
-        "Default VM status for new clients is 'online'",
-        "VM status is persisted in backend storage alongside other client data"
+        "Typing indicator appears in chat when the other user is typing",
+        "Indicator disappears when typing stops or message is sent",
+        "Works bidirectionally for both admin and client chat views"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add VM status edit controls in the admin panel for each client in the client list",
-      "target": "frontend",
+      "text": "Add online/offline status indicator for the chat system visible in the admin panel",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-7"
         ],
         "quotes": [
-          "isso alteravel em cada cliente específico no painel de administração"
+          "coloque o status do chat se está online ou offline no painel administrativo"
         ]
       },
       "acceptanceCriteria": [
-        "Each client row in the admin panel ClientList shows the current VM status",
-        "Admin can change VM status through a dropdown or button group for each client",
-        "Status changes are saved to the backend immediately",
-        "Visual indicators (colors/icons) differentiate between online (green), offline (red), and maintenance (yellow/orange) statuses"
+        "Chat status (online/offline) is displayed in the admin panel",
+        "Status indicator clearly shows whether chat is available or unavailable",
+        "Status persists across sessions"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Display VM status indicator on the client dashboard showing their current VM state",
-      "target": "frontend",
+      "text": "Provide admin controls to manually change the chat status between online and offline",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-7"
         ],
         "quotes": [
-          "o status da vm do cliente"
+          "pra alterar o status do chat"
         ]
       },
       "acceptanceCriteria": [
-        "Client dashboard displays the current VM status with appropriate visual styling",
-        "Status indicator uses consistent color coding matching admin panel (green=online, red=offline, yellow/orange=maintenance)",
-        "Status updates in real-time when changed by admin"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Create backend data structures and functions to store and retrieve chat messages between clients and administrators",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "faça um chat onde o cliente clica no simbolo de chat flutuante e abre uma janelinha com o chat pra falar com algum suporte"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend stores chat messages with sender identification (client ID or 'admin'), timestamp, and message text",
-        "Messages are organized by client ID to maintain separate conversation threads",
-        "Backend provides functions to send messages, retrieve chat history for a specific client, and mark messages as read"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Implement a floating chat button and chat window widget on the client dashboard",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "o cliente clica no simbolo de chat flutuante e abre uma janelinha com o chat"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A floating chat icon appears fixed on the client dashboard (typically bottom-right corner)",
-        "Clicking the chat icon opens a chat window showing conversation history with support/admin",
-        "Chat window displays messages in chronological order with clear sender identification",
-        "Client can type and send messages through the chat interface",
-        "Chat window can be minimized/closed while retaining conversation state",
-        "Unread message indicator shows on the chat icon when new admin messages arrive"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Add a chat management interface in the admin panel showing all active client conversations",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "pra falar com algum suporte no caso algum administrador"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel displays a list of clients with active chat conversations",
-        "Admin can select a client to view and respond to their chat messages",
-        "Admin chat interface shows full conversation history with the selected client",
-        "Admin can send messages that appear in the client's chat window",
-        "Visual indicator shows which clients have unread messages waiting for admin response"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Display the logged-in administrator's name/profile in the admin panel header",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "no painel administrativo apareca o perfil com o nome de quem ta logado"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel header displays the logged-in administrator's name or username",
-        "Profile display is visible on all admin panel pages",
-        "Profile section includes admin identification consistent with the authentication system"
+        "Admin can toggle chat status between online and offline",
+        "Status change is immediately reflected in the admin panel",
+        "When chat is offline, clients see an appropriate message or disabled state",
+        "Status change persists in backend storage"
       ]
     }
   ],
   "constraints": [
-    "Maintain single-actor Motoko architecture in backend/main.mo",
-    "Do not modify immutable frontend paths: useInternetIdentity.ts, useInternetIdentity.tsx, useActor.ts, main.tsx, components/ui",
-    "Use existing authentication systems (admin and client) without changes to core auth logic",
-    "Keep Carbon Black and Neon Green theme consistency"
+    "Use existing chat message infrastructure from backend/main.mo",
+    "Maintain consistency with current VMStatus pattern for status management",
+    "Keep the Carbon Black/Neon Green theme consistent across new UI elements"
   ],
   "nonGoals": [
-    "Real-time WebSocket-based chat synchronization",
-    "Third-party chat service integration",
-    "Voice or video chat capabilities",
-    "File sharing in chat",
-    "Chat message encryption beyond standard HTTPS",
-    "Multi-admin chat assignments or routing",
-    "Automated chatbot responses"
+    "Real-time WebSocket implementation (not supported on platform)",
+    "Read receipts or message delivery confirmations",
+    "Chat history pagination"
   ],
   "imageRequirements": {
     "required": [],

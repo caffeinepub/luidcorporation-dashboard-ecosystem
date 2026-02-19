@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSetGlobalAnnouncement, useGetGlobalAnnouncement, useClearGlobalAnnouncement } from '../hooks/useQueries';
+import { useSetGlobalAnnouncement, useGlobalAnnouncement, useClearGlobalAnnouncement } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Loader2, Megaphone, Trash2 } from 'lucide-react';
 
@@ -11,7 +11,7 @@ export default function GlobalAnnouncementInput() {
   const [announcement, setAnnouncement] = useState('');
   const setGlobalAnnouncement = useSetGlobalAnnouncement();
   const clearGlobalAnnouncement = useClearGlobalAnnouncement();
-  const { data: currentAnnouncement } = useGetGlobalAnnouncement();
+  const { data: currentAnnouncement } = useGlobalAnnouncement();
 
   useEffect(() => {
     if (currentAnnouncement !== undefined) {

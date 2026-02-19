@@ -8,6 +8,8 @@ import ClientList from '../components/ClientList';
 import NetworkMonitoringToggle from '../components/NetworkMonitoringToggle';
 import AdminChatPanel from '../components/AdminChatPanel';
 import AdminProfileDisplay from '../components/AdminProfileDisplay';
+import ChatSystemStatusIndicator from '../components/ChatSystemStatusIndicator';
+import ChatSystemStatusToggle from '../components/ChatSystemStatusToggle';
 import { LogOut, Shield } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -72,8 +74,16 @@ export default function AdminPanel() {
             </div>
           </TabsContent>
 
-          <TabsContent value="chat">
-            <AdminChatPanel />
+          <TabsContent value="chat" className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="space-y-6">
+                <ChatSystemStatusIndicator />
+                <ChatSystemStatusToggle />
+              </div>
+              <div className="lg:col-span-2">
+                <AdminChatPanel />
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </main>

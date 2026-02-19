@@ -1,8 +1,8 @@
-import { useGetGlobalAnnouncement } from '../hooks/useQueries';
+import { useGlobalAnnouncement } from '../hooks/useQueries';
 import { AlertCircle } from 'lucide-react';
 
 export default function GlobalAnnouncementBanner() {
-  const { data: announcement } = useGetGlobalAnnouncement();
+  const { data: announcement } = useGlobalAnnouncement();
 
   if (!announcement || announcement.trim() === '') {
     return null;

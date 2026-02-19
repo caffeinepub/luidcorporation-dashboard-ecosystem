@@ -16,6 +16,8 @@ export interface ChatMessage {
   'timestamp' : bigint,
   'receiver' : string,
 }
+export type ChatSystemStatus = { 'offline' : null } |
+  { 'online' : null };
 export interface ClientRecord {
   'senhaCliente' : string,
   'senhaVps' : string,
@@ -41,12 +43,14 @@ export interface _SERVICE {
   >,
   'deleteClientRecord' : ActorMethod<[string], undefined>,
   'getAllClientRecords' : ActorMethod<[], Array<ClientRecord>>,
+  'getChatSystemStatus' : ActorMethod<[], ChatSystemStatus>,
   'getClientRecord' : ActorMethod<[string], ClientRecord>,
   'getGlobalAnnouncement' : ActorMethod<[], string>,
   'getMessages' : ActorMethod<[string], Array<ChatMessage>>,
   'getNetworkMonitoringStatus' : ActorMethod<[], string>,
   'getNotifications' : ActorMethod<[string], Array<Notification>>,
   'sendMessage' : ActorMethod<[string, string, string], undefined>,
+  'setChatSystemStatus' : ActorMethod<[ChatSystemStatus], undefined>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,
   'updateClientRecord' : ActorMethod<
     [string, string, string, string, string, string, string, VMStatus],

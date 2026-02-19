@@ -109,6 +109,10 @@ export interface ClientRecord {
     idLuid: string;
     plano: string;
 }
+export enum ChatSystemStatus {
+    offline = "offline",
+    online = "online"
+}
 export enum VMStatus {
     maintenance = "maintenance",
     offline = "offline",
@@ -122,18 +126,20 @@ export interface backendInterface {
     createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
+    getChatSystemStatus(): Promise<ChatSystemStatus>;
     getClientRecord(idLuid: string): Promise<ClientRecord>;
     getGlobalAnnouncement(): Promise<string>;
     getMessages(clientId: string): Promise<Array<ChatMessage>>;
     getNetworkMonitoringStatus(): Promise<string>;
     getNotifications(clientId: string): Promise<Array<Notification>>;
     sendMessage(sender: string, receiver: string, message: string): Promise<void>;
+    setChatSystemStatus(status: ChatSystemStatus): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
     updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;
     updateVMStatus(idLuid: string, vmStatus: VMStatus): Promise<void>;
 }
-import type { ClientRecord as _ClientRecord, VMStatus as _VMStatus } from "./declarations/backend.did.d.ts";
+import type { ChatSystemStatus as _ChatSystemStatus, ClientRecord as _ClientRecord, VMStatus as _VMStatus } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async addNotification(arg0: string, arg1: string): Promise<void> {
@@ -234,6 +240,20 @@ export class Backend implements backendInterface {
             return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getChatSystemStatus(): Promise<ChatSystemStatus> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getChatSystemStatus();
+                return from_candid_ChatSystemStatus_n8(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getChatSystemStatus();
+            return from_candid_ChatSystemStatus_n8(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getClientRecord(arg0: string): Promise<ClientRecord> {
         if (this.processError) {
             try {
@@ -318,6 +338,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async setChatSystemStatus(arg0: ChatSystemStatus): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n10(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setChatSystemStatus(to_candid_ChatSystemStatus_n10(this._uploadFile, this._downloadFile, arg0));
+            return result;
+        }
+    }
     async setGlobalAnnouncement(arg0: string): Promise<void> {
         if (this.processError) {
             try {
@@ -375,6 +409,9 @@ export class Backend implements backendInterface {
         }
     }
 }
+function from_candid_ChatSystemStatus_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ChatSystemStatus): ChatSystemStatus {
+    return from_candid_variant_n9(_uploadFile, _downloadFile, value);
+}
 function from_candid_ClientRecord_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ClientRecord): ClientRecord {
     return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
@@ -420,11 +457,32 @@ function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): VMStatus {
     return "maintenance" in value ? VMStatus.maintenance : "offline" in value ? VMStatus.offline : "online" in value ? VMStatus.online : value;
 }
+function from_candid_variant_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    offline: null;
+} | {
+    online: null;
+}): ChatSystemStatus {
+    return "offline" in value ? ChatSystemStatus.offline : "online" in value ? ChatSystemStatus.online : value;
+}
 function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_ClientRecord>): Array<ClientRecord> {
     return value.map((x)=>from_candid_ClientRecord_n4(_uploadFile, _downloadFile, x));
 }
+function to_candid_ChatSystemStatus_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): _ChatSystemStatus {
+    return to_candid_variant_n11(_uploadFile, _downloadFile, value);
+}
 function to_candid_VMStatus_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: VMStatus): _VMStatus {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: ChatSystemStatus): {
+    offline: null;
+} | {
+    online: null;
+} {
+    return value == ChatSystemStatus.offline ? {
+        offline: null
+    } : value == ChatSystemStatus.online ? {
+        online: null
+    } : value;
 }
 function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: VMStatus): {
     maintenance: null;

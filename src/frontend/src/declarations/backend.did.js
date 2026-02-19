@@ -23,6 +23,10 @@ export const ClientRecord = IDL.Record({
   'idLuid' : IDL.Text,
   'plano' : IDL.Text,
 });
+export const ChatSystemStatus = IDL.Variant({
+  'offline' : IDL.Null,
+  'online' : IDL.Null,
+});
 export const ChatMessage = IDL.Record({
   'sender' : IDL.Text,
   'message' : IDL.Text,
@@ -55,12 +59,14 @@ export const idlService = IDL.Service({
     ),
   'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
   'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
+  'getChatSystemStatus' : IDL.Func([], [ChatSystemStatus], ['query']),
   'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
   'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
   'getMessages' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
   'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
   'getNotifications' : IDL.Func([IDL.Text], [IDL.Vec(Notification)], ['query']),
   'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+  'setChatSystemStatus' : IDL.Func([ChatSystemStatus], [], []),
   'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
   'updateClientRecord' : IDL.Func(
       [
@@ -98,6 +104,10 @@ export const idlFactory = ({ IDL }) => {
     'idLuid' : IDL.Text,
     'plano' : IDL.Text,
   });
+  const ChatSystemStatus = IDL.Variant({
+    'offline' : IDL.Null,
+    'online' : IDL.Null,
+  });
   const ChatMessage = IDL.Record({
     'sender' : IDL.Text,
     'message' : IDL.Text,
@@ -130,6 +140,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
     'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
+    'getChatSystemStatus' : IDL.Func([], [ChatSystemStatus], ['query']),
     'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
     'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
     'getMessages' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
@@ -140,6 +151,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+    'setChatSystemStatus' : IDL.Func([ChatSystemStatus], [], []),
     'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
     'updateClientRecord' : IDL.Func(
         [

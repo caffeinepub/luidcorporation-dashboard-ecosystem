@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAllClientRecords, useAllChatMessages, useSendMessage } from '../hooks/useQueries';
-import { MessageCircle, Send, Loader2, Circle } from 'lucide-react';
+import { MessageCircle, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminChatPanel() {
@@ -13,9 +13,42 @@ export default function AdminChatPanel() {
   const sendMessage = useSendMessage();
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const selectedChat = allChats.find(chat => chat.clientId === selectedClientId);
   const selectedClient = clients.find(client => client.idLuid === selectedClientId);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [selectedChat?.messages, isTyping]);
+
+  // Simulate typing detection from client
+  useEffect(() => {
+    if (selectedChat) {
+      const lastMessage = selectedChat.messages[selectedChat.messages.length - 1];
+      if (lastMessage && lastMessage.sender === selectedClientId) {
+        setIsTyping(false);
+      }
+    }
+  }, [selectedChat, selectedClientId]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+    
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Set typing indicator (simulated - in real app would send to backend)
+    typingTimeoutRef.current = setTimeout(() => {
+      // Typing stopped
+    }, 1000);
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,7 +140,7 @@ export default function AdminChatPanel() {
                     <div className="text-xs text-muted-foreground">ID: {selectedClient.idLuid}</div>
                   </div>
 
-                  <ScrollArea className="flex-1 p-4">
+                  <ScrollArea className="flex-1 p-4" ref={scrollRef}>
                     {selectedChat && selectedChat.messages.length > 0 ? (
                       <div className="space-y-3">
                         {selectedChat.messages.map((msg, index) => {
@@ -132,6 +165,20 @@ export default function AdminChatPanel() {
                             </div>
                           );
                         })}
+                        {isTyping && (
+                          <div className="flex justify-start">
+                            <div className="max-w-[80%] rounded-lg bg-neon-green/10 px-3 py-2">
+                              <div className="mb-1 text-xs font-semibold text-foreground">
+                                {selectedClient.nome}
+                              </div>
+                              <div className="flex gap-1">
+                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.3s]"></span>
+                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.15s]"></span>
+                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green"></span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
@@ -144,7 +191,7 @@ export default function AdminChatPanel() {
                     <div className="flex gap-2">
                       <Input
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={handleInputChange}
                         placeholder="Digite sua resposta..."
                         className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
                         disabled={sendMessage.isPending}

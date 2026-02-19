@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useClientAuth } from '../hooks/useClientAuth';
-import { useGetGlobalAnnouncement, useGetNotifications, useClearNotifications } from '../hooks/useQueries';
+import { useGlobalAnnouncement, useNotifications, useClearNotifications } from '../hooks/useQueries';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -11,8 +11,8 @@ import { toast } from 'sonner';
 
 export default function NotificationBell() {
   const { clientData } = useClientAuth();
-  const { data: globalAnnouncement } = useGetGlobalAnnouncement();
-  const { data: notifications, isLoading } = useGetNotifications(clientData?.idLuid || null);
+  const { data: globalAnnouncement } = useGlobalAnnouncement();
+  const { data: notifications, isLoading } = useNotifications(clientData?.idLuid || null);
   const clearNotifications = useClearNotifications();
   const [open, setOpen] = useState(false);
 

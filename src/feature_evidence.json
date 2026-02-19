@@ -2,11 +2,32 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-vm-status-edit-controls-in-the-admin-panel-for-each-client-in-the-client-list",
-      "featureTitle": "Add VM status edit controls in the admin panel for each client in the client list",
+      "featureId": "feature-display-a-typing-indicator-in-the-chat-interface-when-the-other-party-is-actively-typing-a-message",
+      "featureTitle": "Display a typing indicator in the chat interface when the other party is actively typing a message",
       "files": [
-        "frontend/src/components/ClientList.tsx",
+        "frontend/src/components/AdminChatPanel.tsx",
+        "frontend/src/components/ChatWidget.tsx",
         "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-online-offline-status-indicator-for-the-chat-system-visible-in-the-admin-panel",
+      "featureTitle": "Add online/offline status indicator for the chat system visible in the admin panel",
+      "files": [
+        "frontend/src/components/ChatSystemStatusIndicator.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -21,10 +42,13 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-display-vm-status-indicator-on-the-client-dashboard-showing-their-current-vm-state",
-      "featureTitle": "Display VM status indicator on the client dashboard showing their current VM state",
+      "featureId": "feature-provide-admin-controls-to-manually-change-the-chat-status-between-online-and-offline",
+      "featureTitle": "Provide admin controls to manually change the chat status between online and offline",
       "files": [
-        "frontend/src/pages/ClientDashboard.tsx"
+        "frontend/src/components/ChatSystemStatusToggle.tsx",
+        "frontend/src/components/ChatWidget.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -35,64 +59,6 @@
       ],
       "testIds": [
         "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-a-floating-chat-button-and-chat-window-widget-on-the-client-dashboard",
-      "featureTitle": "Implement a floating chat button and chat window widget on the client dashboard",
-      "files": [
-        "frontend/src/components/ChatWidget.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "frontend/src/pages/ClientDashboard.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-chat-management-interface-in-the-admin-panel-showing-all-active-client-conversations",
-      "featureTitle": "Add a chat management interface in the admin panel showing all active client conversations",
-      "files": [
-        "frontend/src/components/AdminChatPanel.tsx",
-        "frontend/src/pages/AdminPanel.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-display-the-logged-in-administrator-s-name-profile-in-the-admin-panel-header",
-      "featureTitle": "Display the logged-in administrator's name/profile in the admin panel header",
-      "files": [
-        "frontend/src/components/AdminProfileDisplay.tsx",
-        "frontend/src/pages/AdminPanel.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
       ],
       "confidence": "high"
     }

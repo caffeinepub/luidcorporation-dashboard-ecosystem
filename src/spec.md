@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Add VM status management, support chat functionality, and admin profile display to the Luid Corporation Dashboard.
+**Goal:** Add real-time typing indicators and online/offline status management to the chat system.
 
 **Planned changes:**
-- Add VM status field (online/offline/maintenance) to each client record with admin controls to modify status
-- Display VM status indicator on client dashboard with color-coded visual styling
-- Implement floating chat widget on client dashboard for support conversations
-- Add chat management interface in admin panel to view and respond to client messages
-- Display logged-in administrator's name/profile in admin panel header
+- Display typing indicator in chat interface when the other party is actively typing
+- Add online/offline status indicator for chat in the admin panel
+- Provide admin controls to toggle chat status between online and offline
+- Show appropriate message to clients when chat is offline
 
-**User-visible outcome:** Admins can monitor and update VM status for each client, manage support conversations through a built-in chat system, and see their profile displayed in the admin panel. Clients can view their VM status and communicate with support via a floating chat widget.
+**User-visible outcome:** Users will see when someone is typing in the chat, and admins can control whether the chat is available (online/offline) with status clearly visible in the admin panel. Clients will see when chat is unavailable.

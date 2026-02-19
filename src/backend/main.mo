@@ -31,12 +31,15 @@ actor {
     timestamp : Int;
   };
 
+  type ChatSystemStatus = { #online; #offline };
+
   let clientRecords = Map.empty<Text, ClientRecord>();
   let notifications = Map.empty<Text, List.List<Notification>>();
   let chatMessages = Map.empty<Text, List.List<ChatMessage>>();
 
   var globalAnnouncement : Text = "";
   var networkMonitoringStatus : Text = "normal";
+  var chatSystemStatus : ChatSystemStatus = #offline;
 
   public shared ({ caller }) func createClientRecord(
     idLuid : Text,
@@ -187,6 +190,10 @@ actor {
   };
 
   public shared ({ caller }) func sendMessage(sender : Text, receiver : Text, message : Text) : async () {
+    if (chatSystemStatus == #offline) {
+      Runtime.trap("Chat system is currently offline");
+    };
+
     let newMessage : ChatMessage = {
       sender;
       receiver;
@@ -228,5 +235,13 @@ actor {
 
   public shared ({ caller }) func clearMessages(clientId : Text) : async () {
     chatMessages.add(clientId, List.empty<ChatMessage>());
+  };
+
+  public shared ({ caller }) func setChatSystemStatus(status : ChatSystemStatus) : async () {
+    chatSystemStatus := status;
+  };
+
+  public query ({ caller }) func getChatSystemStatus() : async ChatSystemStatus {
+    chatSystemStatus;
   };
 };
