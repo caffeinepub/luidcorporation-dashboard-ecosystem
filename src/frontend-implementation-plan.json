@@ -1,95 +1,161 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add OS tracking, connection instructions, and plan management with expiration dates",
+  "title": "Add message timestamps, read receipts, theme toggle, and professional design improvements",
   "requirements": [
     {
-      "id": "REQ-3",
-      "summary": "Update client registration form to include operating system dropdown and plan expiration date picker",
+      "id": "REQ-1",
+      "summary": "Display timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
       "acceptanceCriteria": [
-        "ClientRegistrationForm component includes OS dropdown with Windows/Ubuntu options",
-        "ClientRegistrationForm component includes date picker for plan expiration",
-        "Form submits OS and expiration date to backend when creating new clients"
+        "Each message in the chat displays a timestamp indicating when it was sent",
+        "Timestamps are formatted in a user-friendly way (e.g., 'HH:MM' or relative time)",
+        "Timestamps are visible in both the admin chat panel and client chat widget"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientRegistrationForm.tsx",
+          "path": "frontend/src/components/AdminChatPanel.tsx",
           "operation": "modify",
-          "description": "Add operating system dropdown field with Windows/Ubuntu options using shadcn/ui Select component. Add plan expiration date picker using shadcn/ui Calendar/Popover components. Update form state to include operatingSystem and planExpiry fields. Modify form submission to pass operatingSystem (as OperatingSystem enum) and planExpiry (as Time/bigint timestamp) to the createClientRecord backend function. Ensure proper type mapping between form values and backend interface types."
+          "description": "Add timestamp display for each chat message using the message.timestamp field from ChatMessage. Format timestamps in HH:MM format or relative time (e.g., 'just now', '5 min ago'). Position timestamps alongside message content with subtle styling."
+        },
+        {
+          "path": "frontend/src/components/ChatWidget.tsx",
+          "operation": "modify",
+          "description": "Add timestamp display for each chat message using the message.timestamp field from ChatMessage. Format timestamps consistently with AdminChatPanel. Ensure timestamps are visible but don't clutter the compact chat widget interface."
+        },
+        {
+          "path": "frontend/src/utils/timeFormatters.ts",
+          "operation": "create",
+          "description": "Create utility functions for formatting timestamps: formatMessageTime (returns HH:MM), formatRelativeTime (returns relative time like 'just now', '5 min ago', 'yesterday'), and getTimestampDisplay (chooses between relative and absolute format based on message age)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add visual indicators showing message status: sent or read",
+      "acceptanceCriteria": [
+        "Messages display a checkmark or similar symbol to indicate sent status",
+        "Messages display a double checkmark or different symbol to indicate read status",
+        "Status indicators are visible and distinguish between sent and read states"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AdminChatPanel.tsx",
+          "operation": "modify",
+          "description": "Add message status indicators (checkmark icons) to messages sent by admin. Display single checkmark for sent status and double checkmark for read status. Use lucide-react icons (Check, CheckCheck) with appropriate colors. Position indicators near timestamps."
+        },
+        {
+          "path": "frontend/src/components/ChatWidget.tsx",
+          "operation": "modify",
+          "description": "Add message status indicators to messages sent by client. Display single checkmark for sent status and double checkmark for read status. Use lucide-react icons consistently with AdminChatPanel. Ensure indicators are visible in the compact widget layout."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Enhance message data handling to track read status. Add logic to mark messages as read when viewed by the recipient. Update the chat queries to support message status tracking without modifying backend data models."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement light/dark theme toggle allowing users to switch between light and dark modes",
+      "acceptanceCriteria": [
+        "A theme toggle control is accessible to users in the dashboard",
+        "Switching themes updates the entire interface color scheme instantly",
+        "Theme preference persists across sessions",
+        "Both light and dark themes are fully styled and usable"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useTheme.tsx",
+          "operation": "create",
+          "description": "Create theme context provider and hook to manage light/dark theme state. Store theme preference in localStorage for persistence. Provide toggleTheme and setTheme functions. Apply theme class to document root element dynamically."
+        },
+        {
+          "path": "frontend/src/components/ThemeToggle.tsx",
+          "operation": "create",
+          "description": "Create theme toggle button component with sun/moon icons (using lucide-react). Display current theme state and allow users to switch between light and dark modes. Use smooth transition animations when toggling."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove the forced dark mode configuration from ThemeProvider. Wrap application with the new useTheme provider. Allow theme to be dynamically controlled by user preference instead of forcing dark mode."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Add ThemeToggle component to the admin panel header or settings area, making it accessible to admin users alongside the logout functionality and profile display."
+        },
+        {
+          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "operation": "modify",
+          "description": "Add ThemeToggle component to the client dashboard header or navigation area, making it accessible to client users near the profile menu or notification bell."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Ensure both light and dark theme CSS variables are properly defined and complete. Verify that all components use CSS custom properties that support both themes. Add any missing light theme color definitions for backgrounds, borders, text, and accents."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Update client edit modal to allow editing operating system and plan expiration date",
+      "summary": "Enhance dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling",
       "acceptanceCriteria": [
-        "ClientEditModal component includes OS dropdown field",
-        "ClientEditModal component includes date picker for plan expiration",
-        "Modal saves updated OS and expiration date to backend"
+        "Dashboard layout uses improved spacing and alignment for a cleaner look",
+        "Typography is refined with better font weights, sizes, and hierarchy",
+        "Visual elements follow a consistent design system with cohesive colors and styling",
+        "Overall interface appears more polished and professional"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientEditModal.tsx",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Add operating system dropdown field with Windows/Ubuntu options using shadcn/ui Select component. Add plan expiration date picker using shadcn/ui Calendar/Popover components. Initialize form with existing operatingSystem and planExpiry values from the client record. Update form submission to include operatingSystem and planExpiry in the updateClientRecord backend call. Ensure proper handling of OperatingSystem enum values and Time/bigint conversion."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Display SSH connection instructions on client dashboard when operating system is Ubuntu",
-      "acceptanceCriteria": [
-        "Client dashboard shows SSH instructions card when OS is Ubuntu",
-        "Instructions include SSH command format using the VPS IP and username",
-        "Instructions include clear step-by-step connection guidance"
-      ],
-      "file_operations": [
+          "description": "Enhance global typography styles with refined font stack, improved heading hierarchy (h1-h6), better line heights, and professional letter spacing. Add smooth transitions for interactive elements. Refine spacing scale and ensure consistent use of design tokens throughout."
+        },
         {
-          "path": "frontend/src/components/SshInstructionsCard.tsx",
-          "operation": "create",
-          "description": "Create a new card component that displays SSH connection instructions for Ubuntu users. Include a title 'SSH Connection Instructions', a mini explanation of SSH, and step-by-step instructions. Display the SSH command format using the client's VPS IP and username (e.g., 'ssh {userVps}@{ipVps}'). Include steps: 1) Open terminal, 2) Run the SSH command, 3) Enter VPS password when prompted. Use shadcn/ui Card components for consistent styling with the dark theme. Accept ipVps and userVps as props."
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind configuration with refined typography scale, improved spacing system, enhanced color palette with better contrast ratios, refined shadow system for depth, and professional border radius tokens. Ensure design system supports both light and dark themes with accessible colors."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Refine admin panel layout with improved spacing, better visual hierarchy, refined tab styling, professional card designs, consistent padding and margins, and polished header section. Ensure all elements align with the enhanced design system."
         },
         {
           "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Import and conditionally render the SshInstructionsCard component when the client's operatingSystem field equals 'ubuntu'. Pass the ipVps and userVps values from the clientRecord to the component. Position the card appropriately within the dashboard layout, ensuring it appears alongside other relevant client information like VPS credentials."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Display RDP connection instructions on client dashboard when operating system is Windows",
-      "acceptanceCriteria": [
-        "Client dashboard shows RDP instructions card when OS is Windows",
-        "Instructions include how to open Remote Desktop Connection",
-        "Instructions include step-by-step guidance using the VPS IP and credentials"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/RdpInstructionsCard.tsx",
-          "operation": "create",
-          "description": "Create a new card component that displays RDP connection instructions for Windows users. Include a title 'RDP Connection Instructions', a mini explanation of Remote Desktop Protocol, and step-by-step instructions. Include steps: 1) Press Windows + R and type 'mstsc', 2) Enter the VPS IP address, 3) Click Connect, 4) Enter VPS username and password when prompted. Use shadcn/ui Card components for consistent styling with the dark theme. Accept ipVps, userVps, and senhaVps as props for display in instructions."
+          "description": "Enhance client dashboard layout with improved grid system, better card spacing and alignment, refined section hierarchy, professional component styling, and consistent visual treatment. Ensure cohesive appearance with admin panel."
         },
         {
-          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "path": "frontend/src/components/ClientList.tsx",
           "operation": "modify",
-          "description": "Import and conditionally render the RdpInstructionsCard component when the client's operatingSystem field equals 'windows'. Pass the ipVps, userVps, and senhaVps values from the clientRecord to the component. Position the card appropriately within the dashboard layout alongside other client information."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Display client's plan name and expiration date in user profile section on client dashboard",
-      "acceptanceCriteria": [
-        "Client dashboard profile section displays the plan name",
-        "Client dashboard profile section displays the plan expiration date",
-        "Expiration date is formatted in a user-friendly way (e.g., 'Valid until Jan 15, 2025')"
-      ],
-      "file_operations": [
+          "description": "Refine table design with improved column spacing, better header styling, refined row hover states, professional action button placement, and enhanced visual hierarchy. Ensure table is responsive and visually balanced."
+        },
         {
-          "path": "frontend/src/components/ClientProfileMenu.tsx",
+          "path": "frontend/src/components/NetworkSpeedChart.tsx",
           "operation": "modify",
-          "description": "Add display of plan name and plan expiration date within the profile dropdown menu. Fetch the current clientRecord from useClientAuth context to access the plano and planExpiry fields. Format the planExpiry timestamp (bigint) to a readable date string using JavaScript Date methods (e.g., 'Valid until Jan 15, 2025'). Display plan information below the client name and ID, maintaining consistent styling with existing profile elements."
+          "description": "Enhance chart card design with refined typography, better spacing around chart elements, improved legend styling, professional color scheme, and polished header section. Ensure chart integrates seamlessly with overall design."
+        },
+        {
+          "path": "frontend/src/components/VpsCredentialsCard.tsx",
+          "operation": "modify",
+          "description": "Improve credentials card styling with better label/value hierarchy, refined spacing between fields, professional copy button design, enhanced password toggle styling, and consistent visual treatment with other cards."
+        },
+        {
+          "path": "frontend/src/components/VMStatusIndicator.tsx",
+          "operation": "modify",
+          "description": "Refine status indicator design with improved icon sizing, better color contrast for accessibility, refined badge styling, professional typography, and enhanced status messaging."
+        },
+        {
+          "path": "frontend/src/components/GlobalAnnouncementBanner.tsx",
+          "operation": "modify",
+          "description": "Enhance banner design with refined alert icon styling, improved text hierarchy, better padding and spacing, professional color treatment, and smooth animations that align with overall design system."
+        },
+        {
+          "path": "frontend/src/components/NotificationBell.tsx",
+          "operation": "modify",
+          "description": "Refine notification bell and popover design with improved badge styling, better notification list layout, refined typography, professional scrollbar styling, and enhanced hover states."
         }
       ]
     }

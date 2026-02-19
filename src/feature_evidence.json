@@ -2,10 +2,54 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-client-registration-form-in-the-admin-panel-to-include-a-dropdown-for-selecting-operating-system-windows-or-ubuntu-and-a-date-picker-for-setting-the-plan-expiration-date",
-      "featureTitle": "Update the client registration form in the admin panel to include a dropdown for selecting operating system (Windows or Ubuntu) and a date picker for setting the plan expiration date",
+      "featureId": "feature-display-the-timestamp-showing-when-each-chat-message-was-sent-in-both-adminchatpanel-and-chatwidget-components",
+      "featureTitle": "Display the timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
       "files": [
-        "frontend/src/components/ClientRegistrationForm.tsx"
+        "frontend/src/components/AdminChatPanel.tsx",
+        "frontend/src/components/ChatWidget.tsx",
+        "frontend/src/utils/timeFormatters.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-visual-indicators-symbols-icons-to-show-message-status-sent-or-read",
+      "featureTitle": "Add visual indicators (symbols/icons) to show message status: sent or read",
+      "files": [
+        "frontend/src/components/AdminChatPanel.tsx",
+        "frontend/src/components/ChatWidget.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-light-dark-theme-toggle-that-allows-users-to-switch-between-light-and-dark-modes",
+      "featureTitle": "Implement a light/dark theme toggle that allows users to switch between light and dark modes",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ThemeToggle.tsx",
+        "frontend/src/hooks/useTheme.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/AdminPanel.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -20,10 +64,13 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-update-the-client-edit-modal-in-the-admin-panel-to-allow-editing-the-operating-system-and-plan-expiration-date-fields",
-      "featureTitle": "Update the client edit modal in the admin panel to allow editing the operating system and plan expiration date fields",
+      "featureId": "feature-enhance-the-dashboard-design-to-achieve-a-more-professional-appearance-with-improved-typography-spacing-visual-hierarchy-and-consistent-styling-across-all-components",
+      "featureTitle": "Enhance the dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling across all components",
       "files": [
-        "frontend/src/components/ClientEditModal.tsx"
+        "frontend/src/index.css",
+        "frontend/src/pages/AdminPanel.tsx",
+        "frontend/src/pages/ClientDashboard.tsx",
+        "frontend/tailwind.config.js"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -34,62 +81,6 @@
       ],
       "testIds": [
         "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-display-ssh-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-ubuntu-including-a-mini-explanation-with-the-command-format-and-connection-steps",
-      "featureTitle": "Display SSH connection instructions on the client dashboard when the operating system is Ubuntu, including a mini explanation with the command format and connection steps",
-      "files": [
-        "frontend/src/components/SshInstructionsCard.tsx",
-        "frontend/src/pages/ClientDashboard.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-display-rdp-connection-instructions-on-the-client-dashboard-when-the-operating-system-is-windows-including-a-mini-explanation-with-the-connection-steps-and-how-to-use-remote-desktop",
-      "featureTitle": "Display RDP connection instructions on the client dashboard when the operating system is Windows, including a mini explanation with the connection steps and how to use Remote Desktop",
-      "files": [
-        "frontend/src/components/RdpInstructionsCard.tsx",
-        "frontend/src/pages/ClientDashboard.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-display-the-client-s-plan-name-and-expiration-date-in-the-user-profile-section-on-the-client-dashboard-showing-the-expiration-date-in-a-readable-format",
-      "featureTitle": "Display the client's plan name and expiration date in the user profile section on the client dashboard, showing the expiration date in a readable format",
-      "files": [
-        "frontend/src/components/ClientProfileMenu.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
       ],
       "confidence": "high"
     }

@@ -1,145 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Add OS tracking, connection instructions, and plan management with expiration dates",
+  "title": "Add message timestamps, read receipts, theme toggle, and professional design improvements",
+  "projectName": "LuidCorporation Dashboard",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add operating system field (Windows or Ubuntu) to the client record data model in the backend, storing it as a variant type with options for Windows and Ubuntu",
-      "target": "backend",
+      "text": "Display the timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7"
+          "msg-5"
         ],
         "quotes": [
-          "cadastrar o sistema da máquina se é windows ou ubuntu"
+          "Coloque o horário onde as mensagens do chat foram enviadas"
         ]
       },
       "acceptanceCriteria": [
-        "Backend ClientRecord type includes an OS field with Windows/Ubuntu options",
-        "OS field is persisted and retrieved correctly in CRUD operations"
+        "Each message in the chat displays a timestamp indicating when it was sent",
+        "Timestamps are formatted in a user-friendly way (e.g., 'HH:MM' or relative time)",
+        "Timestamps are visible in both the admin chat panel and client chat widget"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add plan expiration date field to the client record data model in the backend, storing it as a timestamp or date value",
-      "target": "backend",
+      "text": "Add visual indicators (symbols/icons) to show message status: sent or read",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7"
+          "msg-5"
         ],
         "quotes": [
-          "validade dele, que deve também ser definida no cadastro do cliente no painel de administração"
+          "o simbolo de mensagem enviada ou lida"
         ]
       },
       "acceptanceCriteria": [
-        "Backend ClientRecord type includes a planExpirationDate field",
-        "Expiration date is persisted and retrieved correctly in CRUD operations"
+        "Messages display a checkmark or similar symbol to indicate sent status",
+        "Messages display a double checkmark or different symbol to indicate read status",
+        "Status indicators are visible and distinguish between sent and read states"
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Update the client registration form in the admin panel to include a dropdown for selecting operating system (Windows or Ubuntu) and a date picker for setting the plan expiration date",
+      "text": "Implement a light/dark theme toggle that allows users to switch between light and dark modes",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7"
+          "msg-5"
         ],
         "quotes": [
-          "cadastrar o sistema da máquina se é windows ou ubuntu",
-          "validade dele, que deve também ser definida no cadastro do cliente no painel de administração"
+          "coloque o tema claro ou escuro"
         ]
       },
       "acceptanceCriteria": [
-        "ClientRegistrationForm component includes OS dropdown with Windows/Ubuntu options",
-        "ClientRegistrationForm component includes date picker for plan expiration",
-        "Form submits OS and expiration date to backend when creating new clients"
+        "A theme toggle control is accessible to users in the dashboard",
+        "Switching themes updates the entire interface color scheme instantly",
+        "Theme preference persists across sessions",
+        "Both light and dark themes are fully styled and usable"
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Update the client edit modal in the admin panel to allow editing the operating system and plan expiration date fields",
+      "text": "Enhance the dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling across all components",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-7"
+          "msg-5"
         ],
         "quotes": [
-          "cadastrar o sistema da máquina se é windows ou ubuntu",
-          "validade dele, que deve também ser definida no cadastro do cliente"
+          "deixe mais profissional o design do painel"
         ]
       },
       "acceptanceCriteria": [
-        "ClientEditModal component includes OS dropdown field",
-        "ClientEditModal component includes date picker for plan expiration",
-        "Modal saves updated OS and expiration date to backend"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Display SSH connection instructions on the client dashboard when the operating system is Ubuntu, including a mini explanation with the command format and connection steps",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-7"
-        ],
-        "quotes": [
-          "caso seja Ubuntu tenha uma mini explicação sobre como conectar ao ssh"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Client dashboard shows SSH instructions card when OS is Ubuntu",
-        "Instructions include SSH command format using the VPS IP and username",
-        "Instructions include clear step-by-step connection guidance"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Display RDP connection instructions on the client dashboard when the operating system is Windows, including a mini explanation with the connection steps and how to use Remote Desktop",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-7"
-        ],
-        "quotes": [
-          "se for windows como conectar ao rdp"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Client dashboard shows RDP instructions card when OS is Windows",
-        "Instructions include how to open Remote Desktop Connection",
-        "Instructions include step-by-step guidance using the VPS IP and credentials"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Display the client's plan name and expiration date in the user profile section on the client dashboard, showing the expiration date in a readable format",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-7"
-        ],
-        "quotes": [
-          "no perfil do usuário apareça o plano e a validade dele"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Client dashboard profile section displays the plan name",
-        "Client dashboard profile section displays the plan expiration date",
-        "Expiration date is formatted in a user-friendly way (e.g., 'Valid until Jan 15, 2025')"
+        "Dashboard layout uses improved spacing and alignment for a cleaner look",
+        "Typography is refined with better font weights, sizes, and hierarchy",
+        "Visual elements follow a consistent design system with cohesive colors and styling",
+        "Overall interface appears more polished and professional"
       ]
     }
   ],
   "constraints": [
-    "Do not modify immutable frontend paths: useInternetIdentity.ts, useInternetIdentity.tsx, useActor.ts, main.tsx, components/ui",
-    "Maintain single-actor architecture in backend with all logic in main.mo",
-    "Preserve existing authentication system and admin/client separation"
+    "Do not modify backend/main.mo actor structure or data models",
+    "Preserve all existing functionality while adding new features",
+    "Maintain compatibility with current authentication system"
   ],
   "nonGoals": [
-    "Automated expiration date notifications or warnings",
-    "Automatic client account suspension based on expiration",
-    "Support for operating systems other than Windows and Ubuntu",
-    "VNC or other remote connection protocols beyond SSH and RDP"
+    "Backend changes to message storage or data models",
+    "Real-time WebSocket implementation",
+    "Complete redesign of existing component structure"
   ],
   "imageRequirements": {
     "required": [],

@@ -3,9 +3,9 @@ import Map "mo:core/Map";
 import Text "mo:core/Text";
 import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   type VMStatus = { #online; #offline; #maintenance };
   type OperatingSystem = { #windows; #ubuntu };

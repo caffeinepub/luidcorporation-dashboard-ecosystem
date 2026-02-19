@@ -10,6 +10,7 @@ import AdminChatPanel from '../components/AdminChatPanel';
 import AdminProfileDisplay from '../components/AdminProfileDisplay';
 import ChatSystemStatusIndicator from '../components/ChatSystemStatusIndicator';
 import ChatSystemStatusToggle from '../components/ChatSystemStatusToggle';
+import ThemeToggle from '../components/ThemeToggle';
 import { LogOut, Shield } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -23,18 +24,19 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-[calc(100vh-8rem)] bg-background">
-      <header className="border-b border-neon-green/20 bg-carbon-black">
+      <header className="border-b border-border bg-card shadow-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
             <Shield className="h-6 w-6 text-neon-green" />
             <h1 className="text-xl font-bold text-neon-green">Luid Master Panel</h1>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             <AdminProfileDisplay />
             <Button
               variant="outline"
               onClick={handleLogout}
-              className="border-neon-green/30 text-neon-green hover:bg-neon-green/10"
+              className="border-border text-foreground hover:bg-muted"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Sair
@@ -45,14 +47,14 @@ export default function AdminPanel() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="mb-2 text-2xl font-bold text-foreground">Painel de Administração</h2>
+          <h2 className="mb-2 text-3xl font-bold text-foreground">Painel de Administração</h2>
           <p className="text-muted-foreground">
             Gerencie clientes, anúncios, chat e monitoramento de rede
           </p>
         </div>
 
         <Tabs defaultValue="clients" className="space-y-6">
-          <TabsList className="border-neon-green/20 bg-carbon-black">
+          <TabsList className="border border-border bg-card">
             <TabsTrigger value="clients" className="data-[state=active]:bg-neon-green/10 data-[state=active]:text-neon-green">
               Gerenciar Clientes
             </TabsTrigger>
