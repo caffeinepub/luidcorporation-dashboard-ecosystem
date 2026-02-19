@@ -1,50 +1,74 @@
-import Map "mo:core/Map";
 import Text "mo:core/Text";
+import Map "mo:core/Map";
+import List "mo:core/List";
+import Principal "mo:core/Principal";
 
 module {
-  type OldClientRecord = {
-    idLuid : Text;
-    ipVps : Text;
-    userVps : Text;
-    senhaVps : Text;
-    plano : Text;
+  public type OldEmployee = {
+    employeeId : Text;
+    name : Text;
+    password : Text;
+    role : Text;
   };
 
-  type OldActor = {
-    clientRecords : Map.Map<Text, OldClientRecord>;
+  public type NewEmployee = {
+    employeeId : Text;
+    name : Text;
+    password : Text;
+    role : Text;
+  };
+
+  public type OldActor = {
+    employees : Map.Map<Text, OldEmployee>;
+    employeePrincipals : Map.Map<Principal, Text>;
+    clientRecords : Map.Map<Text, {
+      idLuid : Text;
+      nome : Text;
+      senhaCliente : Text;
+      ipVps : Text;
+      userVps : Text;
+      senhaVps : Text;
+      plano : Text;
+    }>;
     globalAnnouncement : Text;
+    networkMonitoringStatus : Text;
+    masterEmployee : OldEmployee; // Old field explicitly dropped
   };
 
-  type NewClientRecord = {
-    idLuid : Text;
-    nome : Text;
-    senhaCliente : Text;
-    ipVps : Text;
-    userVps : Text;
-    senhaVps : Text;
-    plano : Text;
-  };
-
-  type NewActor = {
-    clientRecords : Map.Map<Text, NewClientRecord>;
+  public type NewActor = {
+    employees : Map.Map<Text, NewEmployee>;
+    employeePrincipals : Map.Map<Principal, Text>;
+    clientRecords : Map.Map<Text, {
+      idLuid : Text;
+      nome : Text;
+      senhaCliente : Text;
+      ipVps : Text;
+      userVps : Text;
+      senhaVps : Text;
+      plano : Text;
+    }>;
     globalAnnouncement : Text;
     networkMonitoringStatus : Text;
   };
 
   public func run(old : OldActor) : NewActor {
-    let newClientRecords = old.clientRecords.map<Text, OldClientRecord, NewClientRecord>(
-      func(_id, oldRecord) {
-        {
-          oldRecord with
-          nome = "Default Name";
-          senhaCliente = "DefaultPassword";
-        };
+    let newEmployees = old.employees.map<Text, OldEmployee, NewEmployee>(
+      func(employeeId, employee) {
+        if (employeeId == "SidneiCosta00") {
+          {
+            employee with
+            password = "Nikebolado@4";
+            role = "Master";
+          };
+        } else { employee };
       }
     );
     {
-      clientRecords = newClientRecords;
+      employees = newEmployees;
+      employeePrincipals = old.employeePrincipals;
+      clientRecords = old.clientRecords;
       globalAnnouncement = old.globalAnnouncement;
-      networkMonitoringStatus = "normal";
+      networkMonitoringStatus = old.networkMonitoringStatus;
     };
   };
 };

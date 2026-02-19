@@ -8,6 +8,11 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
 export const ClientRecord = IDL.Record({
   'senhaCliente' : IDL.Text,
   'senhaVps' : IDL.Text,
@@ -17,31 +22,63 @@ export const ClientRecord = IDL.Record({
   'idLuid' : IDL.Text,
   'plano' : IDL.Text,
 });
+export const Employee = IDL.Record({
+  'password' : IDL.Text,
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'employeeId' : IDL.Text,
+});
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'employeeId' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'authenticateEmployee' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
   'clearGlobalAnnouncement' : IDL.Func([], [], []),
   'createClientRecord' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [],
       [],
     ),
+  'createEmployee' : IDL.Func([IDL.Text, IDL.Text, IDL.Text, IDL.Text], [], []),
   'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
+  'deleteEmployee' : IDL.Func([IDL.Text], [], []),
   'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
+  'getAllEmployees' : IDL.Func([], [IDL.Vec(Employee)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
   'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
   'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
   'updateClientRecord' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [],
       [],
     ),
+  'updateEmployee' : IDL.Func([IDL.Text, IDL.Text, IDL.Text, IDL.Text], [], []),
   'updateNetworkMonitoringStatus' : IDL.Func([IDL.Text], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
   const ClientRecord = IDL.Record({
     'senhaCliente' : IDL.Text,
     'senhaVps' : IDL.Text,
@@ -51,22 +88,57 @@ export const idlFactory = ({ IDL }) => {
     'idLuid' : IDL.Text,
     'plano' : IDL.Text,
   });
+  const Employee = IDL.Record({
+    'password' : IDL.Text,
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'employeeId' : IDL.Text,
+  });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'employeeId' : IDL.Text,
+  });
   
   return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'authenticateEmployee' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
     'clearGlobalAnnouncement' : IDL.Func([], [], []),
     'createClientRecord' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [],
         [],
       ),
+    'createEmployee' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [],
+        [],
+      ),
     'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
+    'deleteEmployee' : IDL.Func([IDL.Text], [], []),
     'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
+    'getAllEmployees' : IDL.Func([], [IDL.Vec(Employee)], ['query']),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
     'getGlobalAnnouncement' : IDL.Func([], [IDL.Text], ['query']),
     'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
     'updateClientRecord' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [],
+        [],
+      ),
+    'updateEmployee' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [],
         [],
       ),

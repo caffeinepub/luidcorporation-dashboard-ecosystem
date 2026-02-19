@@ -1,156 +1,41 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add client editing, client name, client password authentication, and network monitoring status toggle",
+  "title": "Fix SidneiCosta00 credentials and ensure Master role permissions",
   "requirements": [
     {
-      "id": "REQ-27",
-      "summary": "Add Nome (client name) input field to ClientRegistrationForm for creating new clients",
+      "id": "REQ-47",
+      "summary": "Verify that SidneiCosta00 with Master role has full access to all admin panel features including employee catalog, client credential editing, and all management operations",
       "acceptanceCriteria": [
-        "Form includes Nome text input field",
-        "Nome field is required for submission",
-        "Nome value is sent to backend during client creation",
-        "Form validation handles empty Nome field"
+        "When logged in as SidneiCosta00, Employee Catalog section is visible and accessible",
+        "When logged in as SidneiCosta00, client credential editing features are enabled",
+        "All admin panel management operations are available without restrictions"
       ],
       "file_operations": [
-        {
-          "path": "frontend/src/components/ClientRegistrationForm.tsx",
-          "operation": "modify",
-          "description": "Add Nome text input field to the form with required validation. Update the form state to include nome field and pass it to the createClient mutation along with existing fields (idLuid, ipVps, userVps, senhaVps, plano). Add form validation to ensure Nome is not empty before submission."
-        }
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "summary": "Add Senha_Cliente (client password) input field to ClientRegistrationForm for creating new clients",
-      "acceptanceCriteria": [
-        "Form includes Senha_Cliente password input field",
-        "Senha_Cliente field is required for submission",
-        "Password input type is used for security",
-        "Senha_Cliente value is sent to backend during client creation"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ClientRegistrationForm.tsx",
-          "operation": "modify",
-          "description": "Add Senha_Cliente password input field to the form with required validation and type='password' for security. Update the form state to include senhaCliente field and pass it to the createClient mutation. Ensure validation checks that Senha_Cliente is not empty before submission."
-        }
-      ]
-    },
-    {
-      "id": "REQ-29",
-      "summary": "Create client edit form/modal in admin panel for editing all client fields",
-      "acceptanceCriteria": [
-        "Admin panel shows edit button for each client in ClientList",
-        "Clicking edit opens form/modal pre-filled with current client data",
-        "All fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) are editable",
-        "Save button triggers backend update mutation",
-        "Success/error toast notifications display after update",
-        "Client list refreshes after successful update"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ClientEditModal.tsx",
-          "operation": "create",
-          "description": "Create a new modal component using shadcn/ui Dialog component that displays a form pre-filled with client data. Include input fields for Nome, IP_VPS, User_VPS, Senha_VPS, Plano, and Senha_Cliente. Add Save and Cancel buttons. On save, call the updateClient mutation hook with all field values. Display toast notifications for success/error. Accept open/onOpenChange props and selectedClient prop containing the ClientRecord to edit."
-        },
-        {
-          "path": "frontend/src/components/ClientList.tsx",
-          "operation": "modify",
-          "description": "Add an Edit button next to the Delete button for each client row. Add state to track which client is being edited and modal open state. Import and render ClientEditModal component, passing the selected client data and open state. The modal should open when Edit button is clicked and close after successful save or cancel."
-        }
-      ]
-    },
-    {
-      "id": "REQ-30",
-      "summary": "Display Nome (client name) column in ClientList table",
-      "acceptanceCriteria": [
-        "Table includes Nome column",
-        "Nome value displays for each client row",
-        "Column is positioned appropriately in table layout"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ClientList.tsx",
-          "operation": "modify",
-          "description": "Add a Nome column to the table between the ID column and IP_VPS column. Display client.nome value for each client row in the table. Update table headers to include 'Nome' label."
-        }
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "summary": "Update client login to require both ID_Luid and Senha_Cliente for authentication",
-      "acceptanceCriteria": [
-        "ClientLogin page includes password input field in addition to ID_Luid",
-        "Login validation checks both ID_Luid and Senha_Cliente against backend data",
-        "Login fails if password does not match",
-        "Error message displays for invalid credentials",
-        "Successful login proceeds to client dashboard"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/ClientLogin.tsx",
-          "operation": "modify",
-          "description": "Add a Senha_Cliente password input field to the login form below the ID_Luid field. Update form state to include password. Modify the login handler to fetch the client record using getClientRecord query, then compare the entered password with client.senhaCliente. If passwords match, call clientLogin with the client record. If passwords don't match or client not found, display error toast with 'Invalid credentials' message. On successful authentication, navigate to client dashboard."
-        }
-      ]
-    },
-    {
-      "id": "REQ-32",
-      "summary": "Add network monitoring status toggle control in admin panel",
-      "acceptanceCriteria": [
-        "Admin panel displays toggle control with 'Normal' and 'Offline' options",
-        "Current monitoring status is fetched from backend and displayed",
-        "Changing toggle updates backend monitoring status",
-        "Visual feedback confirms status change",
-        "Toggle state persists across page refreshes"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/NetworkMonitoringToggle.tsx",
-          "operation": "create",
-          "description": "Create a new component that displays a toggle control for network monitoring status. Use the getNetworkMonitoringStatus query hook to fetch and display current status. Render a toggle or radio group with 'Normal' and 'Offline' options. When the user changes the selection, call the setMonitoringStatus mutation hook with the new status value. Display toast notification on successful status change. Style the component to match the Dark Premium theme with neon green accents."
-        },
         {
           "path": "frontend/src/pages/AdminPanel.tsx",
           "operation": "modify",
-          "description": "Import and render the NetworkMonitoringToggle component in the admin panel. Position it in a logical location within the admin interface, such as below the GlobalAnnouncementInput or in a separate monitoring section. Ensure the component is visible and accessible to admins."
-        }
-      ]
-    },
-    {
-      "id": "REQ-33",
-      "summary": "Modify network speed simulation to display zero when monitoring status is Offline",
-      "acceptanceCriteria": [
-        "useNetworkSpeedSimulation hook fetches current monitoring status from backend",
-        "When status is 'Offline', network speed returns 0 Gbps",
-        "When status is 'Normal', network speed oscillates between 2.5-4.8 Gbps as before",
-        "NetworkSpeedChart component correctly displays zero speed when offline",
-        "Chart updates in real-time when monitoring status changes"
-      ],
-      "file_operations": [
+          "description": "Ensure Master role (stored as 'Master' in userProfile) has full access to all admin panel sections including employee management, client editing, announcements, and network monitoring. Verify role comparison logic checks for 'Master' string match with case sensitivity."
+        },
         {
-          "path": "frontend/src/hooks/useNetworkSpeedSimulation.ts",
+          "path": "frontend/src/components/ClientList.tsx",
           "operation": "modify",
-          "description": "Import and use the getNetworkMonitoringStatus query hook to fetch the current monitoring status. Modify the speed calculation logic: when status is 'offline', set speed to 0 Gbps; when status is 'normal', use the existing sine wave oscillation logic (2.5-4.8 Gbps). Ensure the hook re-calculates speed when monitoring status changes by including status in the useEffect dependencies."
-        }
-      ]
-    },
-    {
-      "id": "REQ-34",
-      "summary": "Add frontend mutation hooks for updating clients and managing network monitoring status",
-      "acceptanceCriteria": [
-        "useQueries.ts includes updateClient mutation hook",
-        "useQueries.ts includes setMonitoringStatus mutation hook",
-        "useQueries.ts includes getMonitoringStatus query hook",
-        "Mutations invalidate relevant query caches on success",
-        "Hooks integrate with TanStack Query properly"
-      ],
-      "file_operations": [
+          "description": "Verify that edit and delete actions for client records are enabled when the admin role is 'Master'. Ensure role checks use exact string match 'Master' for permission validation."
+        },
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/components/EmployeeList.tsx",
           "operation": "modify",
-          "description": "Add updateClient mutation hook that calls backend.updateClientRecord with parameters (idLuid, nome, senhaCliente, ipVps, userVps, senhaVps, plano). On success, invalidate the 'clientRecords' and 'clientRecord' query caches. Add setMonitoringStatus mutation hook that calls backend.updateNetworkMonitoringStatus with status parameter. On success, invalidate 'networkMonitoringStatus' query cache. Add getNetworkMonitoringStatus query hook that calls backend.getNetworkMonitoringStatus and returns the current status string. Use TanStack Query's useMutation and useQuery patterns consistent with existing hooks in the file."
+          "description": "Ensure employee catalog displays correctly and edit/delete actions are available for Master role users. Verify role permission checks use 'Master' string for access control."
+        },
+        {
+          "path": "frontend/src/components/EmployeeEditModal.tsx",
+          "operation": "modify",
+          "description": "Confirm that Master role users can edit employee records and that the role field dropdown includes 'Master' as an option. Ensure the prevention of editing SidneiCosta00's role remains in place."
+        },
+        {
+          "path": "frontend/src/hooks/useAdminAuth.tsx",
+          "operation": "modify",
+          "description": "Verify that the admin authentication context correctly stores and retrieves the 'Master' role from backend UserProfile after successful login with SidneiCosta00 credentials. Ensure role persistence in localStorage/sessionStorage maintains exact case."
         }
       ]
     }

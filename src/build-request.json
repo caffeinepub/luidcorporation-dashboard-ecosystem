@@ -1,270 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Add client editing, client name, client password authentication, and network monitoring status toggle",
+  "title": "Fix SidneiCosta00 credentials and ensure Master role permissions",
   "projectName": "LuidCorporation Dashboard",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "Add client name field (Nome) to the backend ClientRecord data structure and update all CRUD operations to handle this field",
+      "id": "REQ-46",
+      "text": "Update backend initialization to ensure employee record for SidneiCosta00 has correct password 'Nikebolado@4' and role 'Master'",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-5"
         ],
         "quotes": [
-          "adicionar o nome do cliente"
+          "Arruma ai SidneiCosta00 e a senha Nikebolado@4 e as permissões dele são master"
         ]
       },
       "acceptanceCriteria": [
-        "Backend ClientRecord includes Nome field as Text type",
-        "Create operation accepts and stores Nome",
-        "Get operations return Nome",
-        "Update operation can modify Nome"
+        "Backend contains employee record with employeeId 'SidneiCosta00'",
+        "Employee record has password set to 'Nikebolado@4'",
+        "Employee record has role set to 'Master'",
+        "Admin login with these credentials successfully authenticates"
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Add client password field (Senha_Cliente) to the backend ClientRecord data structure for client authentication and update all CRUD operations to handle this field",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "cadastrar uma senha para o cliente para mais segurança"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend ClientRecord includes Senha_Cliente field as Text type",
-        "Create operation accepts and stores Senha_Cliente",
-        "Get operations return Senha_Cliente",
-        "Update operation can modify Senha_Cliente"
-      ]
-    },
-    {
-      "id": "REQ-25",
-      "text": "Create backend update function that allows modifying all client fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) for an existing client by ID_Luid",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "editar as informações do cliente no caso as credenciais da vps ip e senha e plano etc"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes update function accepting ID_Luid and new field values",
-        "Function validates that client exists before updating",
-        "All client fields can be updated independently",
-        "Returns success/failure result"
-      ]
-    },
-    {
-      "id": "REQ-26",
-      "text": "Add network monitoring status field to backend with possible values 'normal' and 'offline', including functions to set and get this status",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "gerenciar o monitoramento de rede tipo colocar a opção de alternar para normal e offline"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend stores network monitoring status as Text (\"normal\" or \"offline\")",
-        "Backend exposes function to set monitoring status",
-        "Backend exposes function to get current monitoring status",
-        "Default status is \"normal\""
-      ]
-    },
-    {
-      "id": "REQ-27",
-      "text": "Update ClientRegistrationForm component in admin panel to include Nome (client name) input field and save it when creating new clients",
+      "id": "REQ-47",
+      "text": "Verify that SidneiCosta00 with Master role has full access to all admin panel features including employee catalog, client credential editing, and all management operations",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-5"
         ],
         "quotes": [
-          "adicionar o nome do cliente"
+          "as permissões dele são master"
         ]
       },
       "acceptanceCriteria": [
-        "Form includes Nome text input field",
-        "Nome field is required for submission",
-        "Nome value is sent to backend during client creation",
-        "Form validation handles empty Nome field"
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "text": "Update ClientRegistrationForm component in admin panel to include Senha_Cliente (client password) input field and save it when creating new clients",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "cadastrar uma senha para o cliente para mais segurança"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Form includes Senha_Cliente password input field",
-        "Senha_Cliente field is required for submission",
-        "Password input type is used for security",
-        "Senha_Cliente value is sent to backend during client creation"
-      ]
-    },
-    {
-      "id": "REQ-29",
-      "text": "Create client edit form/modal in admin panel that allows editing all client fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) for existing clients",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "editar as informações do cliente no caso as credenciais da vps ip e senha e plano etc"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel shows edit button for each client in ClientList",
-        "Clicking edit opens form/modal pre-filled with current client data",
-        "All fields (Nome, IP_VPS, User_VPS, Senha_VPS, Plano, Senha_Cliente) are editable",
-        "Save button triggers backend update mutation",
-        "Success/error toast notifications display after update",
-        "Client list refreshes after successful update"
-      ]
-    },
-    {
-      "id": "REQ-30",
-      "text": "Update ClientList component to display Nome (client name) column in the admin panel table",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "adicionar o nome do cliente"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Table includes Nome column",
-        "Nome value displays for each client row",
-        "Column is positioned appropriately in table layout"
-      ]
-    },
-    {
-      "id": "REQ-31",
-      "text": "Update client login flow to require both ID_Luid and Senha_Cliente (password) for authentication instead of ID only",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "cadastrar uma senha para o cliente para mais segurança"
-        ]
-      },
-      "acceptanceCriteria": [
-        "ClientLogin page includes password input field in addition to ID_Luid",
-        "Login validation checks both ID_Luid and Senha_Cliente against backend data",
-        "Login fails if password does not match",
-        "Error message displays for invalid credentials",
-        "Successful login proceeds to client dashboard"
-      ]
-    },
-    {
-      "id": "REQ-32",
-      "text": "Add network monitoring status toggle control in admin panel with options 'Normal' and 'Offline' that updates backend status",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "do painel de administração deixe também gerenciar o monitoramento de rede tipo colocar a opção de alternar para normal e offline"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin panel displays toggle control with 'Normal' and 'Offline' options",
-        "Current monitoring status is fetched from backend and displayed",
-        "Changing toggle updates backend monitoring status",
-        "Visual feedback confirms status change",
-        "Toggle state persists across page refreshes"
-      ]
-    },
-    {
-      "id": "REQ-33",
-      "text": "Modify network speed simulation logic to display zero Gbps when monitoring status is 'Offline' and normal oscillating speeds when status is 'Normal'",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "quando estiver em offline a velocidade do monitoramento fica em zero"
-        ]
-      },
-      "acceptanceCriteria": [
-        "useNetworkSpeedSimulation hook fetches current monitoring status from backend",
-        "When status is 'Offline', network speed returns 0 Gbps",
-        "When status is 'Normal', network speed oscillates between 2.5-4.8 Gbps as before",
-        "NetworkSpeedChart component correctly displays zero speed when offline",
-        "Chart updates in real-time when monitoring status changes"
-      ]
-    },
-    {
-      "id": "REQ-34",
-      "text": "Add frontend mutation hooks for updating client records and managing network monitoring status",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ]
-      },
-      "acceptanceCriteria": [
-        "useQueries.ts includes updateClient mutation hook",
-        "useQueries.ts includes setMonitoringStatus mutation hook",
-        "useQueries.ts includes getMonitoringStatus query hook",
-        "Mutations invalidate relevant query caches on success",
-        "Hooks integrate with TanStack Query properly"
-      ]
-    },
-    {
-      "id": "REQ-35",
-      "text": "Generate migration.mo to preserve existing client data when adding Nome and Senha_Cliente fields to ClientRecord structure",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ]
-      },
-      "acceptanceCriteria": [
-        "migration.mo includes transformation logic for new ClientRecord structure",
-        "Existing clients receive default empty string values for Nome and Senha_Cliente",
-        "No existing client data is lost during migration",
-        "Migration handles null/missing values gracefully"
+        "When logged in as SidneiCosta00, Employee Catalog section is visible and accessible",
+        "When logged in as SidneiCosta00, client credential editing features are enabled",
+        "All admin panel management operations are available without restrictions"
       ]
     }
   ],
   "constraints": [
-    "Maintain single-actor architecture in backend",
-    "Do not modify Internet Identity authentication hooks (frontend/src/hooks/useInternetIdentity.ts)",
-    "Do not modify read-only UI component sources in frontend/src/components/ui",
-    "Preserve Dark Premium theme with Carbon Black background and Neon Green (#39FF14) accents",
-    "Keep existing admin authentication credentials unchanged (ID: SidneiCosta00, Password: Nikebolado@4)"
+    "Do not modify the employee authentication flow logic",
+    "Preserve existing role-based permission system"
   ],
   "nonGoals": [
-    "Implementing password hashing or encryption for client passwords",
-    "Adding multi-factor authentication",
-    "Creating role-based access control beyond admin/client distinction",
-    "Implementing password reset functionality",
-    "Adding email notifications for client credential changes",
-    "Creating audit logs for client edits"
+    "Changing the authentication mechanism",
+    "Adding new employee roles beyond Master and Employee"
   ],
   "imageRequirements": {
     "required": [],

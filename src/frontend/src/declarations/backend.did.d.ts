@@ -19,22 +19,48 @@ export interface ClientRecord {
   'idLuid' : string,
   'plano' : string,
 }
+export interface Employee {
+  'password' : string,
+  'name' : string,
+  'role' : string,
+  'employeeId' : string,
+}
+export interface UserProfile {
+  'name' : string,
+  'role' : string,
+  'employeeId' : string,
+}
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
 export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'authenticateEmployee' : ActorMethod<[string, string], boolean>,
   'clearGlobalAnnouncement' : ActorMethod<[], undefined>,
   'createClientRecord' : ActorMethod<
     [string, string, string, string, string, string, string],
     undefined
   >,
+  'createEmployee' : ActorMethod<[string, string, string, string], undefined>,
   'deleteClientRecord' : ActorMethod<[string], undefined>,
+  'deleteEmployee' : ActorMethod<[string], undefined>,
   'getAllClientRecords' : ActorMethod<[], Array<ClientRecord>>,
+  'getAllEmployees' : ActorMethod<[], Array<Employee>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getClientRecord' : ActorMethod<[string], ClientRecord>,
   'getGlobalAnnouncement' : ActorMethod<[], string>,
   'getNetworkMonitoringStatus' : ActorMethod<[], string>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,
   'updateClientRecord' : ActorMethod<
     [string, string, string, string, string, string, string],
     undefined
   >,
+  'updateEmployee' : ActorMethod<[string, string, string, string], undefined>,
   'updateNetworkMonitoringStatus' : ActorMethod<[string], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
