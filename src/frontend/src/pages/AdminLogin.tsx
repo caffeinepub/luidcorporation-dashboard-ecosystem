@@ -26,7 +26,10 @@ export default function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
 
-    const success = await login(id, password, rememberMe);
+    // Simulate network delay for better UX
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const success = login(id, password, rememberMe);
 
     if (success) {
       toast.success('Login realizado com sucesso!');

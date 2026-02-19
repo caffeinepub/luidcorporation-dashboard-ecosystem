@@ -10,51 +10,36 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface ChatMessage {
-  'sender' : string,
-  'message' : string,
-  'timestamp' : bigint,
-}
 export interface ClientRecord {
   'senhaCliente' : string,
   'senhaVps' : string,
   'nome' : string,
-  'vmStatus' : VMStatus,
   'userVps' : string,
   'ipVps' : string,
   'idLuid' : string,
   'plano' : string,
 }
 export interface Notification { 'message' : string, 'timestamp' : bigint }
-export type VMStatus = { 'maintenance' : null } |
-  { 'offline' : null } |
-  { 'online' : null };
 export interface _SERVICE {
-  'addAdminAccount' : ActorMethod<[string, string], undefined>,
   'addNotification' : ActorMethod<[string, string], undefined>,
-  'adminLogin' : ActorMethod<[string, string], boolean>,
-  'clearChatMessages' : ActorMethod<[string], undefined>,
   'clearGlobalAnnouncement' : ActorMethod<[], undefined>,
   'clearNotifications' : ActorMethod<[string], undefined>,
   'createClientRecord' : ActorMethod<
-    [string, string, string, string, string, string, string, VMStatus],
+    [string, string, string, string, string, string, string],
     undefined
   >,
   'deleteClientRecord' : ActorMethod<[string], undefined>,
   'getAllClientRecords' : ActorMethod<[], Array<ClientRecord>>,
-  'getChatMessages' : ActorMethod<[string], Array<ChatMessage>>,
   'getClientRecord' : ActorMethod<[string], ClientRecord>,
   'getGlobalAnnouncement' : ActorMethod<[], string>,
   'getNetworkMonitoringStatus' : ActorMethod<[], string>,
   'getNotifications' : ActorMethod<[string], Array<Notification>>,
-  'sendMessage' : ActorMethod<[string, string], undefined>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,
   'updateClientRecord' : ActorMethod<
-    [string, string, string, string, string, string, string, VMStatus],
+    [string, string, string, string, string, string, string],
     undefined
   >,
   'updateNetworkMonitoringStatus' : ActorMethod<[string], undefined>,
-  'updateVMStatus' : ActorMethod<[string, VMStatus], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

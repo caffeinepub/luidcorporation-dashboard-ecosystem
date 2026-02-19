@@ -10,11 +10,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useUpdateClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import type { ClientRecord, VMStatus } from '../backend';
+import type { ClientRecord } from '../backend';
 
 interface ClientEditModalProps {
   client: ClientRecord;
@@ -31,7 +30,6 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
     userVps: client.userVps,
     senhaVps: client.senhaVps,
     plano: client.plano,
-    vmStatus: client.vmStatus as VMStatus,
   });
 
   const updateClient = useUpdateClientRecord();
@@ -45,7 +43,6 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
       userVps: client.userVps,
       senhaVps: client.senhaVps,
       plano: client.plano,
-      vmStatus: client.vmStatus as VMStatus,
     });
   }, [client]);
 
@@ -152,23 +149,6 @@ export default function ClientEditModal({ client, open, onOpenChange }: ClientEd
               placeholder="Ex: Premium, Basic, Enterprise"
               className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="edit-vmStatus">Status da VM</Label>
-            <Select
-              value={formData.vmStatus}
-              onValueChange={(value) => setFormData({ ...formData, vmStatus: value as VMStatus })}
-            >
-              <SelectTrigger className="border-neon-green/30 bg-carbon-black focus:border-neon-green">
-                <SelectValue placeholder="Selecione o status" />
-              </SelectTrigger>
-              <SelectContent className="border-neon-green/30 bg-card-dark">
-                <SelectItem value="online">Online</SelectItem>
-                <SelectItem value="offline">Offline</SelectItem>
-                <SelectItem value="maintenance">Manutenção</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <DialogFooter>

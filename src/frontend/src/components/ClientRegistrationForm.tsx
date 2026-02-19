@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCreateClientRecord } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { VMStatus } from '../backend';
 
 export default function ClientRegistrationForm() {
   const [formData, setFormData] = useState({
@@ -18,7 +16,6 @@ export default function ClientRegistrationForm() {
     userVps: '',
     senhaVps: '',
     plano: '',
-    vmStatus: 'online' as VMStatus,
   });
 
   const createClient = useCreateClientRecord();
@@ -42,7 +39,6 @@ export default function ClientRegistrationForm() {
         userVps: '',
         senhaVps: '',
         plano: '',
-        vmStatus: 'online' as VMStatus,
       });
     } catch (error) {
       toast.error('Erro ao cadastrar cliente. Verifique se o ID já existe.');
@@ -134,23 +130,6 @@ export default function ClientRegistrationForm() {
               placeholder="Ex: Premium, Basic, Enterprise"
               className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="vmStatus">Status da VM</Label>
-            <Select
-              value={formData.vmStatus}
-              onValueChange={(value) => setFormData({ ...formData, vmStatus: value as VMStatus })}
-            >
-              <SelectTrigger className="border-neon-green/30 bg-carbon-black focus:border-neon-green">
-                <SelectValue placeholder="Selecione o status" />
-              </SelectTrigger>
-              <SelectContent className="border-neon-green/30 bg-card-dark">
-                <SelectItem value="online">Online</SelectItem>
-                <SelectItem value="offline">Offline</SelectItem>
-                <SelectItem value="maintenance">Manutenção</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <Button

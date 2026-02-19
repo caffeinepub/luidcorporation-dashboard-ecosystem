@@ -1,143 +1,119 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add VM status management, live chat support, and multi-admin management",
+  "title": "Add stay connected option, profile menu, notification bell, and individual client notifications",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Display VM status indicator for each client in the admin panel client list with visual differentiation for online/offline/maintenance states",
+      "id": "REQ-1",
+      "summary": "Add a 'Stay Connected' checkbox to the client login page that persists authentication using localStorage when checked",
       "acceptanceCriteria": [
-        "Client list table shows VM status badge for each client",
-        "Online status displays with green indicator",
-        "Offline status displays with red indicator",
-        "Maintenance status displays with yellow/orange indicator"
+        "Client login page displays a 'Stay Connected' checkbox",
+        "When checked, client authentication persists across browser sessions using localStorage",
+        "When unchecked, authentication uses sessionStorage (current behavior)"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientList.tsx",
+          "path": "frontend/src/pages/ClientLogin.tsx",
           "operation": "modify",
-          "description": "Add VM status badge column to the client table displaying the vmStatus field from ClientRecord. Implement three visual states: green badge for 'online', red badge for 'offline', and yellow/orange badge for 'maintenance'. Use the VMStatus enum from backend.d.ts to ensure type safety."
+          "description": "Add a 'Stay Connected' checkbox to the client login form using shadcn-ui Checkbox component. Pass the checkbox state to the authentication handler."
+        },
+        {
+          "path": "frontend/src/hooks/useClientAuth.tsx",
+          "operation": "modify",
+          "description": "Modify the login function to accept a 'rememberMe' parameter. When true, persist client authentication data in localStorage instead of sessionStorage. Update the authentication check to read from both storage locations, prioritizing localStorage. Ensure logout clears both storage locations."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Create a profile menu in the top-right corner of the client dashboard displaying the client's name and a disconnect button",
+      "acceptanceCriteria": [
+        "Profile menu is visible in the top-right corner of the client dashboard",
+        "Clicking the profile menu reveals a dropdown showing the client's name",
+        "Dropdown includes a disconnect/logout button",
+        "Clicking disconnect logs out the client and redirects to login"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ClientProfileMenu.tsx",
+          "operation": "create",
+          "description": "Create a profile menu component using shadcn-ui DropdownMenu components. Display a user icon or avatar that triggers the dropdown on click. The dropdown content should show the client's name (from useClientAuth context) and a logout button. Clicking logout should call the logout function from useClientAuth and navigate to the client login page."
+        },
+        {
+          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "operation": "modify",
+          "description": "Add the ClientProfileMenu component to the top-right corner of the dashboard header area, positioning it alongside any existing header elements using flexbox layout."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Add ability to change VM status for individual clients through the client edit modal",
+      "summary": "Add a notification bell icon in the client dashboard that displays global announcements when clicked",
       "acceptanceCriteria": [
-        "Client edit modal includes a dropdown or radio button group to select VM status",
-        "Admin can change status between online, offline, and maintenance",
-        "Status change persists and updates the client list display immediately"
+        "Notification bell icon is visible in the client dashboard header",
+        "Clicking the bell opens a dropdown/popover showing global announcements",
+        "Bell shows a visual indicator (badge) when there are unread announcements",
+        "Announcement content is fetched from the existing global announcement system"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientEditModal.tsx",
-          "operation": "modify",
-          "description": "Add a VM status selection field (dropdown or radio group) to the edit form with three options: online, offline, maintenance. Include the vmStatus field in the form state and pass it to the updateClientRecord mutation. Use the VMStatus enum from backend.d.ts for type safety."
+          "path": "frontend/src/components/NotificationBell.tsx",
+          "operation": "create",
+          "description": "Create a notification bell component using shadcn-ui Popover and Badge components. Display a bell icon from lucide-react. Show a badge indicator when there are unread announcements. On click, open a popover displaying global announcements fetched via the existing useQueries hook. Initially show only global announcements (individual notifications will be added in REQ-6)."
         },
         {
-          "path": "frontend/src/hooks/useQueries.ts",
+          "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Ensure the updateClientRecord mutation includes the vmStatus parameter and invalidates the client list query after successful update to refresh the display immediately."
+          "description": "Add the NotificationBell component to the dashboard header area, positioned to the left of the ClientProfileMenu component."
         }
       ]
     },
     {
       "id": "REQ-5",
-      "summary": "Add a floating chat button on the client dashboard that opens a chat window for communication with administrators",
+      "summary": "Add UI in the admin panel's client management section to send individual notifications to specific clients",
       "acceptanceCriteria": [
-        "Floating chat icon button positioned fixed in bottom-right corner of client dashboard",
-        "Clicking the button opens a chat window/dialog",
-        "Chat window displays conversation history with the support team",
-        "Client can type and send messages in the chat window",
-        "Chat window can be closed and reopened without losing context"
+        "Admin panel client list includes a button or action to send notifications to individual clients",
+        "Clicking the notification action opens a modal or form to compose a message",
+        "Admin can enter notification text and send it to the selected client",
+        "Success/error feedback is displayed after sending"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/ClientChatWidget.tsx",
+          "path": "frontend/src/components/SendNotificationModal.tsx",
           "operation": "create",
-          "description": "Create a floating chat widget component with a fixed-position button in the bottom-right corner. Implement a dialog/modal that opens on click, displaying chat message history fetched via getChatMessages backend method. Include a message input field and send button that calls the sendMessage backend method with the client's ID as sender. Use Carbon Black and Neon Green theme for styling. The widget maintains conversation context across open/close cycles."
+          "description": "Create a dialog modal component using shadcn-ui Dialog and Form components. Accept clientId and clientName as props. Display a textarea for notification message input and a send button. Use React Query mutation to call backend.addNotification with the clientId and message. Show toast notifications for success/error feedback. Close the modal on successful submission."
         },
         {
-          "path": "frontend/src/pages/ClientDashboard.tsx",
+          "path": "frontend/src/components/ClientList.tsx",
           "operation": "modify",
-          "description": "Import and render the ClientChatWidget component at the root level of the dashboard so it appears as a floating element on top of the existing content."
+          "description": "Add a notification/bell icon button in the action column for each client row. Clicking the button opens the SendNotificationModal for that specific client, passing the client's idLuid and nome as props."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add query hooks for fetching chat messages (getChatMessages) and a mutation hook for sending messages (sendMessage). Include proper cache invalidation to refresh chat history after sending a message."
+          "description": "Add a React Query mutation hook for sending individual notifications using backend.addNotification. The mutation should accept clientId and message parameters, invalidate relevant notification queries on success, and return success/error states for UI feedback."
         }
       ]
     },
     {
       "id": "REQ-6",
-      "summary": "Create an admin chat interface in the admin panel to view and respond to client messages",
+      "summary": "Display individual client notifications in the notification bell dropdown, showing both global announcements and client-specific notifications",
       "acceptanceCriteria": [
-        "Admin panel includes a chat section showing all active client conversations",
-        "Admin can select a client conversation to view message history",
-        "Admin can send messages to clients through the chat interface",
-        "New messages from clients are highlighted or indicated with unread status"
+        "Notification bell dropdown shows both global announcements and individual notifications",
+        "Individual notifications are clearly distinguished from global announcements",
+        "Client can mark individual notifications as read",
+        "Notification count badge reflects unread individual notifications"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AdminChatInterface.tsx",
-          "operation": "create",
-          "description": "Create an admin chat interface component displaying a list of all clients (from getAllClientRecords) in a sidebar. When a client is selected, display their conversation history using getChatMessages with the client's idLuid. Include a message input and send button that calls sendMessage with an admin identifier as sender. Implement visual indicators for conversations with recent messages. Use Carbon Black and Neon Green theme consistent with the existing design."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
+          "path": "frontend/src/components/NotificationBell.tsx",
           "operation": "modify",
-          "description": "Add the AdminChatInterface component to the admin panel layout, positioning it as a new section alongside existing components (ClientRegistrationForm, GlobalAnnouncementInput, NetworkMonitoringToggle, ClientList)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Create an admin member management interface to add, edit, and remove administrator accounts",
-      "acceptanceCriteria": [
-        "Admin panel includes a section for managing administrator accounts",
-        "Interface allows creating new admin accounts with ID and password",
-        "Admin list displays all registered administrators",
-        "Administrators can be edited or removed from the list",
-        "Only authenticated admins can access the member management interface"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AdminMemberManagement.tsx",
-          "operation": "create",
-          "description": "Create an admin member management component with a form for adding new administrators (username and password fields) that calls the addAdminAccount backend method. Display a list of registered administrators. Note: The backend interface does not currently expose methods to list, edit, or remove administrators, so this component will focus on the add functionality and display a placeholder message about edit/remove features requiring backend support."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
-          "operation": "modify",
-          "description": "Add the AdminMemberManagement component to the admin panel layout as a new section. Since the page is already protected by ProtectedRoute wrapper in App.tsx, no additional authentication guards are needed."
+          "description": "Extend the notification bell to fetch and display individual notifications for the logged-in client using backend.getNotifications. Show both global announcements and individual notifications in separate sections within the popover. Add a clear/dismiss action for individual notifications using backend.clearNotifications. Update the badge count to reflect unread individual notifications. Use the client's idLuid from useClientAuth context to fetch notifications."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add a mutation hook for addAdminAccount that calls the backend method to register new administrator accounts."
-        }
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "summary": "Update admin login to authenticate against backend-stored administrator accounts instead of hardcoded credentials",
-      "acceptanceCriteria": [
-        "Admin login validates credentials against backend-stored admin accounts",
-        "Login works for all registered administrators, not just hardcoded credentials",
-        "Failed login attempts show appropriate error messages",
-        "Successful login maintains session persistence as currently implemented"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AdminLogin.tsx",
-          "operation": "modify",
-          "description": "Replace the hardcoded credential check with a call to the adminLogin backend method. Pass the entered username and password to the backend for validation. On successful authentication (adminLogin returns true), proceed with the existing session storage logic. On failure (returns false), display an error message to the user."
-        },
-        {
-          "path": "frontend/src/hooks/useAdminAuth.tsx",
-          "operation": "modify",
-          "description": "Update the login function in the admin auth context to use the adminLogin backend method instead of comparing against hardcoded credentials. Maintain the existing localStorage and sessionStorage persistence logic for remember-me functionality. The isAuthenticated state should still be derived from storage, but initial login validation must go through the backend."
+          "description": "Add React Query hooks for fetching individual client notifications using backend.getNotifications and clearing notifications using backend.clearNotifications. Accept clientId as a parameter and enable the query only when clientId is available. Invalidate notification queries after clearing."
         }
       ]
     }

@@ -89,11 +89,6 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface ChatMessage {
-    sender: string;
-    message: string;
-    timestamp: bigint;
-}
 export interface Notification {
     message: string;
     timestamp: bigint;
@@ -102,55 +97,28 @@ export interface ClientRecord {
     senhaCliente: string;
     senhaVps: string;
     nome: string;
-    vmStatus: VMStatus;
     userVps: string;
     ipVps: string;
     idLuid: string;
     plano: string;
 }
-export enum VMStatus {
-    maintenance = "maintenance",
-    offline = "offline",
-    online = "online"
-}
 export interface backendInterface {
-    addAdminAccount(username: string, password: string): Promise<void>;
     addNotification(clientId: string, message: string): Promise<void>;
-    adminLogin(username: string, password: string): Promise<boolean>;
-    clearChatMessages(userId: string): Promise<void>;
     clearGlobalAnnouncement(): Promise<void>;
     clearNotifications(clientId: string): Promise<void>;
-    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
-    getChatMessages(userId: string): Promise<Array<ChatMessage>>;
     getClientRecord(idLuid: string): Promise<ClientRecord>;
     getGlobalAnnouncement(): Promise<string>;
     getNetworkMonitoringStatus(): Promise<string>;
     getNotifications(clientId: string): Promise<Array<Notification>>;
-    sendMessage(sender: string, message: string): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
-    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus): Promise<void>;
+    updateClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string): Promise<void>;
     updateNetworkMonitoringStatus(status: string): Promise<void>;
-    updateVMStatus(idLuid: string, status: VMStatus): Promise<void>;
 }
-import type { ClientRecord as _ClientRecord, VMStatus as _VMStatus } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async addAdminAccount(arg0: string, arg1: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.addAdminAccount(arg0, arg1);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.addAdminAccount(arg0, arg1);
-            return result;
-        }
-    }
     async addNotification(arg0: string, arg1: string): Promise<void> {
         if (this.processError) {
             try {
@@ -162,34 +130,6 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.addNotification(arg0, arg1);
-            return result;
-        }
-    }
-    async adminLogin(arg0: string, arg1: string): Promise<boolean> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.adminLogin(arg0, arg1);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.adminLogin(arg0, arg1);
-            return result;
-        }
-    }
-    async clearChatMessages(arg0: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.clearChatMessages(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.clearChatMessages(arg0);
             return result;
         }
     }
@@ -221,17 +161,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async createClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus): Promise<void> {
+    async createClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+                const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+            const result = await this.actor.createClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
             return result;
         }
     }
@@ -253,27 +193,13 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getAllClientRecords();
-                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getAllClientRecords();
-            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
-        }
-    }
-    async getChatMessages(arg0: string): Promise<Array<ChatMessage>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getChatMessages(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getChatMessages(arg0);
+            const result = await this.actor.getAllClientRecords();
             return result;
         }
     }
@@ -281,14 +207,14 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getClientRecord(arg0);
-                return from_candid_ClientRecord_n4(this._uploadFile, this._downloadFile, result);
+                return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getClientRecord(arg0);
-            return from_candid_ClientRecord_n4(this._uploadFile, this._downloadFile, result);
+            return result;
         }
     }
     async getGlobalAnnouncement(): Promise<string> {
@@ -333,20 +259,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async sendMessage(arg0: string, arg1: string): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.sendMessage(arg0, arg1);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.sendMessage(arg0, arg1);
-            return result;
-        }
-    }
     async setGlobalAnnouncement(arg0: string): Promise<void> {
         if (this.processError) {
             try {
@@ -361,17 +273,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string, arg7: VMStatus): Promise<void> {
+    async updateClientRecord(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string, arg6: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+                const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg7));
+            const result = await this.actor.updateClientRecord(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
             return result;
         }
     }
@@ -389,86 +301,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateVMStatus(arg0: string, arg1: VMStatus): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.updateVMStatus(arg0, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg1));
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.updateVMStatus(arg0, to_candid_VMStatus_n1(this._uploadFile, this._downloadFile, arg1));
-            return result;
-        }
-    }
-}
-function from_candid_ClientRecord_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _ClientRecord): ClientRecord {
-    return from_candid_record_n5(_uploadFile, _downloadFile, value);
-}
-function from_candid_VMStatus_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _VMStatus): VMStatus {
-    return from_candid_variant_n7(_uploadFile, _downloadFile, value);
-}
-function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    senhaCliente: string;
-    senhaVps: string;
-    nome: string;
-    vmStatus: _VMStatus;
-    userVps: string;
-    ipVps: string;
-    idLuid: string;
-    plano: string;
-}): {
-    senhaCliente: string;
-    senhaVps: string;
-    nome: string;
-    vmStatus: VMStatus;
-    userVps: string;
-    ipVps: string;
-    idLuid: string;
-    plano: string;
-} {
-    return {
-        senhaCliente: value.senhaCliente,
-        senhaVps: value.senhaVps,
-        nome: value.nome,
-        vmStatus: from_candid_VMStatus_n6(_uploadFile, _downloadFile, value.vmStatus),
-        userVps: value.userVps,
-        ipVps: value.ipVps,
-        idLuid: value.idLuid,
-        plano: value.plano
-    };
-}
-function from_candid_variant_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    maintenance: null;
-} | {
-    offline: null;
-} | {
-    online: null;
-}): VMStatus {
-    return "maintenance" in value ? VMStatus.maintenance : "offline" in value ? VMStatus.offline : "online" in value ? VMStatus.online : value;
-}
-function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_ClientRecord>): Array<ClientRecord> {
-    return value.map((x)=>from_candid_ClientRecord_n4(_uploadFile, _downloadFile, x));
-}
-function to_candid_VMStatus_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: VMStatus): _VMStatus {
-    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
-}
-function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: VMStatus): {
-    maintenance: null;
-} | {
-    offline: null;
-} | {
-    online: null;
-} {
-    return value == VMStatus.maintenance ? {
-        maintenance: null
-    } : value == VMStatus.offline ? {
-        offline: null
-    } : value == VMStatus.online ? {
-        online: null
-    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;
