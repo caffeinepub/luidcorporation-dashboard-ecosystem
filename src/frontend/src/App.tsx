@@ -1,36 +1,29 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
 import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from './hooks/useTheme';
-import { AdminAuthProvider } from './hooks/useAdminAuth';
-import { ClientAuthProvider } from './hooks/useClientAuth';
+import { ThemeProvider } from 'next-themes';
 import AdminLogin from './pages/AdminLogin';
 import AdminPanel from './pages/AdminPanel';
 import ClientLogin from './pages/ClientLogin';
 import ClientDashboard from './pages/ClientDashboard';
+import Footer from './components/Footer';
+import { AdminAuthProvider } from './hooks/useAdminAuth';
+import { ClientAuthProvider } from './hooks/useClientAuth';
 import ProtectedRoute from './components/ProtectedRoute';
 import ClientProtectedRoute from './components/ClientProtectedRoute';
-import Footer from './components/Footer';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
-});
+function Layout() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+}
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <div className="flex min-h-screen flex-col">
-      <div className="flex-1">
-        <Outlet />
-      </div>
-      <Footer />
-      <Toaster />
-    </div>
-  ),
+  component: Layout,
 });
 
 const adminLoginRoute = createRoute({
@@ -41,7 +34,7 @@ const adminLoginRoute = createRoute({
 
 const adminPanelRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/admin-panel',
+  path: '/luid-master-panel',
   component: () => (
     <ProtectedRoute>
       <AdminPanel />
@@ -57,7 +50,7 @@ const clientLoginRoute = createRoute({
 
 const clientDashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/dashboard',
+  path: '/client-dashboard',
   component: () => (
     <ClientProtectedRoute>
       <ClientDashboard />
@@ -74,16 +67,21 @@ const routeTree = rootRoute.addChildren([
 
 const router = createRouter({ routeTree });
 
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router;
+  }
+}
+
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <AdminAuthProvider>
-          <ClientAuthProvider>
-            <RouterProvider router={router} />
-          </ClientAuthProvider>
-        </AdminAuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
+      <AdminAuthProvider>
+        <ClientAuthProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </ClientAuthProvider>
+      </AdminAuthProvider>
+    </ThemeProvider>
   );
 }

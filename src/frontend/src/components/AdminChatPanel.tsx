@@ -4,9 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAllClientRecords, useAllChatMessages, useSendMessage } from '../hooks/useQueries';
-import { MessageCircle, Send, Loader2, Check, CheckCheck } from 'lucide-react';
+import { MessageCircle, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { formatMessageTime } from '../utils/timeFormatters';
 
 export default function AdminChatPanel() {
   const { data: clients = [] } = useAllClientRecords();
@@ -74,7 +73,7 @@ export default function AdminChatPanel() {
   };
 
   return (
-    <Card className="border-border bg-card shadow-lg">
+    <Card className="border-neon-green/20 bg-card-dark">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-neon-green">
           <MessageCircle className="h-5 w-5" />
@@ -93,7 +92,7 @@ export default function AdminChatPanel() {
           <div className="grid gap-4 lg:grid-cols-3">
             {/* Client List */}
             <div className="lg:col-span-1">
-              <ScrollArea className="h-[500px] rounded-md border border-border bg-background p-2">
+              <ScrollArea className="h-[500px] rounded-md border border-neon-green/20 bg-carbon-black p-2">
                 {clients.length === 0 ? (
                   <div className="py-8 text-center text-sm text-muted-foreground">
                     Nenhum cliente cadastrado
@@ -107,10 +106,10 @@ export default function AdminChatPanel() {
                         <button
                           key={client.idLuid}
                           onClick={() => setSelectedClientId(client.idLuid)}
-                          className={`w-full rounded-lg border p-3 text-left transition-all duration-200 ${
+                          className={`w-full rounded-lg border p-3 text-left transition-colors ${
                             isSelected
-                              ? 'border-neon-green bg-neon-green/10 shadow-md'
-                              : 'border-border hover:bg-muted'
+                              ? 'border-neon-green bg-neon-green/10'
+                              : 'border-neon-green/20 hover:bg-neon-green/5'
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -119,7 +118,7 @@ export default function AdminChatPanel() {
                               <div className="text-xs text-muted-foreground">{client.idLuid}</div>
                             </div>
                             {unreadCount > 0 && (
-                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neon-green text-xs font-bold text-carbon-black animate-pulse">
+                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neon-green text-xs font-bold text-carbon-black">
                                 {unreadCount > 9 ? '9+' : unreadCount}
                               </div>
                             )}
@@ -135,8 +134,8 @@ export default function AdminChatPanel() {
             {/* Chat Area */}
             <div className="lg:col-span-2">
               {selectedClientId && selectedClient ? (
-                <div className="flex h-[500px] flex-col rounded-md border border-border bg-background shadow-lg">
-                  <div className="border-b border-border p-4">
+                <div className="flex h-[500px] flex-col rounded-md border border-neon-green/20 bg-carbon-black">
+                  <div className="border-b border-neon-green/20 p-4">
                     <div className="font-medium text-neon-green">{selectedClient.nome}</div>
                     <div className="text-xs text-muted-foreground">ID: {selectedClient.idLuid}</div>
                   </div>
@@ -146,42 +145,29 @@ export default function AdminChatPanel() {
                       <div className="space-y-3">
                         {selectedChat.messages.map((msg, index) => {
                           const isAdmin = msg.sender === 'admin';
-                          const isRead = isAdmin && index < selectedChat.messages.length - 1;
                           return (
                             <div
                               key={index}
                               className={`flex ${isAdmin ? 'justify-end' : 'justify-start'}`}
                             >
                               <div
-                                className={`max-w-[80%] rounded-lg px-3 py-2 shadow-sm ${
+                                className={`max-w-[80%] rounded-lg px-3 py-2 ${
                                   isAdmin
                                     ? 'bg-neon-green text-carbon-black'
-                                    : 'bg-muted text-foreground'
+                                    : 'bg-neon-green/10 text-foreground'
                                 }`}
                               >
                                 <div className="mb-1 text-xs font-semibold">
                                   {isAdmin ? 'Você (Admin)' : selectedClient.nome}
                                 </div>
-                                <div className="text-sm leading-relaxed">{msg.message}</div>
-                                <div className={`mt-1 flex items-center gap-1 text-[10px] ${isAdmin ? 'text-carbon-black/70' : 'text-muted-foreground'}`}>
-                                  <span>{formatMessageTime(msg.timestamp)}</span>
-                                  {isAdmin && (
-                                    <>
-                                      {isRead ? (
-                                        <CheckCheck className="h-3 w-3" />
-                                      ) : (
-                                        <Check className="h-3 w-3" />
-                                      )}
-                                    </>
-                                  )}
-                                </div>
+                                <div className="text-sm">{msg.message}</div>
                               </div>
                             </div>
                           );
                         })}
                         {isTyping && (
                           <div className="flex justify-start">
-                            <div className="max-w-[80%] rounded-lg bg-muted px-3 py-2 shadow-sm">
+                            <div className="max-w-[80%] rounded-lg bg-neon-green/10 px-3 py-2">
                               <div className="mb-1 text-xs font-semibold text-foreground">
                                 {selectedClient.nome}
                               </div>
@@ -201,13 +187,13 @@ export default function AdminChatPanel() {
                     )}
                   </ScrollArea>
 
-                  <form onSubmit={handleSendMessage} className="border-t border-border p-4">
+                  <form onSubmit={handleSendMessage} className="border-t border-neon-green/20 p-4">
                     <div className="flex gap-2">
                       <Input
                         value={message}
                         onChange={handleInputChange}
                         placeholder="Digite sua resposta..."
-                        className="border-border bg-background focus:border-neon-green"
+                        className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
                         disabled={sendMessage.isPending}
                       />
                       <Button
@@ -225,7 +211,7 @@ export default function AdminChatPanel() {
                   </form>
                 </div>
               ) : (
-                <div className="flex h-[500px] items-center justify-center rounded-md border border-border bg-background text-sm text-muted-foreground">
+                <div className="flex h-[500px] items-center justify-center rounded-md border border-neon-green/20 bg-carbon-black text-muted-foreground">
                   Selecione um cliente para visualizar a conversa
                 </div>
               )}

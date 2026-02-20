@@ -4,37 +4,13 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-display-the-timestamp-showing-when-each-chat-message-was-sent-in-both-adminchatpanel-and-chatwidget-components",
-      "title": "Display the timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-visual-indicators-symbols-icons-to-show-message-status-sent-or-read",
-      "title": "Add visual indicators (symbols/icons) to show message status: sent or read",
+      "id": "feature-add-a-refresh-button-in-the-client-dashboard-that-allows-clients-to-manually-reload-their-data-when-the-administrator-has-modified-their-information",
+      "title": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
       "reqIds": [
         "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-a-light-dark-theme-toggle-that-allows-users-to-switch-between-light-and-dark-modes",
-      "title": "Implement a light/dark theme toggle that allows users to switch between light and dark modes",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-enhance-the-dashboard-design-to-achieve-a-more-professional-appearance-with-improved-typography-spacing-visual-hierarchy-and-consistent-styling-across-all-components",
-      "title": "Enhance the dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling across all components",
-      "reqIds": [
-        "REQ-4"
       ],
       "version": 1
     }
@@ -42,30 +18,26 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add timestamp display to chat messages",
+      "summary": "Fix 'keep me logged in' option",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add sent/read status indicator symbols for messages",
+      "summary": "Add refresh button for clients to reload admin-changed data",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Add light/dark theme toggle",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Improve dashboard design to be more professional",
-      "reqIds": [],
+      "summary": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
+      "reqIds": [
+        "REQ-1"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "LuidCorporation Dashboard",
+  "projectName": "Fix remember-me option and add data refresh button",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

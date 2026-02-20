@@ -1,161 +1,43 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add message timestamps, read receipts, theme toggle, and professional design improvements",
+  "title": "Fix remember-me option and add data refresh button",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Display timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
+      "summary": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
       "acceptanceCriteria": [
-        "Each message in the chat displays a timestamp indicating when it was sent",
-        "Timestamps are formatted in a user-friendly way (e.g., 'HH:MM' or relative time)",
-        "Timestamps are visible in both the admin chat panel and client chat widget"
+        "When 'keep me logged in' is checked, client authentication persists after closing and reopening the browser",
+        "When unchecked, client authentication is cleared when browser is closed",
+        "The remember-me state is properly saved to localStorage when checked and sessionStorage when unchecked"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AdminChatPanel.tsx",
+          "path": "frontend/src/hooks/useClientAuth.tsx",
           "operation": "modify",
-          "description": "Add timestamp display for each chat message using the message.timestamp field from ChatMessage. Format timestamps in HH:MM format or relative time (e.g., 'just now', '5 min ago'). Position timestamps alongside message content with subtle styling."
+          "description": "Fix the storage mechanism to properly use localStorage when remember-me is true and sessionStorage when false. Update the login function to accept a rememberMe parameter and persist it correctly. Ensure the authentication state is restored from the correct storage on component mount based on where data exists."
         },
         {
-          "path": "frontend/src/components/ChatWidget.tsx",
+          "path": "frontend/src/pages/ClientLogin.tsx",
           "operation": "modify",
-          "description": "Add timestamp display for each chat message using the message.timestamp field from ChatMessage. Format timestamps consistently with AdminChatPanel. Ensure timestamps are visible but don't clutter the compact chat widget interface."
-        },
-        {
-          "path": "frontend/src/utils/timeFormatters.ts",
-          "operation": "create",
-          "description": "Create utility functions for formatting timestamps: formatMessageTime (returns HH:MM), formatRelativeTime (returns relative time like 'just now', '5 min ago', 'yesterday'), and getTimestampDisplay (chooses between relative and absolute format based on message age)."
+          "description": "Add a 'keep me logged in' checkbox to the login form. Pass the checkbox state to the useClientAuth login function to control whether authentication persists in localStorage or sessionStorage. Ensure the checkbox state is properly wired to the form submission handler."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add visual indicators showing message status: sent or read",
+      "summary": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
       "acceptanceCriteria": [
-        "Messages display a checkmark or similar symbol to indicate sent status",
-        "Messages display a double checkmark or different symbol to indicate read status",
-        "Status indicators are visible and distinguish between sent and read states"
+        "A refresh button is visible and accessible in the client dashboard interface",
+        "Clicking the button triggers a refetch of all client data from the backend",
+        "The button shows a loading state while data is being refreshed",
+        "After refresh completes, updated data (credentials, plan, expiry, VM status, etc.) is displayed immediately"
       ],
       "file_operations": [
-        {
-          "path": "frontend/src/components/AdminChatPanel.tsx",
-          "operation": "modify",
-          "description": "Add message status indicators (checkmark icons) to messages sent by admin. Display single checkmark for sent status and double checkmark for read status. Use lucide-react icons (Check, CheckCheck) with appropriate colors. Position indicators near timestamps."
-        },
-        {
-          "path": "frontend/src/components/ChatWidget.tsx",
-          "operation": "modify",
-          "description": "Add message status indicators to messages sent by client. Display single checkmark for sent status and double checkmark for read status. Use lucide-react icons consistently with AdminChatPanel. Ensure indicators are visible in the compact widget layout."
-        },
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Enhance message data handling to track read status. Add logic to mark messages as read when viewed by the recipient. Update the chat queries to support message status tracking without modifying backend data models."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Implement light/dark theme toggle allowing users to switch between light and dark modes",
-      "acceptanceCriteria": [
-        "A theme toggle control is accessible to users in the dashboard",
-        "Switching themes updates the entire interface color scheme instantly",
-        "Theme preference persists across sessions",
-        "Both light and dark themes are fully styled and usable"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useTheme.tsx",
-          "operation": "create",
-          "description": "Create theme context provider and hook to manage light/dark theme state. Store theme preference in localStorage for persistence. Provide toggleTheme and setTheme functions. Apply theme class to document root element dynamically."
-        },
-        {
-          "path": "frontend/src/components/ThemeToggle.tsx",
-          "operation": "create",
-          "description": "Create theme toggle button component with sun/moon icons (using lucide-react). Display current theme state and allow users to switch between light and dark modes. Use smooth transition animations when toggling."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Remove the forced dark mode configuration from ThemeProvider. Wrap application with the new useTheme provider. Allow theme to be dynamically controlled by user preference instead of forcing dark mode."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
-          "operation": "modify",
-          "description": "Add ThemeToggle component to the admin panel header or settings area, making it accessible to admin users alongside the logout functionality and profile display."
-        },
         {
           "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Add ThemeToggle component to the client dashboard header or navigation area, making it accessible to client users near the profile menu or notification bell."
-        },
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Ensure both light and dark theme CSS variables are properly defined and complete. Verify that all components use CSS custom properties that support both themes. Add any missing light theme color definitions for backgrounds, borders, text, and accents."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Enhance dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling",
-      "acceptanceCriteria": [
-        "Dashboard layout uses improved spacing and alignment for a cleaner look",
-        "Typography is refined with better font weights, sizes, and hierarchy",
-        "Visual elements follow a consistent design system with cohesive colors and styling",
-        "Overall interface appears more polished and professional"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Enhance global typography styles with refined font stack, improved heading hierarchy (h1-h6), better line heights, and professional letter spacing. Add smooth transitions for interactive elements. Refine spacing scale and ensure consistent use of design tokens throughout."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Extend Tailwind configuration with refined typography scale, improved spacing system, enhanced color palette with better contrast ratios, refined shadow system for depth, and professional border radius tokens. Ensure design system supports both light and dark themes with accessible colors."
-        },
-        {
-          "path": "frontend/src/pages/AdminPanel.tsx",
-          "operation": "modify",
-          "description": "Refine admin panel layout with improved spacing, better visual hierarchy, refined tab styling, professional card designs, consistent padding and margins, and polished header section. Ensure all elements align with the enhanced design system."
-        },
-        {
-          "path": "frontend/src/pages/ClientDashboard.tsx",
-          "operation": "modify",
-          "description": "Enhance client dashboard layout with improved grid system, better card spacing and alignment, refined section hierarchy, professional component styling, and consistent visual treatment. Ensure cohesive appearance with admin panel."
-        },
-        {
-          "path": "frontend/src/components/ClientList.tsx",
-          "operation": "modify",
-          "description": "Refine table design with improved column spacing, better header styling, refined row hover states, professional action button placement, and enhanced visual hierarchy. Ensure table is responsive and visually balanced."
-        },
-        {
-          "path": "frontend/src/components/NetworkSpeedChart.tsx",
-          "operation": "modify",
-          "description": "Enhance chart card design with refined typography, better spacing around chart elements, improved legend styling, professional color scheme, and polished header section. Ensure chart integrates seamlessly with overall design."
-        },
-        {
-          "path": "frontend/src/components/VpsCredentialsCard.tsx",
-          "operation": "modify",
-          "description": "Improve credentials card styling with better label/value hierarchy, refined spacing between fields, professional copy button design, enhanced password toggle styling, and consistent visual treatment with other cards."
-        },
-        {
-          "path": "frontend/src/components/VMStatusIndicator.tsx",
-          "operation": "modify",
-          "description": "Refine status indicator design with improved icon sizing, better color contrast for accessibility, refined badge styling, professional typography, and enhanced status messaging."
-        },
-        {
-          "path": "frontend/src/components/GlobalAnnouncementBanner.tsx",
-          "operation": "modify",
-          "description": "Enhance banner design with refined alert icon styling, improved text hierarchy, better padding and spacing, professional color treatment, and smooth animations that align with overall design system."
-        },
-        {
-          "path": "frontend/src/components/NotificationBell.tsx",
-          "operation": "modify",
-          "description": "Refine notification bell and popover design with improved badge styling, better notification list layout, refined typography, professional scrollbar styling, and enhanced hover states."
+          "description": "Add a refresh button near the top of the dashboard (e.g., next to the profile menu or in a header section). Wire the button to trigger refetch of the client record using the existing React Query hooks. Implement loading state visualization on the button while data is being fetched. Ensure the refetch updates all displayed client data including credentials, plan, expiry, and VM status."
         }
       ]
     }

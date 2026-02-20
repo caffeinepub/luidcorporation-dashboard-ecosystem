@@ -1,93 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Add message timestamps, read receipts, theme toggle, and professional design improvements",
-  "projectName": "LuidCorporation Dashboard",
+  "title": "Fix remember-me option and add data refresh button",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Display the timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
+      "text": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-11"
         ],
         "quotes": [
-          "Coloque o horário onde as mensagens do chat foram enviadas"
+          "Arrume a opção manter conectado"
         ]
       },
       "acceptanceCriteria": [
-        "Each message in the chat displays a timestamp indicating when it was sent",
-        "Timestamps are formatted in a user-friendly way (e.g., 'HH:MM' or relative time)",
-        "Timestamps are visible in both the admin chat panel and client chat widget"
+        "When 'keep me logged in' is checked, client authentication persists after closing and reopening the browser",
+        "When unchecked, client authentication is cleared when browser is closed",
+        "The remember-me state is properly saved to localStorage when checked and sessionStorage when unchecked"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add visual indicators (symbols/icons) to show message status: sent or read",
+      "text": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-11"
         ],
         "quotes": [
-          "o simbolo de mensagem enviada ou lida"
+          "coloque um botão de recarregar para o cliente apertar caso o administrador tenha mudado seus dados e não tenha aparecido ainda"
         ]
       },
       "acceptanceCriteria": [
-        "Messages display a checkmark or similar symbol to indicate sent status",
-        "Messages display a double checkmark or different symbol to indicate read status",
-        "Status indicators are visible and distinguish between sent and read states"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Implement a light/dark theme toggle that allows users to switch between light and dark modes",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "coloque o tema claro ou escuro"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A theme toggle control is accessible to users in the dashboard",
-        "Switching themes updates the entire interface color scheme instantly",
-        "Theme preference persists across sessions",
-        "Both light and dark themes are fully styled and usable"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Enhance the dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling across all components",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "deixe mais profissional o design do painel"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Dashboard layout uses improved spacing and alignment for a cleaner look",
-        "Typography is refined with better font weights, sizes, and hierarchy",
-        "Visual elements follow a consistent design system with cohesive colors and styling",
-        "Overall interface appears more polished and professional"
+        "A refresh button is visible and accessible in the client dashboard interface",
+        "Clicking the button triggers a refetch of all client data from the backend",
+        "The button shows a loading state while data is being refreshed",
+        "After refresh completes, updated data (credentials, plan, expiry, VM status, etc.) is displayed immediately"
       ]
     }
   ],
   "constraints": [
-    "Do not modify backend/main.mo actor structure or data models",
-    "Preserve all existing functionality while adding new features",
-    "Maintain compatibility with current authentication system"
+    "Do not modify the useInternetIdentity.ts hook or other immutable frontend paths",
+    "Use existing React Query hooks for data fetching and mutation",
+    "Maintain the current authentication architecture with useClientAuth"
   ],
   "nonGoals": [
-    "Backend changes to message storage or data models",
-    "Real-time WebSocket implementation",
-    "Complete redesign of existing component structure"
+    "Modifying admin authentication or remember-me functionality",
+    "Implementing automatic polling or real-time data sync",
+    "Adding refresh functionality to the admin panel"
   ],
   "imageRequirements": {
     "required": [],

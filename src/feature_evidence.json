@@ -2,53 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-display-the-timestamp-showing-when-each-chat-message-was-sent-in-both-adminchatpanel-and-chatwidget-components",
-      "featureTitle": "Display the timestamp showing when each chat message was sent in both AdminChatPanel and ChatWidget components",
+      "featureId": "feature-add-a-refresh-button-in-the-client-dashboard-that-allows-clients-to-manually-reload-their-data-when-the-administrator-has-modified-their-information",
+      "featureTitle": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
       "files": [
-        "frontend/src/components/AdminChatPanel.tsx",
-        "frontend/src/components/ChatWidget.tsx",
-        "frontend/src/utils/timeFormatters.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-visual-indicators-symbols-icons-to-show-message-status-sent-or-read",
-      "featureTitle": "Add visual indicators (symbols/icons) to show message status: sent or read",
-      "files": [
-        "frontend/src/components/AdminChatPanel.tsx",
-        "frontend/src/components/ChatWidget.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-a-light-dark-theme-toggle-that-allows-users-to-switch-between-light-and-dark-modes",
-      "featureTitle": "Implement a light/dark theme toggle that allows users to switch between light and dark modes",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/ThemeToggle.tsx",
-        "frontend/src/hooks/useTheme.tsx",
-        "frontend/src/index.css",
-        "frontend/src/pages/AdminPanel.tsx",
         "frontend/src/pages/ClientDashboard.tsx"
       ],
       "components": [
@@ -59,28 +15,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-3"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-enhance-the-dashboard-design-to-achieve-a-more-professional-appearance-with-improved-typography-spacing-visual-hierarchy-and-consistent-styling-across-all-components",
-      "featureTitle": "Enhance the dashboard design to achieve a more professional appearance with improved typography, spacing, visual hierarchy, and consistent styling across all components",
-      "files": [
-        "frontend/src/index.css",
-        "frontend/src/pages/AdminPanel.tsx",
-        "frontend/src/pages/ClientDashboard.tsx",
-        "frontend/tailwind.config.js"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
+        "REQ-2"
       ],
       "confidence": "high"
     }

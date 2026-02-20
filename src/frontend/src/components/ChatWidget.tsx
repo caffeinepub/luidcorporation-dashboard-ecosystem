@@ -5,9 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChatMessages, useSendMessage, useChatSystemStatus } from '../hooks/useQueries';
 import { useClientAuth } from '../hooks/useClientAuth';
-import { MessageCircle, X, Send, Loader2, Circle, Check, CheckCheck } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Circle } from 'lucide-react';
 import { toast } from 'sonner';
-import { formatMessageTime } from '../utils/timeFormatters';
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +86,7 @@ export default function ChatWidget() {
       {/* Floating Chat Button */}
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-neon-green p-0 text-carbon-black shadow-neon transition-all duration-300 hover:scale-110 hover:bg-neon-green/90"
+        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-neon-green p-0 text-carbon-black shadow-neon hover:bg-neon-green/90"
         title="Chat com Suporte"
       >
         {isOpen ? (
@@ -96,7 +95,7 @@ export default function ChatWidget() {
           <div className="relative">
             <MessageCircle className="h-6 w-6" />
             {unreadCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white animate-pulse">
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -106,8 +105,8 @@ export default function ChatWidget() {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 z-50 w-96 border-neon-green/20 bg-card shadow-2xl transition-all duration-300">
-          <CardHeader className="border-b border-border pb-3">
+        <Card className="fixed bottom-24 right-6 z-50 w-96 border-neon-green/20 bg-carbon-black shadow-neon">
+          <CardHeader className="border-b border-neon-green/20 pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-lg text-neon-green">
                 <MessageCircle className="h-5 w-5" />
@@ -117,7 +116,7 @@ export default function ChatWidget() {
                 <Circle 
                   className={`h-2 w-2 ${isChatOffline ? 'fill-red-500 text-red-500' : 'fill-neon-green text-neon-green'}`} 
                 />
-                <span className={`text-xs font-medium ${isChatOffline ? 'text-red-500' : 'text-neon-green'}`}>
+                <span className={`text-xs ${isChatOffline ? 'text-red-500' : 'text-neon-green'}`}>
                   {isChatOffline ? 'Offline' : 'Online'}
                 </span>
               </div>
@@ -146,42 +145,29 @@ export default function ChatWidget() {
                 <div className="space-y-3">
                   {messages.map((msg, index) => {
                     const isAdmin = msg.sender === 'admin';
-                    const isRead = !isAdmin && index < messages.length - 1;
                     return (
                       <div
                         key={index}
                         className={`flex ${isAdmin ? 'justify-start' : 'justify-end'}`}
                       >
                         <div
-                          className={`max-w-[80%] rounded-lg px-3 py-2 shadow-sm ${
+                          className={`max-w-[80%] rounded-lg px-3 py-2 ${
                             isAdmin
-                              ? 'bg-muted text-foreground'
+                              ? 'bg-neon-green/10 text-foreground'
                               : 'bg-neon-green text-carbon-black'
                           }`}
                         >
                           <div className="mb-1 text-xs font-semibold">
                             {isAdmin ? 'Suporte' : 'Você'}
                           </div>
-                          <div className="text-sm leading-relaxed">{msg.message}</div>
-                          <div className={`mt-1 flex items-center gap-1 text-[10px] ${isAdmin ? 'text-muted-foreground' : 'text-carbon-black/70'}`}>
-                            <span>{formatMessageTime(msg.timestamp)}</span>
-                            {!isAdmin && (
-                              <>
-                                {isRead ? (
-                                  <CheckCheck className="h-3 w-3" />
-                                ) : (
-                                  <Check className="h-3 w-3" />
-                                )}
-                              </>
-                            )}
-                          </div>
+                          <div className="text-sm">{msg.message}</div>
                         </div>
                       </div>
                     );
                   })}
                   {isTyping && (
                     <div className="flex justify-start">
-                      <div className="max-w-[80%] rounded-lg bg-muted px-3 py-2 shadow-sm">
+                      <div className="max-w-[80%] rounded-lg bg-neon-green/10 px-3 py-2">
                         <div className="mb-1 text-xs font-semibold text-foreground">Suporte</div>
                         <div className="flex gap-1">
                           <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.3s]"></span>
@@ -195,7 +181,7 @@ export default function ChatWidget() {
               )}
             </ScrollArea>
 
-            <form onSubmit={handleSendMessage} className="border-t border-border p-4">
+            <form onSubmit={handleSendMessage} className="border-t border-neon-green/20 p-4">
               {isChatOffline ? (
                 <div className="rounded-md bg-red-500/10 p-3 text-center text-xs text-red-500">
                   O chat está offline no momento
@@ -206,7 +192,7 @@ export default function ChatWidget() {
                     value={message}
                     onChange={handleInputChange}
                     placeholder="Digite sua mensagem..."
-                    className="border-border bg-background focus:border-neon-green"
+                    className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
                     disabled={sendMessage.isPending || isChatOffline}
                   />
                   <Button
