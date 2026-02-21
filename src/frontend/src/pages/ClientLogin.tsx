@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useClientAuth } from '../hooks/useClientAuth';
 import { useActor } from '../hooks/useActor';
+import { useLogAccess } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Cloud, Loader2 } from 'lucide-react';
 
@@ -17,12 +18,23 @@ export default function ClientLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const { login, isAuthenticated } = useClientAuth();
   const { actor } = useActor();
+  const logAccess = useLogAccess();
   const navigate = useNavigate();
 
   if (isAuthenticated) {
     navigate({ to: '/client-dashboard' });
     return null;
   }
+
+  const getClientIpAddress = async (): Promise<string> => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      return 'unknown';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,11 +61,18 @@ export default function ClientLogin() {
         return;
       }
 
+      // Log access
+      const ipAddress = await getClientIpAddress();
+      await logAccess.mutateAsync({ clientId: idLuid, ipAddress });
+
       login(clientData, rememberMe);
       toast.success('Login realizado com sucesso!');
       navigate({ to: '/client-dashboard' });
     } catch (error) {
-      toast.error('ID Luid não encontrado. Verifique e tente novamente.');
+      toast.error('⚠️ ID não identificado. Por favor, verifique seu contrato ou chame nossa equipe no suporte ao lado.', {
+        duration: 5000,
+        className: 'bg-destructive text-destructive-foreground border-red-500',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -115,11 +134,11 @@ export default function ClientLogin() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-neon-green text-carbon-black hover:bg-neon-green/90"
+              className="w-full bg-neon-green text-carbon-black hover:bg-neon-green/90 relative overflow-hidden"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin neon-loading" />
                   Conectando...
                 </>
               ) : (

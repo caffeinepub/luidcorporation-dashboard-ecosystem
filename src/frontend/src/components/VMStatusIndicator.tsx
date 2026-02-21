@@ -48,7 +48,7 @@ export default function VMStatusIndicator({ vmStatus }: VMStatusIndicatorProps) 
   const status = getStatusDisplay();
 
   return (
-    <Card className={`border-neon-green/20 bg-card-dark ${status.borderColor}`}>
+    <Card className={`border-neon-green/20 bg-card-dark card-glow ${status.borderColor}`}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-neon-green">
           <Server className="h-5 w-5" />

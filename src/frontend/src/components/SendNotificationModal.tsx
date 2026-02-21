@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { useSendNotification } from '../hooks/useQueries';
+import { useAddNotification } from '../hooks/useQueries';
 import { toast } from 'sonner';
 import { Loader2, Send } from 'lucide-react';
 
@@ -28,7 +28,7 @@ export default function SendNotificationModal({
   onOpenChange,
 }: SendNotificationModalProps) {
   const [message, setMessage] = useState('');
-  const sendNotification = useSendNotification();
+  const addNotification = useAddNotification();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ export default function SendNotificationModal({
     }
 
     try {
-      await sendNotification.mutateAsync({ clientId, message: message.trim() });
+      await addNotification.mutateAsync({ clientId, message: message.trim() });
       toast.success(`Notificação enviada para ${clientName}!`);
       setMessage('');
       onOpenChange(false);
@@ -87,10 +87,10 @@ export default function SendNotificationModal({
             </Button>
             <Button
               type="submit"
-              disabled={sendNotification.isPending || !message.trim()}
+              disabled={addNotification.isPending || !message.trim()}
               className="bg-neon-green text-carbon-black hover:bg-neon-green/90"
             >
-              {sendNotification.isPending ? (
+              {addNotification.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Enviando...

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
-import type { ClientRecord, Notification, ChatMessage, ChatSystemStatus, OperatingSystem, Time } from '../backend';
+import type { ClientRecord, Notification, ChatMessage, ChatSystemStatus, OperatingSystem, Time, AccessLog } from '../backend';
 import { VMStatus } from '../backend';
 
 export function useCreateClientRecord() {
@@ -214,7 +214,7 @@ export function useNetworkMonitoringStatus() {
   });
 }
 
-export function useSendNotification() {
+export function useAddNotification() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
@@ -269,7 +269,6 @@ export function useSendMessage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatMessages'] });
-      queryClient.invalidateQueries({ queryKey: ['allChatMessages'] });
     },
   });
 }
@@ -288,24 +287,18 @@ export function useChatMessages(clientId: string | null) {
   });
 }
 
-export function useAllChatMessages() {
-  const { actor, isFetching } = useActor();
-  const { data: clients = [] } = useAllClientRecords();
+export function useSetChatSystemStatus() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
 
-  return useQuery<Array<{ clientId: string; messages: ChatMessage[] }>>({
-    queryKey: ['allChatMessages'],
-    queryFn: async () => {
-      if (!actor) return [];
-      const allChats = await Promise.all(
-        clients.map(async (client) => ({
-          clientId: client.idLuid,
-          messages: await actor.getMessages(client.idLuid),
-        }))
-      );
-      return allChats;
+  return useMutation({
+    mutationFn: async (status: ChatSystemStatus) => {
+      if (!actor) throw new Error('Actor not initialized');
+      await actor.setChatSystemStatus(status);
     },
-    enabled: !!actor && !isFetching && clients.length > 0,
-    refetchInterval: 3000,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatSystemStatus'] });
+    },
   });
 }
 
@@ -323,17 +316,31 @@ export function useChatSystemStatus() {
   });
 }
 
-export function useSetChatSystemStatus() {
+export function useLogAccess() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (status: ChatSystemStatus) => {
+    mutationFn: async ({ clientId, ipAddress }: { clientId: string; ipAddress: string }) => {
       if (!actor) throw new Error('Actor not initialized');
-      await actor.setChatSystemStatus(status);
+      await actor.logAccess(clientId, ipAddress);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chatSystemStatus'] });
+      queryClient.invalidateQueries({ queryKey: ['accessLogs'] });
     },
+  });
+}
+
+export function useAccessLogs() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<AccessLog[]>({
+    queryKey: ['accessLogs'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return await actor.getAccessLogs();
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 5000,
   });
 }

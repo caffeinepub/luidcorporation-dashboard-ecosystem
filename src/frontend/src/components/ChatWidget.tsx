@@ -94,6 +94,9 @@ export default function ChatWidget() {
         ) : (
           <div className="relative">
             <MessageCircle className="h-6 w-6" />
+            {!isChatOffline && (
+              <Circle className="absolute -right-1 -top-1 h-3 w-3 fill-green-500 text-green-500 animate-pulse" />
+            )}
             {unreadCount > 0 && (
               <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
                 {unreadCount > 9 ? '9+' : unreadCount}
@@ -114,10 +117,10 @@ export default function ChatWidget() {
               </CardTitle>
               <div className="flex items-center gap-1.5">
                 <Circle 
-                  className={`h-2 w-2 ${isChatOffline ? 'fill-red-500 text-red-500' : 'fill-neon-green text-neon-green'}`} 
+                  className={`h-2 w-2 ${isChatOffline ? 'fill-red-500 text-red-500' : 'fill-green-500 text-green-500 animate-pulse'}`} 
                 />
-                <span className={`text-xs ${isChatOffline ? 'text-red-500' : 'text-neon-green'}`}>
-                  {isChatOffline ? 'Offline' : 'Online'}
+                <span className={`text-xs ${isChatOffline ? 'text-red-500' : 'text-green-500'}`}>
+                  {isChatOffline ? 'Offline' : 'Alta Disponibilidade'}
                 </span>
               </div>
             </div>

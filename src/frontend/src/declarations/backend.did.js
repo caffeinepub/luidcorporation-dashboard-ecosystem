@@ -18,6 +18,11 @@ export const OperatingSystem = IDL.Variant({
   'windows' : IDL.Null,
 });
 export const Time = IDL.Int;
+export const AccessLog = IDL.Record({
+  'clientId' : IDL.Text,
+  'timestamp' : Time,
+  'ipAddress' : IDL.Text,
+});
 export const ClientRecord = IDL.Record({
   'senhaCliente' : IDL.Text,
   'senhaVps' : IDL.Text,
@@ -67,6 +72,7 @@ export const idlService = IDL.Service({
       [],
     ),
   'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
+  'getAccessLogs' : IDL.Func([], [IDL.Vec(AccessLog)], ['query']),
   'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
   'getChatSystemStatus' : IDL.Func([], [ChatSystemStatus], ['query']),
   'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
@@ -74,6 +80,7 @@ export const idlService = IDL.Service({
   'getMessages' : IDL.Func([IDL.Text], [IDL.Vec(ChatMessage)], ['query']),
   'getNetworkMonitoringStatus' : IDL.Func([], [IDL.Text], ['query']),
   'getNotifications' : IDL.Func([IDL.Text], [IDL.Vec(Notification)], ['query']),
+  'logAccess' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   'setChatSystemStatus' : IDL.Func([ChatSystemStatus], [], []),
   'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),
@@ -110,6 +117,11 @@ export const idlFactory = ({ IDL }) => {
     'windows' : IDL.Null,
   });
   const Time = IDL.Int;
+  const AccessLog = IDL.Record({
+    'clientId' : IDL.Text,
+    'timestamp' : Time,
+    'ipAddress' : IDL.Text,
+  });
   const ClientRecord = IDL.Record({
     'senhaCliente' : IDL.Text,
     'senhaVps' : IDL.Text,
@@ -159,6 +171,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'deleteClientRecord' : IDL.Func([IDL.Text], [], []),
+    'getAccessLogs' : IDL.Func([], [IDL.Vec(AccessLog)], ['query']),
     'getAllClientRecords' : IDL.Func([], [IDL.Vec(ClientRecord)], ['query']),
     'getChatSystemStatus' : IDL.Func([], [ChatSystemStatus], ['query']),
     'getClientRecord' : IDL.Func([IDL.Text], [ClientRecord], ['query']),
@@ -170,6 +183,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(Notification)],
         ['query'],
       ),
+    'logAccess' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'sendMessage' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
     'setChatSystemStatus' : IDL.Func([ChatSystemStatus], [], []),
     'setGlobalAnnouncement' : IDL.Func([IDL.Text], [], []),

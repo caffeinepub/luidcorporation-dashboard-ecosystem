@@ -2,10 +2,32 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-refresh-button-in-the-client-dashboard-that-allows-clients-to-manually-reload-their-data-when-the-administrator-has-modified-their-information",
-      "featureTitle": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
+      "featureId": "feature-create-an-activity-logs-section-in-the-admin-panel-that-displays-access-logs-with-client-id-timestamp-date-and-time-and-source-ip-address-for-monitoring-client-logins-in-real-time",
+      "featureTitle": "Create an 'Activity Logs' section in the Admin Panel that displays access logs with Client ID, timestamp (date and time), and source IP address for monitoring client logins in real-time",
       "files": [
-        "frontend/src/pages/ClientDashboard.tsx"
+        "frontend/src/components/ActivityLogsTable.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/AdminPanel.tsx",
+        "frontend/src/pages/ClientLogin.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-export-database-button-in-the-admin-panel-that-generates-and-downloads-a-json-or-csv-file-containing-all-registered-client-ids-ip-addresses-and-passwords-for-backup-purposes",
+      "featureTitle": "Add an 'Export Database' button in the Admin Panel that generates and downloads a JSON or CSV file containing all registered client IDs, IP addresses, and passwords for backup purposes",
+      "files": [
+        "frontend/src/components/DatabaseExportButton.tsx",
+        "frontend/src/pages/AdminPanel.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -16,6 +38,121 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-a-styled-red-error-alert-toast-or-modal-on-the-client-login-page-when-an-invalid-or-non-existent-client-id-is-entered-with-the-message-id-not-identified-please-check-your-contract-or-contact-our-support-team",
+      "featureTitle": "Display a styled red error alert (Toast or Modal) on the client login page when an invalid or non-existent Client ID is entered, with the message: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+      "files": [
+        "frontend/src/pages/ClientLogin.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-green-neon-loading-effect-to-the-client-login-page-that-appears-when-the-enter-button-is-clicked-providing-visual-feedback-during-authentication-processing",
+      "featureTitle": "Add a green neon loading effect to the client login page that appears when the 'Enter' button is clicked, providing visual feedback during authentication processing",
+      "files": [
+        "frontend/src/pages/ClientLogin.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-copy-buttons-clipboard-icon-next-to-the-ip-address-username-and-password-fields-in-the-client-dashboard-that-copy-the-value-to-clipboard-and-display-a-copied-confirmation-message",
+      "featureTitle": "Add copy buttons (clipboard icon) next to the IP address, username, and password fields in the Client Dashboard that copy the value to clipboard and display a 'Copied!' confirmation message",
+      "files": [
+        "frontend/src/components/VpsCredentialsCard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-footer-links-for-terms-of-use-and-privacy-policy-in-the-client-dashboard-footer-with-placeholder-generic-text-content-that-can-be-edited-later",
+      "featureTitle": "Add footer links for 'Terms of Use' and 'Privacy Policy' in the Client Dashboard footer with placeholder generic text content that can be edited later",
+      "files": [
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/LegalContentModal.tsx",
+        "frontend/src/pages/ClientDashboard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-green-glow-effect-to-information-cards-throughout-the-application-for-a-premium-visual-appearance",
+      "featureTitle": "Apply a green glow effect to information cards throughout the application for a premium visual appearance",
+      "files": [
+        "frontend/src/components/NetworkSpeedChart.tsx",
+        "frontend/src/components/RdpInstructionsCard.tsx",
+        "frontend/src/components/SshInstructionsCard.tsx",
+        "frontend/src/components/VMStatusIndicator.tsx",
+        "frontend/src/components/VpsCredentialsCard.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-green-indicator-dot-to-the-support-chat-widget-showing-high-availability-operational-status",
+      "featureTitle": "Add a green indicator dot to the Support Chat widget showing 'High Availability' operational status",
+      "files": [
+        "frontend/src/components/ChatWidget.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
       ],
       "confidence": "high"
     }

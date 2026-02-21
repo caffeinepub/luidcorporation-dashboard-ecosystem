@@ -7,7 +7,7 @@ export default function NetworkSpeedChart() {
   const { data, currentSpeed } = useNetworkSpeedSimulation();
 
   return (
-    <Card className="border-neon-green/20 bg-card-dark">
+    <Card className="border-neon-green/20 bg-card-dark card-glow">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-neon-green">
           <Activity className="h-5 w-5" />

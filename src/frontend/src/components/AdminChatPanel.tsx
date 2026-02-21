@@ -3,13 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAllClientRecords, useAllChatMessages, useSendMessage } from '../hooks/useQueries';
+import { useAllClientRecords, useChatMessages, useSendMessage } from '../hooks/useQueries';
 import { MessageCircle, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminChatPanel() {
   const { data: clients = [] } = useAllClientRecords();
-  const { data: allChats = [], isLoading } = useAllChatMessages();
   const sendMessage = useSendMessage();
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
@@ -17,24 +16,26 @@ export default function AdminChatPanel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const selectedChat = allChats.find(chat => chat.clientId === selectedClientId);
+  // Fetch messages for selected client only
+  const { data: messages = [], isLoading } = useChatMessages(selectedClientId);
+
   const selectedClient = clients.find(client => client.idLuid === selectedClientId);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [selectedChat?.messages, isTyping]);
+  }, [messages, isTyping]);
 
   // Simulate typing detection from client
   useEffect(() => {
-    if (selectedChat) {
-      const lastMessage = selectedChat.messages[selectedChat.messages.length - 1];
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
       if (lastMessage && lastMessage.sender === selectedClientId) {
         setIsTyping(false);
       }
     }
-  }, [selectedChat, selectedClientId]);
+  }, [messages, selectedClientId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -67,9 +68,8 @@ export default function AdminChatPanel() {
   };
 
   const getUnreadCount = (clientId: string) => {
-    const chat = allChats.find(c => c.clientId === clientId);
-    if (!chat) return 0;
-    return chat.messages.filter(msg => msg.sender === clientId).length;
+    // This is a simplified version - in a real app, you'd track read/unread status
+    return 0;
   };
 
   return (
@@ -84,140 +84,138 @@ export default function AdminChatPanel() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-neon-green" />
-          </div>
-        ) : (
-          <div className="grid gap-4 lg:grid-cols-3">
-            {/* Client List */}
-            <div className="lg:col-span-1">
-              <ScrollArea className="h-[500px] rounded-md border border-neon-green/20 bg-carbon-black p-2">
-                {clients.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-muted-foreground">
-                    Nenhum cliente cadastrado
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {clients.map((client) => {
-                      const unreadCount = getUnreadCount(client.idLuid);
-                      const isSelected = selectedClientId === client.idLuid;
-                      return (
-                        <button
-                          key={client.idLuid}
-                          onClick={() => setSelectedClientId(client.idLuid)}
-                          className={`w-full rounded-lg border p-3 text-left transition-colors ${
-                            isSelected
-                              ? 'border-neon-green bg-neon-green/10'
-                              : 'border-neon-green/20 hover:bg-neon-green/5'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium text-foreground">{client.nome}</div>
-                              <div className="text-xs text-muted-foreground">{client.idLuid}</div>
-                            </div>
-                            {unreadCount > 0 && (
-                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neon-green text-xs font-bold text-carbon-black">
-                                {unreadCount > 9 ? '9+' : unreadCount}
-                              </div>
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </ScrollArea>
-            </div>
-
-            {/* Chat Area */}
-            <div className="lg:col-span-2">
-              {selectedClientId && selectedClient ? (
-                <div className="flex h-[500px] flex-col rounded-md border border-neon-green/20 bg-carbon-black">
-                  <div className="border-b border-neon-green/20 p-4">
-                    <div className="font-medium text-neon-green">{selectedClient.nome}</div>
-                    <div className="text-xs text-muted-foreground">ID: {selectedClient.idLuid}</div>
-                  </div>
-
-                  <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-                    {selectedChat && selectedChat.messages.length > 0 ? (
-                      <div className="space-y-3">
-                        {selectedChat.messages.map((msg, index) => {
-                          const isAdmin = msg.sender === 'admin';
-                          return (
-                            <div
-                              key={index}
-                              className={`flex ${isAdmin ? 'justify-end' : 'justify-start'}`}
-                            >
-                              <div
-                                className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                                  isAdmin
-                                    ? 'bg-neon-green text-carbon-black'
-                                    : 'bg-neon-green/10 text-foreground'
-                                }`}
-                              >
-                                <div className="mb-1 text-xs font-semibold">
-                                  {isAdmin ? 'Você (Admin)' : selectedClient.nome}
-                                </div>
-                                <div className="text-sm">{msg.message}</div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                        {isTyping && (
-                          <div className="flex justify-start">
-                            <div className="max-w-[80%] rounded-lg bg-neon-green/10 px-3 py-2">
-                              <div className="mb-1 text-xs font-semibold text-foreground">
-                                {selectedClient.nome}
-                              </div>
-                              <div className="flex gap-1">
-                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.3s]"></span>
-                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.15s]"></span>
-                                <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green"></span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                        Nenhuma mensagem ainda
-                      </div>
-                    )}
-                  </ScrollArea>
-
-                  <form onSubmit={handleSendMessage} className="border-t border-neon-green/20 p-4">
-                    <div className="flex gap-2">
-                      <Input
-                        value={message}
-                        onChange={handleInputChange}
-                        placeholder="Digite sua resposta..."
-                        className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
-                        disabled={sendMessage.isPending}
-                      />
-                      <Button
-                        type="submit"
-                        disabled={sendMessage.isPending || !message.trim()}
-                        className="bg-neon-green text-carbon-black hover:bg-neon-green/90"
-                      >
-                        {sendMessage.isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Send className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </form>
+        <div className="grid gap-4 lg:grid-cols-3">
+          {/* Client List */}
+          <div className="lg:col-span-1">
+            <ScrollArea className="h-[500px] rounded-md border border-neon-green/20 bg-carbon-black p-2">
+              {clients.length === 0 ? (
+                <div className="py-8 text-center text-sm text-muted-foreground">
+                  Nenhum cliente cadastrado
                 </div>
               ) : (
-                <div className="flex h-[500px] items-center justify-center rounded-md border border-neon-green/20 bg-carbon-black text-muted-foreground">
-                  Selecione um cliente para visualizar a conversa
+                <div className="space-y-2">
+                  {clients.map((client) => {
+                    const unreadCount = getUnreadCount(client.idLuid);
+                    const isSelected = selectedClientId === client.idLuid;
+                    return (
+                      <button
+                        key={client.idLuid}
+                        onClick={() => setSelectedClientId(client.idLuid)}
+                        className={`w-full rounded-lg border p-3 text-left transition-colors ${
+                          isSelected
+                            ? 'border-neon-green bg-neon-green/10'
+                            : 'border-neon-green/20 hover:bg-neon-green/5'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-foreground">{client.nome}</div>
+                            <div className="text-xs text-muted-foreground">{client.idLuid}</div>
+                          </div>
+                          {unreadCount > 0 && (
+                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neon-green text-xs font-bold text-carbon-black">
+                              {unreadCount > 9 ? '9+' : unreadCount}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
-            </div>
+            </ScrollArea>
           </div>
-        )}
+
+          {/* Chat Area */}
+          <div className="lg:col-span-2">
+            {selectedClientId && selectedClient ? (
+              <div className="flex h-[500px] flex-col rounded-md border border-neon-green/20 bg-carbon-black">
+                <div className="border-b border-neon-green/20 p-4">
+                  <div className="font-medium text-neon-green">{selectedClient.nome}</div>
+                  <div className="text-xs text-muted-foreground">ID: {selectedClient.idLuid}</div>
+                </div>
+
+                <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+                  {isLoading ? (
+                    <div className="flex h-full items-center justify-center">
+                      <Loader2 className="h-6 w-6 animate-spin text-neon-green" />
+                    </div>
+                  ) : messages.length > 0 ? (
+                    <div className="space-y-3">
+                      {messages.map((msg, index) => {
+                        const isAdmin = msg.sender === 'admin';
+                        return (
+                          <div
+                            key={index}
+                            className={`flex ${isAdmin ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div
+                              className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                                isAdmin
+                                  ? 'bg-neon-green text-carbon-black'
+                                  : 'bg-neon-green/10 text-foreground'
+                              }`}
+                            >
+                              <div className="mb-1 text-xs font-semibold">
+                                {isAdmin ? 'Você (Admin)' : selectedClient.nome}
+                              </div>
+                              <div className="text-sm">{msg.message}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      {isTyping && (
+                        <div className="flex justify-start">
+                          <div className="max-w-[80%] rounded-lg bg-neon-green/10 px-3 py-2">
+                            <div className="mb-1 text-xs font-semibold text-foreground">
+                              {selectedClient.nome}
+                            </div>
+                            <div className="flex gap-1">
+                              <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.3s]"></span>
+                              <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green [animation-delay:-0.15s]"></span>
+                              <span className="h-2 w-2 animate-bounce rounded-full bg-neon-green"></span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                      Nenhuma mensagem ainda
+                    </div>
+                  )}
+                </ScrollArea>
+
+                <form onSubmit={handleSendMessage} className="border-t border-neon-green/20 p-4">
+                  <div className="flex gap-2">
+                    <Input
+                      value={message}
+                      onChange={handleInputChange}
+                      placeholder="Digite sua resposta..."
+                      className="border-neon-green/30 bg-carbon-black focus:border-neon-green"
+                      disabled={sendMessage.isPending}
+                    />
+                    <Button
+                      type="submit"
+                      disabled={sendMessage.isPending || !message.trim()}
+                      className="bg-neon-green text-carbon-black hover:bg-neon-green/90"
+                    >
+                      {sendMessage.isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <div className="flex h-[500px] items-center justify-center rounded-md border border-neon-green/20 bg-carbon-black text-muted-foreground">
+                Selecione um cliente para visualizar a conversa
+              </div>
+            )}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

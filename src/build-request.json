@@ -1,55 +1,174 @@
 {
   "kind": "build_request",
-  "title": "Fix remember-me option and add data refresh button",
+  "title": "Add access logging, database export, enhanced login UX, copy buttons, footer links, and premium visual effects",
+  "projectName": "LuidCorporation Dashboard",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
-      "target": "frontend",
+      "text": "Create an 'Activity Logs' section in the Admin Panel that displays access logs with Client ID, timestamp (date and time), and source IP address for monitoring client logins in real-time",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-7"
         ],
         "quotes": [
-          "Arrume a opção manter conectado"
+          "No meu Painel Master, crie uma seção de 'Logs de Atividade'. O sistema deve registrar e exibir: [ID do Cliente], [Data/Hora do Acesso] e [Endereço IP de origem]"
         ]
       },
       "acceptanceCriteria": [
-        "When 'keep me logged in' is checked, client authentication persists after closing and reopening the browser",
-        "When unchecked, client authentication is cleared when browser is closed",
-        "The remember-me state is properly saved to localStorage when checked and sessionStorage when unchecked"
+        "Admin Panel displays an 'Activity Logs' section with a table or list view",
+        "Each log entry shows Client ID, timestamp with date and time, and IP address",
+        "Logs are fetched from the backend and displayed in chronological order",
+        "Log entries are created automatically when clients log in"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
+      "text": "Add an 'Export Database' button in the Admin Panel that generates and downloads a JSON or CSV file containing all registered client IDs, IP addresses, and passwords for backup purposes",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-7"
         ],
         "quotes": [
-          "coloque um botão de recarregar para o cliente apertar caso o administrador tenha mudado seus dados e não tenha aparecido ainda"
+          "Adicione um botão no Painel ADM chamado 'Exportar Base de Dados'. Ao clicar, o sistema deve gerar um arquivo JSON ou CSV com todos os IDs, IPs e senhas cadastrados"
         ]
       },
       "acceptanceCriteria": [
-        "A refresh button is visible and accessible in the client dashboard interface",
-        "Clicking the button triggers a refetch of all client data from the backend",
-        "The button shows a loading state while data is being refreshed",
-        "After refresh completes, updated data (credentials, plan, expiry, VM status, etc.) is displayed immediately"
+        "Admin Panel has an 'Export Database' button clearly visible",
+        "Clicking the button triggers download of a file containing all client data",
+        "Export file includes Client ID, IP address, username, and password for each client",
+        "File format is either JSON or CSV"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Display a styled red error alert (Toast or Modal) on the client login page when an invalid or non-existent Client ID is entered, with the message: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "Se um cliente digitar um ID inexistente, exiba um alerta estilizado (Toast ou Modal) em vermelho: '⚠️ ID não identificado. Por favor, verifique seu contrato ou chame nossa equipe no suporte ao lado.'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Invalid Client ID triggers a visible error message in red",
+        "Error message displays: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+        "Error is shown as a Toast notification or Modal dialog",
+        "Error styling is consistent with the application theme"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Add a green neon loading effect to the client login page that appears when the 'Enter' button is clicked, providing visual feedback during authentication processing",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "Adicione um efeito de 'Loading' (carregamento) verde neon ao clicar em entrar, para dar sensação de processamento de alta velocidade"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Login button shows a green neon loading indicator when clicked",
+        "Loading effect is visible during authentication processing",
+        "Loading effect uses the neon green color from the theme",
+        "Loading effect stops when authentication completes or fails"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add copy buttons (clipboard icon) next to the IP address, username, and password fields in the Client Dashboard that copy the value to clipboard and display a 'Copied!' confirmation message",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "Adicione um botão 'Copiar' (ícone de prancheta) ao lado do IP, Usuário e Senha. Ao clicar, deve aparecer uma pequena mensagem: 'Copiado!'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Copy button with clipboard icon appears next to IP address field",
+        "Copy button with clipboard icon appears next to username field",
+        "Copy button with clipboard icon appears next to password field",
+        "Clicking a copy button copies the corresponding value to clipboard",
+        "A 'Copied!' confirmation message appears after successful copy"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add footer links for 'Terms of Use' and 'Privacy Policy' in the Client Dashboard footer with placeholder generic text content that can be edited later",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "No rodapé do Dashboard, inclua links para 'Termos de Uso' e 'Política de Privacidade' (pode usar textos genéricos por enquanto que eu editarei depois)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Client Dashboard footer displays 'Terms of Use' link",
+        "Client Dashboard footer displays 'Privacy Policy' link",
+        "Links open pages or modals with placeholder generic text",
+        "Footer styling is consistent with the application theme"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Apply a green glow effect to information cards throughout the application for a premium visual appearance",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "Aplique um efeito de 'Glow' (brilho suave) verde nos cards de informações"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Information cards display a soft green glow effect",
+        "Glow effect uses the neon green color from the theme",
+        "Effect is applied consistently across all information cards",
+        "Glow enhances visual appeal without reducing readability"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Add a green indicator dot to the Support Chat widget showing 'High Availability' operational status",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "Garanta que o Chat de Suporte que já está funcional tenha um indicador visual (uma bolinha verde) indicando que o sistema está operando em 'Alta Disponibilidade'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Support Chat widget displays a green indicator dot",
+        "Indicator visually communicates 'High Availability' status",
+        "Green color matches the neon green theme",
+        "Indicator is clearly visible when chat widget is displayed"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the useInternetIdentity.ts hook or other immutable frontend paths",
-    "Use existing React Query hooks for data fetching and mutation",
-    "Maintain the current authentication architecture with useClientAuth"
+    "Do not modify the existing database integration",
+    "Do not alter the credentials for the SidneiCosta00 admin account",
+    "Maintain compatibility with the existing client management system",
+    "Preserve the current authentication flow and session management"
   ],
   "nonGoals": [
-    "Modifying admin authentication or remember-me functionality",
-    "Implementing automatic polling or real-time data sync",
-    "Adding refresh functionality to the admin panel"
+    "Changing the technology stack or framework",
+    "Implementing real-time IP tracking beyond login events",
+    "Creating automated backup scheduling",
+    "Implementing actual Terms of Use or Privacy Policy content"
   ],
   "imageRequirements": {
     "required": [],

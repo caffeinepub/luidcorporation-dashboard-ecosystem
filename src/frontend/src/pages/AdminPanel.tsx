@@ -10,6 +10,8 @@ import AdminChatPanel from '../components/AdminChatPanel';
 import AdminProfileDisplay from '../components/AdminProfileDisplay';
 import ChatSystemStatusIndicator from '../components/ChatSystemStatusIndicator';
 import ChatSystemStatusToggle from '../components/ChatSystemStatusToggle';
+import ActivityLogsTable from '../components/ActivityLogsTable';
+import DatabaseExportButton from '../components/DatabaseExportButton';
 import { LogOut, Shield } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -30,6 +32,7 @@ export default function AdminPanel() {
             <h1 className="text-xl font-bold text-neon-green">Luid Master Panel</h1>
           </div>
           <div className="flex items-center gap-4">
+            <DatabaseExportButton />
             <AdminProfileDisplay />
             <Button
               variant="outline"
@@ -59,6 +62,9 @@ export default function AdminPanel() {
             <TabsTrigger value="chat" className="data-[state=active]:bg-neon-green/10 data-[state=active]:text-neon-green">
               Chat
             </TabsTrigger>
+            <TabsTrigger value="logs" className="data-[state=active]:bg-neon-green/10 data-[state=active]:text-neon-green">
+              Logs de Atividade
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="clients" className="space-y-6">
@@ -84,6 +90,10 @@ export default function AdminPanel() {
                 <AdminChatPanel />
               </div>
             </div>
+          </TabsContent>
+
+          <TabsContent value="logs" className="space-y-6">
+            <ActivityLogsTable />
           </TabsContent>
         </Tabs>
       </main>

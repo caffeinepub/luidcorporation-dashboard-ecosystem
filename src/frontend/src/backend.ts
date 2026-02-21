@@ -106,6 +106,11 @@ export interface ClientRecord {
     idLuid: string;
     plano: string;
 }
+export interface AccessLog {
+    clientId: string;
+    timestamp: Time;
+    ipAddress: string;
+}
 export interface ChatMessage {
     sender: string;
     message: string;
@@ -132,6 +137,7 @@ export interface backendInterface {
     clearNotifications(clientId: string): Promise<void>;
     createClientRecord(idLuid: string, nome: string, senhaCliente: string, ipVps: string, userVps: string, senhaVps: string, plano: string, vmStatus: VMStatus, operatingSystem: OperatingSystem, planExpiry: Time): Promise<void>;
     deleteClientRecord(idLuid: string): Promise<void>;
+    getAccessLogs(): Promise<Array<AccessLog>>;
     getAllClientRecords(): Promise<Array<ClientRecord>>;
     getChatSystemStatus(): Promise<ChatSystemStatus>;
     getClientRecord(idLuid: string): Promise<ClientRecord>;
@@ -139,6 +145,7 @@ export interface backendInterface {
     getMessages(clientId: string): Promise<Array<ChatMessage>>;
     getNetworkMonitoringStatus(): Promise<string>;
     getNotifications(clientId: string): Promise<Array<Notification>>;
+    logAccess(clientId: string, ipAddress: string): Promise<void>;
     sendMessage(sender: string, receiver: string, message: string): Promise<void>;
     setChatSystemStatus(status: ChatSystemStatus): Promise<void>;
     setGlobalAnnouncement(announcement: string): Promise<void>;
@@ -230,6 +237,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.deleteClientRecord(arg0);
+            return result;
+        }
+    }
+    async getAccessLogs(): Promise<Array<AccessLog>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAccessLogs();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAccessLogs();
             return result;
         }
     }
@@ -328,6 +349,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getNotifications(arg0);
+            return result;
+        }
+    }
+    async logAccess(arg0: string, arg1: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.logAccess(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.logAccess(arg0, arg1);
             return result;
         }
     }

@@ -16,7 +16,7 @@ export default function RdpInstructionsCard({ ipVps, userVps, senhaVps }: RdpIns
   };
 
   return (
-    <Card className="border-neon-green/20 bg-card-dark">
+    <Card className="border-neon-green/20 bg-card-dark card-glow">
       <CardHeader>
         <div className="flex items-center gap-2">
           <Monitor className="h-5 w-5 text-neon-green" />

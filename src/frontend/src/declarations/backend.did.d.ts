@@ -10,6 +10,11 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AccessLog {
+  'clientId' : string,
+  'timestamp' : Time,
+  'ipAddress' : string,
+}
 export interface ChatMessage {
   'sender' : string,
   'message' : string,
@@ -58,6 +63,7 @@ export interface _SERVICE {
     undefined
   >,
   'deleteClientRecord' : ActorMethod<[string], undefined>,
+  'getAccessLogs' : ActorMethod<[], Array<AccessLog>>,
   'getAllClientRecords' : ActorMethod<[], Array<ClientRecord>>,
   'getChatSystemStatus' : ActorMethod<[], ChatSystemStatus>,
   'getClientRecord' : ActorMethod<[string], ClientRecord>,
@@ -65,6 +71,7 @@ export interface _SERVICE {
   'getMessages' : ActorMethod<[string], Array<ChatMessage>>,
   'getNetworkMonitoringStatus' : ActorMethod<[], string>,
   'getNotifications' : ActorMethod<[string], Array<Notification>>,
+  'logAccess' : ActorMethod<[string, string], undefined>,
   'sendMessage' : ActorMethod<[string, string, string], undefined>,
   'setChatSystemStatus' : ActorMethod<[ChatSystemStatus], undefined>,
   'setGlobalAnnouncement' : ActorMethod<[string], undefined>,

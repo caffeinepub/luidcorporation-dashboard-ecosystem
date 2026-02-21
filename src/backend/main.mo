@@ -3,9 +3,9 @@ import Map "mo:core/Map";
 import Text "mo:core/Text";
 import Time "mo:core/Time";
 import Runtime "mo:core/Runtime";
+import Migration "migration";
 
-
-
+(with migration = Migration.run)
 actor {
   type VMStatus = { #online; #offline; #maintenance };
   type OperatingSystem = { #windows; #ubuntu };
@@ -37,9 +37,16 @@ actor {
 
   type ChatSystemStatus = { #online; #offline };
 
+  type AccessLog = {
+    clientId : Text;
+    timestamp : Time.Time;
+    ipAddress : Text;
+  };
+
   let clientRecords = Map.empty<Text, ClientRecord>();
   let notifications = Map.empty<Text, List.List<Notification>>();
   let chatMessages = Map.empty<Text, List.List<ChatMessage>>();
+  let accessLogs = List.empty<AccessLog>();
 
   var globalAnnouncement : Text = "";
   var networkMonitoringStatus : Text = "normal";
@@ -255,5 +262,20 @@ actor {
 
   public query ({ caller }) func getChatSystemStatus() : async ChatSystemStatus {
     chatSystemStatus;
+  };
+
+  // Log new access
+  public shared ({ caller }) func logAccess(clientId : Text, ipAddress : Text) : async () {
+    let newLog : AccessLog = {
+      clientId;
+      timestamp = Time.now();
+      ipAddress;
+    };
+    accessLogs.add(newLog);
+  };
+
+  // Get all access logs
+  public query ({ caller }) func getAccessLogs() : async [AccessLog] {
+    accessLogs.toArray();
   };
 };

@@ -1,43 +1,197 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix remember-me option and add data refresh button",
+  "title": "Add access logging, database export, enhanced login UX, copy buttons, footer links, and premium visual effects",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
+      "summary": "Create an 'Activity Logs' section in the Admin Panel displaying access logs with Client ID, timestamp, and source IP address",
       "acceptanceCriteria": [
-        "When 'keep me logged in' is checked, client authentication persists after closing and reopening the browser",
-        "When unchecked, client authentication is cleared when browser is closed",
-        "The remember-me state is properly saved to localStorage when checked and sessionStorage when unchecked"
+        "Admin Panel displays an 'Activity Logs' section with a table or list view",
+        "Each log entry shows Client ID, timestamp with date and time, and IP address",
+        "Logs are fetched from the backend and displayed in chronological order",
+        "Log entries are created automatically when clients log in"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useClientAuth.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Fix the storage mechanism to properly use localStorage when remember-me is true and sessionStorage when false. Update the login function to accept a rememberMe parameter and persist it correctly. Ensure the authentication state is restored from the correct storage on component mount based on where data exists."
+          "description": "Add useAccessLogs query hook that calls backend getAccessLogs() method and returns the array of AccessLog records with automatic refetching"
+        },
+        {
+          "path": "frontend/src/components/ActivityLogsTable.tsx",
+          "operation": "create",
+          "description": "Create table component displaying access logs with columns for Client ID, formatted timestamp (date and time), and IP address. Use the useAccessLogs hook to fetch data and display in chronological order (newest first). Include loading and error states."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Add new 'Activity Logs' tab to the TabsList and corresponding TabsContent section. Import and render the ActivityLogsTable component within the new tab content area."
         },
         {
           "path": "frontend/src/pages/ClientLogin.tsx",
           "operation": "modify",
-          "description": "Add a 'keep me logged in' checkbox to the login form. Pass the checkbox state to the useClientAuth login function to control whether authentication persists in localStorage or sessionStorage. Ensure the checkbox state is properly wired to the form submission handler."
+          "description": "After successful client authentication, call backend logAccess() method with clientId and client's IP address to create an access log entry before navigating to dashboard"
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
+      "summary": "Add an 'Export Database' button in the Admin Panel that generates and downloads a JSON or CSV file containing all client data",
       "acceptanceCriteria": [
-        "A refresh button is visible and accessible in the client dashboard interface",
-        "Clicking the button triggers a refetch of all client data from the backend",
-        "The button shows a loading state while data is being refreshed",
-        "After refresh completes, updated data (credentials, plan, expiry, VM status, etc.) is displayed immediately"
+        "Admin Panel has an 'Export Database' button clearly visible",
+        "Clicking the button triggers download of a file containing all client data",
+        "Export file includes Client ID, IP address, username, and password for each client",
+        "File format is either JSON or CSV"
       ],
       "file_operations": [
         {
+          "path": "frontend/src/components/DatabaseExportButton.tsx",
+          "operation": "create",
+          "description": "Create button component that fetches all client records using the existing useAllClientRecords hook, transforms the data into JSON format including idLuid, ipVps, userVps, senhaVps, nome, senhaCliente, plano, planExpiry, vmStatus, and operatingSystem fields, then triggers a browser download of the JSON file with filename 'luid-database-export-YYYY-MM-DD.json'. Include loading state during data fetch and export."
+        },
+        {
+          "path": "frontend/src/pages/AdminPanel.tsx",
+          "operation": "modify",
+          "description": "Import and render the DatabaseExportButton component in the Admin Panel header area, positioned near the logout button for easy admin access"
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Display a styled red error alert on the client login page when an invalid Client ID is entered",
+      "acceptanceCriteria": [
+        "Invalid Client ID triggers a visible error message in red",
+        "Error message displays: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+        "Error is shown as a Toast notification or Modal dialog",
+        "Error styling is consistent with the application theme"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ClientLogin.tsx",
+          "operation": "modify",
+          "description": "Update the login error handling to display a toast notification with red/destructive variant when authentication fails due to invalid Client ID. Set the toast message to '⚠️ ID not identified. Please check your contract or contact our support team.' using the existing toast system."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add a green neon loading effect to the client login page during authentication processing",
+      "acceptanceCriteria": [
+        "Login button shows a green neon loading indicator when clicked",
+        "Loading effect is visible during authentication processing",
+        "Loading effect uses the neon green color from the theme",
+        "Loading effect stops when authentication completes or fails"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ClientLogin.tsx",
+          "operation": "modify",
+          "description": "Add loading state management to the login form. When the Enter button is clicked, display a neon green animated loading spinner or pulsing effect using the theme's neon-green color. Show the loading indicator on the button during the authentication process and hide it when login completes or fails."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add copy buttons next to IP address, username, and password fields in the Client Dashboard with clipboard functionality",
+      "acceptanceCriteria": [
+        "Copy button with clipboard icon appears next to IP address field",
+        "Copy button with clipboard icon appears next to username field",
+        "Copy button with clipboard icon appears next to password field",
+        "Clicking a copy button copies the corresponding value to clipboard",
+        "A 'Copied!' confirmation message appears after successful copy"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/VpsCredentialsCard.tsx",
+          "operation": "modify",
+          "description": "Add copy-to-clipboard button with clipboard icon next to the IP address, username (userVps), and password (senhaVps) fields. Implement clipboard API functionality that copies the value when clicked and displays a 'Copied!' toast notification. Style buttons to match the theme."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add footer links for 'Terms of Use' and 'Privacy Policy' in the Client Dashboard with placeholder content",
+      "acceptanceCriteria": [
+        "Client Dashboard footer displays 'Terms of Use' link",
+        "Client Dashboard footer displays 'Privacy Policy' link",
+        "Links open pages or modals with placeholder generic text",
+        "Footer styling is consistent with the application theme"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Add 'Terms of Use' and 'Privacy Policy' links to the footer component. Style the links to match the neon-green theme. Links should trigger modals or navigate to placeholder content pages."
+        },
+        {
+          "path": "frontend/src/components/LegalContentModal.tsx",
+          "operation": "create",
+          "description": "Create a modal dialog component that displays legal content (Terms of Use or Privacy Policy) with placeholder generic text. Include a title prop to distinguish between the two documents and a close button. Use placeholder lorem ipsum or generic legal text that can be edited later."
+        },
+        {
           "path": "frontend/src/pages/ClientDashboard.tsx",
           "operation": "modify",
-          "description": "Add a refresh button near the top of the dashboard (e.g., next to the profile menu or in a header section). Wire the button to trigger refetch of the client record using the existing React Query hooks. Implement loading state visualization on the button while data is being fetched. Ensure the refetch updates all displayed client data including credentials, plan, expiry, and VM status."
+          "description": "Import and render the updated Footer component to ensure the legal links are visible in the Client Dashboard"
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply a green glow effect to information cards throughout the application for premium visual appearance",
+      "acceptanceCriteria": [
+        "Information cards display a soft green glow effect",
+        "Glow effect uses the neon green color from the theme",
+        "Effect is applied consistently across all information cards",
+        "Glow enhances visual appeal without reducing readability"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add a custom CSS class for card glow effect using box-shadow with the neon-green color from the theme. Define the glow as a subtle outer shadow that creates a premium appearance without overwhelming the content. Include hover state enhancement if appropriate."
+        },
+        {
+          "path": "frontend/src/components/VpsCredentialsCard.tsx",
+          "operation": "modify",
+          "description": "Apply the new card glow CSS class to the Card component to add the green glow effect"
+        },
+        {
+          "path": "frontend/src/components/VMStatusIndicator.tsx",
+          "operation": "modify",
+          "description": "Apply the new card glow CSS class to the Card component to add the green glow effect"
+        },
+        {
+          "path": "frontend/src/components/NetworkSpeedChart.tsx",
+          "operation": "modify",
+          "description": "Apply the new card glow CSS class to the Card component wrapper to add the green glow effect"
+        },
+        {
+          "path": "frontend/src/components/SshInstructionsCard.tsx",
+          "operation": "modify",
+          "description": "Apply the new card glow CSS class to the Card component to add the green glow effect"
+        },
+        {
+          "path": "frontend/src/components/RdpInstructionsCard.tsx",
+          "operation": "modify",
+          "description": "Apply the new card glow CSS class to the Card component to add the green glow effect"
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Add a green indicator dot to the Support Chat widget showing 'High Availability' operational status",
+      "acceptanceCriteria": [
+        "Support Chat widget displays a green indicator dot",
+        "Indicator visually communicates 'High Availability' status",
+        "Green color matches the neon green theme",
+        "Indicator is clearly visible when chat widget is displayed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ChatWidget.tsx",
+          "operation": "modify",
+          "description": "Add a green indicator dot (pulsing animation recommended) to the chat widget header or toggle button. Position the dot prominently to indicate 'High Availability' status. Use the neon-green theme color and ensure the indicator is visible when the chat is both open and collapsed. Add tooltip or label text indicating 'High Availability' when hovered."
         }
       ]
     }

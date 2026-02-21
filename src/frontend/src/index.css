@@ -83,3 +83,30 @@
         -moz-osx-font-smoothing: grayscale;
     }
 }
+
+@layer utilities {
+    .card-glow {
+        box-shadow: 0 0 20px rgba(57, 255, 20, 0.15),
+                    0 0 40px rgba(57, 255, 20, 0.08);
+    }
+
+    .card-glow:hover {
+        box-shadow: 0 0 25px rgba(57, 255, 20, 0.2),
+                    0 0 50px rgba(57, 255, 20, 0.12);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .neon-loading {
+        filter: drop-shadow(0 0 8px oklch(var(--neon-green)));
+        animation: neon-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes neon-pulse {
+        0%, 100% {
+            filter: drop-shadow(0 0 8px oklch(var(--neon-green)));
+        }
+        50% {
+            filter: drop-shadow(0 0 16px oklch(var(--neon-green)));
+        }
+    }
+}

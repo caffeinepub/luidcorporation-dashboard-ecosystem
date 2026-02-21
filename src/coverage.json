@@ -1,44 +1,155 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-20T02:17:03.719Z",
+  "generatedAt": "2026-02-21T13:31:21.092Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 1,
+    "total": 8,
+    "implemented": 8,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
-        "status": "missing",
+        "summary": "Create an 'Activity Logs' section in the Admin Panel that displays access logs with Client ID, timestamp (date and time), and source IP address for monitoring client logins in real-time",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useClientAuth.tsx",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/ActivityLogsTable.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
           "frontend/src/pages/ClientLogin.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/ActivityLogsTable.tsx",
+          "frontend/src/pages/AdminPanel.tsx",
+          "frontend/src/pages/ClientLogin.tsx"
+        ]
       },
       {
         "id": "REQ-2",
-        "summary": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
+        "summary": "Add an 'Export Database' button in the Admin Panel that generates and downloads a JSON or CSV file containing all registered client IDs, IP addresses, and passwords for backup purposes",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/components/DatabaseExportButton.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/DatabaseExportButton.tsx",
+          "frontend/src/pages/AdminPanel.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Display a styled red error alert (Toast or Modal) on the client login page when an invalid or non-existent Client ID is entered, with the message: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ClientLogin.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ClientLogin.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add a green neon loading effect to the client login page that appears when the 'Enter' button is clicked, providing visual feedback during authentication processing",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/ClientLogin.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/ClientLogin.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add copy buttons (clipboard icon) next to the IP address, username, and password fields in the Client Dashboard that copy the value to clipboard and display a 'Copied!' confirmation message",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/VpsCredentialsCard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/VpsCredentialsCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Add footer links for 'Terms of Use' and 'Privacy Policy' in the Client Dashboard footer with placeholder generic text content that can be edited later",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/components/LegalContentModal.tsx",
           "frontend/src/pages/ClientDashboard.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/components/LegalContentModal.tsx",
           "frontend/src/pages/ClientDashboard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Apply a green glow effect to information cards throughout the application for a premium visual appearance",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/VpsCredentialsCard.tsx",
+          "frontend/src/components/VMStatusIndicator.tsx",
+          "frontend/src/components/NetworkSpeedChart.tsx",
+          "frontend/src/components/SshInstructionsCard.tsx",
+          "frontend/src/components/RdpInstructionsCard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/VpsCredentialsCard.tsx",
+          "frontend/src/components/VMStatusIndicator.tsx",
+          "frontend/src/components/NetworkSpeedChart.tsx",
+          "frontend/src/components/SshInstructionsCard.tsx",
+          "frontend/src/components/RdpInstructionsCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Add a green indicator dot to the Support Chat widget showing 'High Availability' operational status",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ChatWidget.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ChatWidget.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/ActivityLogsTable.tsx",
+    "frontend/src/components/AdminChatPanel.tsx",
+    "frontend/src/components/ChatWidget.tsx",
+    "frontend/src/components/DatabaseExportButton.tsx",
+    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/LegalContentModal.tsx",
+    "frontend/src/components/NetworkSpeedChart.tsx",
+    "frontend/src/components/RdpInstructionsCard.tsx",
+    "frontend/src/components/SendNotificationModal.tsx",
+    "frontend/src/components/SshInstructionsCard.tsx",
+    "frontend/src/components/VMStatusIndicator.tsx",
+    "frontend/src/components/VpsCredentialsCard.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/pages/AdminPanel.tsx",
     "frontend/src/pages/ClientDashboard.tsx",
+    "frontend/src/pages/ClientLogin.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

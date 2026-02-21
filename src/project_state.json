@@ -1,16 +1,76 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
+  "summary": "LuidCorporation client management and admin dashboard system with access logging, database backup, enhanced UX/validation, and premium visual identity",
+  "architectural_notes": [
+    "System uses existing database integration for client management",
+    "Admin credentials (SidneiCosta00) must remain unchanged",
+    "Support chat functionality already implemented and operational"
+  ],
   "known_issues": [],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-a-refresh-button-in-the-client-dashboard-that-allows-clients-to-manually-reload-their-data-when-the-administrator-has-modified-their-information",
-      "title": "Add a refresh button in the client dashboard that allows clients to manually reload their data when the administrator has modified their information",
+      "id": "feature-create-an-activity-logs-section-in-the-admin-panel-that-displays-access-logs-with-client-id-timestamp-date-and-time-and-source-ip-address-for-monitoring-client-logins-in-real-time",
+      "title": "Create an 'Activity Logs' section in the Admin Panel that displays access logs with Client ID, timestamp (date and time), and source IP address for monitoring client logins in real-time",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-export-database-button-in-the-admin-panel-that-generates-and-downloads-a-json-or-csv-file-containing-all-registered-client-ids-ip-addresses-and-passwords-for-backup-purposes",
+      "title": "Add an 'Export Database' button in the Admin Panel that generates and downloads a JSON or CSV file containing all registered client IDs, IP addresses, and passwords for backup purposes",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-a-styled-red-error-alert-toast-or-modal-on-the-client-login-page-when-an-invalid-or-non-existent-client-id-is-entered-with-the-message-id-not-identified-please-check-your-contract-or-contact-our-support-team",
+      "title": "Display a styled red error alert (Toast or Modal) on the client login page when an invalid or non-existent Client ID is entered, with the message: '⚠️ ID not identified. Please check your contract or contact our support team.'",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-green-neon-loading-effect-to-the-client-login-page-that-appears-when-the-enter-button-is-clicked-providing-visual-feedback-during-authentication-processing",
+      "title": "Add a green neon loading effect to the client login page that appears when the 'Enter' button is clicked, providing visual feedback during authentication processing",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-copy-buttons-clipboard-icon-next-to-the-ip-address-username-and-password-fields-in-the-client-dashboard-that-copy-the-value-to-clipboard-and-display-a-copied-confirmation-message",
+      "title": "Add copy buttons (clipboard icon) next to the IP address, username, and password fields in the Client Dashboard that copy the value to clipboard and display a 'Copied!' confirmation message",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-footer-links-for-terms-of-use-and-privacy-policy-in-the-client-dashboard-footer-with-placeholder-generic-text-content-that-can-be-edited-later",
+      "title": "Add footer links for 'Terms of Use' and 'Privacy Policy' in the Client Dashboard footer with placeholder generic text content that can be edited later",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-green-glow-effect-to-information-cards-throughout-the-application-for-a-premium-visual-appearance",
+      "title": "Apply a green glow effect to information cards throughout the application for a premium visual appearance",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-green-indicator-dot-to-the-support-chat-widget-showing-high-availability-operational-status",
+      "title": "Add a green indicator dot to the Support Chat widget showing 'High Availability' operational status",
+      "reqIds": [
+        "REQ-8"
       ],
       "version": 1
     }
@@ -18,26 +78,42 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Fix 'keep me logged in' option",
+      "summary": "Access logs section in Master Panel showing client ID, timestamp, and IP address",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add refresh button for clients to reload admin-changed data",
+      "summary": "Database export button in admin panel to generate JSON/CSV backup of all IDs, IPs, and passwords",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Fix the 'keep me logged in' functionality to properly persist client authentication sessions between browser sessions",
-      "reqIds": [
-        "REQ-1"
-      ],
+      "summary": "Login validation with styled error alerts for invalid IDs and green neon loading effect",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Copy buttons for IP/username/password in client dashboard with confirmation message",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Footer links for Terms of Use and Privacy Policy in client dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Green glow effect on information cards and green indicator on support chat showing high availability",
+      "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Fix remember-me option and add data refresh button",
+  "projectName": "LuidCorporation",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -9,6 +9,7 @@ import ChatWidget from '../components/ChatWidget';
 import VMStatusIndicator from '../components/VMStatusIndicator';
 import SshInstructionsCard from '../components/SshInstructionsCard';
 import RdpInstructionsCard from '../components/RdpInstructionsCard';
+import Footer from '../components/Footer';
 import { Cloud, Loader2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -36,7 +37,7 @@ export default function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <GlobalAnnouncementBanner />
 
       <header className="border-b border-neon-green/20 bg-carbon-black">
@@ -65,7 +66,7 @@ export default function ClientDashboard() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="mb-2 text-2xl font-bold text-foreground">Bem-vindo, {clientData.nome}</h2>
           <p className="text-muted-foreground">
@@ -112,6 +113,7 @@ export default function ClientDashboard() {
         )}
       </main>
 
+      <Footer />
       <ChatWidget />
     </div>
   );
